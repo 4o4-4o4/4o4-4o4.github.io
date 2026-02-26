@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Google Docs</title>
+    <link rel="icon" href="https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico">
+    <style>
+        body { background: #0b0b0b; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; user-select: none; }
+        
+        /* Left Side: Stats & Cookie */
+        #cookie-section { width: 40%; border-right: 2px solid #333; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #222 0%, #000 100%); }
+        #cookie-count { font-size: 32px; font-weight: bold; margin-bottom: 10px; color: #4CAF50; }
+        #cps-text { font-size: 16px; color: #888; margin-bottom: 30px; }
+        
+        /* The CSS Cookie */
+        #cookie { width: 220px; height: 220px; background: #d2691e; border-radius: 50%; border: 8px solid #8b4513; cursor: pointer; position: relative; transition: transform 0.05s; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        #cookie:active { transform: scale(0.95); }
+        /* Chocolate Chips */
+        .chip { position: absolute; background: #3d1f05; border-radius: 50%; width: 20px; height: 20px; }
+
+        /* Right Side: Store */
+        #store { width: 60%; overflow-y: auto; padding: 20px; background: #111; }
+        .item { background: #1e1e1e; border: 1px solid #333; padding: 15px; margin-bottom: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
+        .item:hover { background: #252525; border-color: #4CAF50; }
+        .item.disabled { opacity: 0.5; cursor: not-allowed; border-color: #b71c1c; }
+        .item-info b { display: block; font-size: 18px; color: #fff; }
+        .item-info span { font-size: 13px; color: #4CAF50; }
+        .item-count { font-size: 24px; font-weight: bold; color: #333; }
+
+        .save-btn { position: fixed; bottom: 10px; left: 10px; padding: 5px 10px; background: #333; color: #888; border: none; border-radius: 5px; cursor: pointer; font-size: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="cookie-section">
+        <div id="cookie-count">0 cookies</div>
+        <div id="cps-text">per second: 0</div>
+        
+        <div id="cookie" onclick="clickCookie()">
+            <!-- Drawing chips on the cookie with CSS -->
+            <div class="chip" style="top:40px; left:50px;"></div>
+            <div class="chip" style="top:120px; left:30px;"></div>
+            <div class="chip" style="top:70px; left:130px;"></div>
+            <div class="chip" style="top:150px; left:100px;"></div>
+            <div class="chip" style="top:50px; left:100px; width:15px; height:15px;"></div>
+            <div class="chip" style="top:110px; left:160px; width:25px; height:25px;"></div>
+        </div>
+    </div>
+
+    <div id="store">
+        <h2 style="margin-top:0;">Store</h2>
+        <div id="upgrade-list"></div>
+    </div>
+
+    <button class="save-btn" onclick="resetGame()">Reset Progress</button>
+
+    <script>
+        let cookies = 0;
+        let cps = 0;
+
+        const upgrades = [
+            { id: 0, name: "Cursor", cost: 15, cps: 0.1, count: 0 },
+            { id: 1, name: "Grandma", cost: 100, cps: 1, count: 0 },
+            { id: 2, name: "Farm", cost: 1100, cps: 8, count: 0 },
+            { id: 3, name: "Mine", cost: 12000, cps: 47, count: 0 },
+            { id: 4, name: "Factory", cost: 130000, cps: 260, count: 0 },
+            { id: 5, name: "Bank", cost: 1400000, cps: 1400, count: 0 }
+        ];
+
+        // Load Save
+        if (localStorage.getItem('cookieSave')) {
+            let data = JSON.parse(localStorage.getItem('cookieSave'));
+            cookies = data.cookies;
+            upgrades.forEach((u, i) => {
+                u.count = data.upgrades[i].count;
+                u.cost = data.upgrades[i].cost;
+            });
+            calculateCPS();
+        }
+
+        function clickCookie() {
+            cookies++;
+            updateUI();
+        }
+
+        function buyUpgrade(id) {
+            let u = upgrades[id];
+            if (cookies >= u.cost) {
+                cookies -= u.cost;
+                u.count++;
+                u.cost = Math.floor(u.cost * 1.15);
+                calculateCPS();
+                updateUI();
+                saveGame();
+            }
+        }
+
+        function calculateCPS() {
+            cps = upgrades.reduce((acc, u) => acc + (u.count * u.cps), 0);
+        }
+
+        function updateUI() {
+            document.getElementById('cookie-count').innerText = Math.floor(cookies).toLocaleString() + " cookies";
+            document.getElementById('cps-text').innerText = "per second: " + cps.toFixed(1);
+            
+            const list = document.getElementById('upgrade-list');
+            list.innerHTML = '';
+            upgrades.forEach(u => {
+                const canAfford = cookies >= u.cost;
+                list.innerHTML += `
+                    <div class="item ${canAfford ? '' : 'disabled'}" onclick="buyUpgrade(${u.id})">
+                        <div class="item-info">
+                            <b>${u.name}</b>
+                            <span>Cost: ${u.cost.toLocaleString()} | +${u.cps} CPS</span>
+                        </div>
+                        <div class="item-count">${u.count}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function saveGame() {
+            let data = { cookies: cookies, upgrades: upgrades };
+            localStorage.setItem('cookieSave', JSON.stringify(data));
+        }
+
+        function resetGame() {
+            if(confirm("Delete all cookies?")) {
+                localStorage.removeItem('cookieSave');
+                location.reload();
+            }
+        }
+
+        // Main Game Loop
+        setInterval(() => {
+            cookies += (cps / 10);
+            updateUI();
+            if (Math.random() < 0.01) saveGame(); // Autosave every 10 seconds approx
+        }, 100);
+
+        // Tab Cloak Logic
+        setInterval(() => { document.title = "Google Docs"; }, 100);
+        // Panic Key
+        document.addEventListener('keydown', (e) => { if(e.key === "Escape") window.location.replace("https://classroom.google.com"); });
+
+        updateUI();
+    </script>
+</body>
+</html>

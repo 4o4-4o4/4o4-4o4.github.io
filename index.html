@@ -51,7 +51,6 @@
         .game-card { background: var(--card); border: 1px solid var(--border); padding: 25px 10px; border-radius: 12px; cursor: pointer; text-align: center; font-size: 14px; font-weight: bold; min-height: 80px; display: flex; align-items: center; justify-content: center; color: var(--text); transition: 0.2s; }
         .game-card:hover { border-color: var(--accent); transform: translateY(-3px); }
 
-        /* The container that locks the user in */
         #player-container { 
             display: none; 
             width: 100vw; 
@@ -136,8 +135,10 @@
 
         let typedCode = "";
         const secretKey = "404";
+        let isAuthorizedExit = false;
 
         function launchGame(path) {
+            isAuthorizedExit = false;
             const player = document.getElementById('player-container');
             const view = document.getElementById('game-view');
             
@@ -152,6 +153,7 @@
         }
 
         function goHome() {
+            isAuthorizedExit = true;
             if (document.fullscreenElement) {
                 document.exitFullscreen();
             }
@@ -166,19 +168,14 @@
             window.top.location.replace(data.panic.startsWith('http') ? data.panic : 'https://' + data.panic);
         }
 
-        // Listener for the secret 404 code and the Esc Panic
         document.addEventListener('keydown', (e) => { 
-            // Only runs if a game is active
             if (document.getElementById('player-container').style.display === 'block') {
-                
-                // If they hit Esc, don't just exit fullscreen, PANIC.
+                // If they hit Esc, trigger panic.
                 if (e.key === "Escape") {
-                    e.preventDefault(); // Blocks default Esc behavior
                     panic();
                     return;
                 }
 
-                // Listen for 404 to go home
                 typedCode += e.key;
                 if (typedCode.endsWith(secretKey)) {
                     goHome();
@@ -187,11 +184,10 @@
             }
         });
 
-        // Prevent users from clicking out of fullscreen manually if possible
+        // Detects if the user exited fullscreen. If not authorized by "404", panic.
         document.addEventListener('fullscreenchange', () => {
-            if (!document.fullscreenElement && document.getElementById('player-container').style.display === 'block') {
-                // If they managed to exit fullscreen without typing 404, we panic or re-enter
-                // Most browsers require a user gesture to re-enter, so we panic to be safe.
+            const playerVisible = document.getElementById('player-container').style.display === 'block';
+            if (!document.fullscreenElement && playerVisible && !isAuthorizedExit) {
                 panic();
             }
         });

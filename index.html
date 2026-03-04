@@ -44,7 +44,6 @@
         #top-nav { height: 60px; background: var(--side); padding: 0 20px; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid var(--border); flex-shrink: 0; }
         #search { flex-grow: 1; background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px; color: var(--text); outline: none; }
         
-        .util-btn { background: var(--border); color: var(--text); border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; }
         .panic-btn { background: #b71c1c; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
 
         #content-area { flex-grow: 1; overflow-y: auto; padding: 20px; }
@@ -52,8 +51,8 @@
         .game-card { background: var(--card); border: 1px solid var(--border); padding: 25px 10px; border-radius: 12px; cursor: pointer; text-align: center; font-size: 14px; transition: 0.3s; font-weight: bold; min-height: 80px; display: flex; align-items: center; justify-content: center; color: var(--text); }
         .game-card:hover { border-color: var(--accent); transform: translateY(-3px); opacity: 0.9; }
 
-        #player-container { display: none; flex-grow: 1; background: black; width: 100%; position: relative; }
-        iframe { width: 100%; height: 100%; border: none; display: block; }
+        #player-container { display: none; width: 100%; height: 100%; background: black; }
+        iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body onload="init()">
@@ -90,7 +89,6 @@
     <div id="main">
         <div id="top-nav">
             <input type="text" id="search" placeholder="Search for games..." oninput="renderGames()">
-            <button class="util-btn" onclick="goFullScreen()">Full Screen</button>
             <button class="panic-btn" onclick="panic()">ESC PANIC</button>
         </div>
 
@@ -129,15 +127,29 @@
         let typedCode = "";
         const secretKey = "404";
 
-        function goFullScreen() {
-            const el = document.documentElement;
-            if (el.requestFullscreen) el.requestFullscreen();
+        function launchGame(path) {
+            const player = document.getElementById('player-container');
+            const view = document.getElementById('game-view');
+            
+            player.style.display = 'block';
+            view.src = path;
+            
+            // Request Fullscreen on the GAME CONTAINER ONLY
+            if (player.requestFullscreen) {
+                player.requestFullscreen();
+            } else if (player.webkitRequestFullscreen) { /* Safari */
+                player.webkitRequestFullscreen();
+            } else if (player.msRequestFullscreen) { /* IE11 */
+                player.msRequestFullscreen();
+            }
         }
 
-        function safeExit() {
+        function goHome() {
             if (document.fullscreenElement) {
                 document.exitFullscreen();
             }
+            document.getElementById('game-view').src = '';
+            document.getElementById('player-container').style.display = 'none';
             typedCode = "";
         }
 
@@ -148,28 +160,34 @@
         }
 
         document.addEventListener('keydown', (e) => { 
-            const isFull = !!document.fullscreenElement;
-
-            if (isFull) {
-                // If in full screen and they hit Esc, it's a Panic
+            // If the game container is currently fullscreen
+            if (document.fullscreenElement) {
                 if (e.key === "Escape") {
                     panic();
                     return;
                 }
 
-                // Sequence listener for 404 to exit safely
                 typedCode += e.key;
                 if (typedCode.endsWith(secretKey)) {
-                    safeExit();
+                    goHome();
                 }
                 if (typedCode.length > 10) typedCode = typedCode.slice(-5);
-            } else {
-                // Normal Panic Shortcut (Alt + Search + Esc) for when not in Full Screen
-                if (e.key === "Escape" && e.altKey && e.metaKey) {
-                    panic();
-                }
             }
         });
+
+        // Other utility functions
+        function renderGames() {
+            const grid = document.getElementById('game-grid');
+            const term = document.getElementById('search').value.toLowerCase();
+            grid.innerHTML = '';
+            gameList.filter(g => g.name.toLowerCase().includes(term)).forEach(g => {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.innerText = g.name;
+                card.onclick = () => launchGame(g.path);
+                grid.appendChild(card);
+            });
+        }
 
         function toggleTheme() {
             const current = document.body.getAttribute('data-theme');
@@ -228,30 +246,6 @@
             loadRecords();
             loadTheme();
             setInterval(applySettings, 1000);
-        }
-
-        function goHome() {
-            document.getElementById('game-view').src = '';
-            document.getElementById('player-container').style.display = 'none';
-            document.getElementById('content-area').style.display = 'block';
-            renderGames();
-        }
-
-        function renderGames() {
-            const grid = document.getElementById('game-grid');
-            const term = document.getElementById('search').value.toLowerCase();
-            grid.innerHTML = '';
-            gameList.filter(g => g.name.toLowerCase().includes(term)).forEach(g => {
-                const card = document.createElement('div');
-                card.className = 'game-card';
-                card.innerText = g.name;
-                card.onclick = () => {
-                    document.getElementById('content-area').style.display = 'none';
-                    document.getElementById('player-container').style.display = 'block';
-                    document.getElementById('game-view').src = g.path;
-                };
-                grid.appendChild(card);
-            });
         }
 
         function runHistoryCloak() {

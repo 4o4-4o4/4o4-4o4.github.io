@@ -2,22 +2,32 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Big NEON Tower vs Tiny Square</title>
+
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; img-src 'self' data: https://cdn.jsdelivr.net; connect-src 'self' https://cdn.jsdelivr.net;">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/icestyle.css" type="text/css">
+    
+    <style>
+        body { background-color: #000; margin: 0; overflow: hidden; }
+        /* Hides any accidental ad-containers left in the HTML */
+        #ads, .ad-unit, .adsbygoogle, #poki-sdk-container { display: none !important; visibility: hidden !important; }
+    </style>
 </head>
 <body>
     <div id="fb-root"></div>
+    
     <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/icewasm.js"></script>
-    <noscript>
-        <div id="notSupportedWrap">
-            <h2 id="notSupportedTitle">This content requires JavaScript</h2>
-            <p class="notSupportedMessage">JavaScript appears to be disabled. Please enable it to view this content.</p>
-        </div>
-    </noscript>
     <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/icecheck.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/office.js" type="module"></script>
     <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/mainice.js" type="module"></script>
     <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/regisice.js" type="module"></script>
-    </body>
+
+    <noscript>
+        <div style="color: white; text-align: center; margin-top: 20%;">
+            <h2>JavaScript is required to play.</h2>
+        </div>
+    </noscript>
+</body>
 </html>

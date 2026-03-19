@@ -6,29 +6,60 @@
     <title>Big NEON Tower vs Tiny Square</title>
 
     <style>
-        body { background-color: #000; margin: 0; overflow: hidden; }
-        #ads, .ad-unit, #poki-sdk-container { display: none !important; }
+        body { background-color: #be1a1a; margin: 0; overflow: hidden; }
+        /* Hide any ad frames that try to render */
+        #gamemonetize-sdk, .gm-ad-container, iframe[src*="gamemonetize"] { 
+            display: none !important; 
+            visibility: hidden !important; 
+        }
     </style>
 
     <script>
-        // FAKE AD SIGNAL (Mocking the SDK)
-        // This tells the game "Ads are finished" before they even try to load
-        window.adConfig = function(o) { return; };
-        window.PokiSDK = {
-            init: function() { return Promise.resolve(); },
-            ads: {
-                breakCheck: function() { return Promise.resolve(); },
-                adFinished: function() { return true; }
-            },
-            setDebug: function() { return; },
-            gameLoadingStart: function() { return; },
-            gameLoadingFinished: function() { return; }
+        // 1. NEUTRALIZE GAME MONETIZE SDK
+        // We define the SDK options BEFORE the game loads
+        window.SDK_OPTIONS = {
+            gameId: "bigneontower", // Generic ID
+            onEvent: function(event) {
+                switch (event.name) {
+                    case "SDK_READY":
+                        console.log("Fake SDK Ready");
+                        break;
+                    case "SDK_GAME_PAUSE":
+                        // If the game tries to pause for an ad, we immediately tell it to start again
+                        console.log("Ad break requested... skipping.");
+                        if (window.sdk && typeof window.sdk.resumeGame === "function") {
+                            window.sdk.resumeGame();
+                        }
+                        break;
+                    case "SDK_GAME_START":
+                        console.log("Game resumed.");
+                        break;
+                }
+            }
         };
 
-        // Mocking Google Tag Manager to prevent errors
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+        // 2. CREATE A FAKE SDK OBJECT
+        // This prevents "sdk is not defined" errors
+        window.sdk = {
+            showBanner: function() { 
+                console.log("Banner blocked.");
+                // Immediately trigger the 'start' event so the game doesn't wait
+                if (window.SDK_OPTIONS.onEvent) {
+                    window.SDK_OPTIONS.onEvent({ name: "SDK_GAME_START" });
+                }
+            },
+            init: function() { return true; },
+            resumeGame: function() { return true; }
+        };
+
+        // 3. PREVENT EXTERNAL LOADING
+        // We "kill" the actual script request if it tries to load
+        window.addEventListener('beforescriptexecute', function(e) {
+            if (e.target.src && e.target.src.includes('gamemonetize.com')) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }, true);
     </script>
 </head>
 <body>

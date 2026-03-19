@@ -16,6 +16,7 @@
             --border: #333;
             --input-bg: #000;
             --panic: #ff4444;
+            --test-color: #3498db;
         }
 
         [data-theme="light"] {
@@ -27,6 +28,7 @@
             --border: #ddd;
             --input-bg: #fff;
             --panic: #cc0000;
+            --test-color: #2980b9;
         }
 
         * { box-sizing: border-box; }
@@ -148,7 +150,6 @@
 
         .config-box { padding: 12px; background: var(--card); border-radius: 10px; border: 1px solid var(--border); margin-bottom: 10px; }
         .config-input { width: 100%; padding: 8px; margin-bottom: 8px; background: var(--input-bg); border: 1px solid var(--border); color: var(--text); border-radius: 4px; font-size: 11px; outline: none; }
-        .config-save-btn { width: 100%; padding: 8px; background: var(--accent); border: none; color: white; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
         
         .preset-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 10px; }
         .preset-btn { width: 100%; aspect-ratio: 1; border: 1px solid var(--border); background: var(--input-bg); border-radius: 6px; padding: 5px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; overflow: hidden; }
@@ -213,7 +214,7 @@
 
                 <div class="config-box">
                     <h2>Appearance</h2>
-                    <button class="config-save-btn" style="background:#555;" onclick="toggleTheme()">Toggle Light/Dark Mode</button>
+                    <button class="side-btn" style="background:#333; width:100%;" onclick="toggleTheme()">Toggle Light/Dark Mode</button>
                 </div>
 
                 <div class="config-box">
@@ -339,7 +340,6 @@
         function renderGames() {
             const grid = document.getElementById('game-grid');
             const term = document.getElementById('search').value.toLowerCase();
-            const currentTheme = document.body.getAttribute('data-theme') || 'dark';
             grid.innerHTML = '';
             
             gameList.filter(g => g.name.toLowerCase().includes(term)).forEach(g => {
@@ -347,19 +347,12 @@
                 card.className = 'game-card';
                 
                 if (g.name.toUpperCase().includes("(TEST)")) {
-                    // Hide the (TEST) text
-                    card.innerText = g.name.replace(/\(TEST\)/gi, "").trim();
-                    
-                    // Flip the color based on current theme
-                    if (currentTheme === 'dark') {
-                        card.style.background = "#ffffff";
-                        card.style.color = "#000000";
-                        card.style.borderColor = "#ffffff";
-                    } else {
-                        card.style.background = "#000000";
-                        card.style.color = "#ffffff";
-                        card.style.borderColor = "#000000";
-                    }
+                    card.style.borderColor = "var(--test-color)";
+                    card.style.boxShadow = "0 0 10px rgba(52, 152, 219, 0.1)";
+                    card.innerHTML = `<div style="display:flex; flex-direction:column; gap:5px;">
+                                        <span>${g.name.replace(/\(TEST\)/gi, "").trim()}</span>
+                                        <span style="font-size:9px; color:var(--test-color); text-transform:uppercase; letter-spacing:1px;">Development</span>
+                                      </div>`;
                 } else {
                     card.innerText = g.name;
                 }

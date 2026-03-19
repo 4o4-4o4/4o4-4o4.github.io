@@ -6,60 +6,62 @@
     <title>Big NEON Tower vs Tiny Square</title>
 
     <style>
-        body { background-color: #be1a1a; margin: 0; overflow: hidden; }
-        /* Hide any ad frames that try to render */
-        #gamemonetize-sdk, .gm-ad-container, iframe[src*="gamemonetize"] { 
-            display: none !important; 
-            visibility: hidden !important; 
+        body { background-color: #000; margin: 0; overflow: hidden; position: fixed; width: 100%; height: 100%; }
+        /* Layer 1: Hide any potential ad elements via CSS */
+        iframe, ins, [id*="ad"], [class*="ad-"], #gamemonetize-sdk, #poki-sdk-container { 
+            display: none !important; opacity: 0 !important; pointer-events: none !important; 
         }
     </style>
 
     <script>
-        // 1. NEUTRALIZE GAME MONETIZE SDK
-        // We define the SDK options BEFORE the game loads
-        window.SDK_OPTIONS = {
-            gameId: "bigneontower", // Generic ID
-            onEvent: function(event) {
-                switch (event.name) {
-                    case "SDK_READY":
-                        console.log("Fake SDK Ready");
-                        break;
-                    case "SDK_GAME_PAUSE":
-                        // If the game tries to pause for an ad, we immediately tell it to start again
-                        console.log("Ad break requested... skipping.");
-                        if (window.sdk && typeof window.sdk.resumeGame === "function") {
-                            window.sdk.resumeGame();
-                        }
-                        break;
-                    case "SDK_GAME_START":
-                        console.log("Game resumed.");
-                        break;
-                }
+        // LAYER 2: INTERCEPT ALL NETWORK CALLS (The Global Kill-Switch)
+        const ALLOWED_DOMAINS = ['cdn.jsdelivr.net', 'bubbls.github.io'];
+
+        // Overwrite XMLHttpRequest (Old school ad calls)
+        const proxiedOpen = window.XMLHttpRequest.prototype.open;
+        window.XMLHttpRequest.prototype.open = function(method, url) {
+            if (typeof url === 'string' && !ALLOWED_DOMAINS.some(d => url.includes(d))) {
+                console.log('BLOCKED XHR:', url);
+                return; // Kill the request
             }
+            return proxiedOpen.apply(this, arguments);
         };
 
-        // 2. CREATE A FAKE SDK OBJECT
-        // This prevents "sdk is not defined" errors
-        window.sdk = {
-            showBanner: function() { 
-                console.log("Banner blocked.");
-                // Immediately trigger the 'start' event so the game doesn't wait
-                if (window.SDK_OPTIONS.onEvent) {
-                    window.SDK_OPTIONS.onEvent({ name: "SDK_GAME_START" });
-                }
-            },
-            init: function() { return true; },
-            resumeGame: function() { return true; }
+        // Overwrite Fetch (Modern ad calls)
+        const originalFetch = window.fetch;
+        window.fetch = function(input, init) {
+            const url = typeof input === 'string' ? input : input.url;
+            if (typeof url === 'string' && !ALLOWED_DOMAINS.some(d => url.includes(d))) {
+                console.log('BLOCKED FETCH:', url);
+                return Promise.resolve(new Response('', { status: 200 }));
+            }
+            return originalFetch.apply(this, arguments);
         };
 
-        // 3. PREVENT EXTERNAL LOADING
-        // We "kill" the actual script request if it tries to load
-        window.addEventListener('beforescriptexecute', function(e) {
-            if (e.target.src && e.target.src.includes('gamemonetize.com')) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-        }, true);
+        // LAYER 3: DUMMY SDKs (The "Success Signal")
+        const silent = () => {};
+        const success = () => Promise.resolve();
+        
+        window.SDK_OPTIONS = { gameId: "none", onEvent: silent };
+        window.sdk = { 
+            showBanner: (callback) => { if(callback) callback(); }, 
+            init: success, 
+            resumeGame: success 
+        };
+        window.PokiSDK = { 
+            init: success, 
+            ads: { breakCheck: success, adFinished: () => true },
+            gameLoadingStart: silent, 
+            gameLoadingFinished: silent 
+        };
+        
+        // LAYER 4: PREVENT REDIRECTS (Stop the game from opening new tabs)
+        window.open = function() { return null; };
+
+        // LAYER 5: DOM WATCHDOG (Delete ads that try to inject via script)
+        setInterval(() => {
+            document.querySelectorAll('iframe, ins, #gamemonetize-sdk').forEach(el => el.remove());
+        }, 50);
     </script>
 </head>
 <body>

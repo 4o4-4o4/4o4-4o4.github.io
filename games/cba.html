@@ -1,323 +1,93 @@
-<!DOCTYPE html><html lang="en-US"> <head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Space Waves</title><meta name="description" content="Space Waves is an exciting side-scrolling game that combines fast-paced action and challenges. Control an arrow to fly through space tunnels full of obstacles."><meta name = "title" content = "Space Waves"><meta name="keywords" content="Space Waves"><meta name="news_keywords" content="Space Waves"><link rel="canonical" href="https://spacewaves.io/"><link rel="icon" href="/upload/imgs/options/space-waves.jpg"/><!-- META FOR FACEBOOK --><meta property="og:title" content="Space Waves" itemprop="headline" /><meta property="og:type" content="website" /><meta property="og:url" itemprop="url" content="https://spacewaves.io/"/><meta property="og:image" itemprop="thumbnailUrl" content="/upload/imgs/space-waves1.png"/><meta property="og:description" content="Space Waves is an exciting side-scrolling game that combines fast-paced action and challenges. Control an arrow to fly through space tunnels full of obstacles." itemprop="description" /><meta property="og:site_name" content="Space Waves" /><link rel="apple-touch-icon" href="/upload/imgs/options/space-waves.jpg"/><!-- META FOR TWITTER --><meta name="twitter:title" content="Space Waves"/><meta name="twitter:url" content="https://spacewaves.io/"/><meta name="twitter:image" content="/upload/imgs/space-waves1.png"/><meta name="twitter:description" content="Space Waves is an exciting side-scrolling game that combines fast-paced action and challenges. Control an arrow to fly through space tunnels full of obstacles."/><meta name="twitter:card" content="summary"/><link rel="stylesheet" href="/themes/spacewaves.io/rs/css/reboot.css"><link rel="stylesheet" href="/themes/spacewaves.io/rs/css/body-style.css?v=1"><link rel="stylesheet" href="/themes/spacewaves.io/rs/css/home.css?v=1.11"> <script async src="https://www.googletagmanager.com/gtag/js?id=G-C0H7N393BB"></script><script>window.dataLayer = window.dataLayer || [];
- function gtag() {
- dataLayer.push(arguments);
- }
- gtag('js', new Date());
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Space Waves</title>
+    <style>
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: #000; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+        }
+        
+        #unity-container { width: 100%; height: 100%; position: relative; }
+        #unity-canvas { width: 100% !important; height: 100% !important; background: #000; }
+        
+        #loading-cover {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #111; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; z-index: 10;
+        }
 
- gtag('config', 'G-C0H7N393BB');</script>		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3669370410817131"
- crossorigin="anonymous"></script><meta name="google-adsense-account" content="ca-pub-3669370410817131"> </head><body><div style=" position: fixed; top: 0; left: 0;width:100vw; height:100vh;"><link rel="stylesheet" href="themes/spacewaves.io/rs/css/home.css?v=1.3"><link rel="stylesheet" href="https://slope3.com/game/RS/game.css?v=3.22"><div class="main-panel"><button type="button" class="btn btn-default hide-main-panel" title="Show/hide"><i class="">>></i></button><div class="main-panel-content">	<div class="menu-header"><a href="/" class="menu-header-item" style="background-color: unset;"><svg fill="#e91e63" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-					 width="28px" height="28px" viewBox="0 0 495.398 495.398"
-					 xml:space="preserve"><g><g><g><path d="M487.083,225.514l-75.08-75.08V63.704c0-15.682-12.708-28.391-28.413-28.391c-15.669,0-28.377,12.709-28.377,28.391
-								v29.941L299.31,37.74c-27.639-27.624-75.694-27.575-103.27,0.05L8.312,225.514c-11.082,11.104-11.082,29.071,0,40.158
-								c11.087,11.101,29.089,11.101,40.172,0l187.71-187.729c6.115-6.083,16.893-6.083,22.976-0.018l187.742,187.747
-								c5.567,5.551,12.825,8.312,20.081,8.312c7.271,0,14.541-2.764,20.091-8.312C498.17,254.586,498.17,236.619,487.083,225.514z"/><path d="M257.561,131.836c-5.454-5.451-14.285-5.451-19.723,0L72.712,296.913c-2.607,2.606-4.085,6.164-4.085,9.877v120.401
-								c0,28.253,22.908,51.16,51.16,51.16h81.754v-126.61h92.299v126.61h81.755c28.251,0,51.159-22.907,51.159-51.159V306.79
-								c0-3.713-1.465-7.271-4.085-9.877L257.561,131.836z"/></g></g></g></svg></a><a href="/hot-games" class="menu-header-item hot">Hot games</a><a href="/new-games" class="menu-header-item new">new games</a></div><div style="position: relative; margin: 3px;"><form method="get" action="/search" id="search"><input style="width: 100%; height: 33px;" id="dark-input-search"name="keywords" type="text"placeholder="Search here..."class="inputsearch" /><button id="dark-search-button"type="submit"class="fa fa-search"><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-					 viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve"><path d="M508.874,478.708L360.142,329.976c28.21-34.827,45.191-79.103,45.191-127.309c0-111.75-90.917-202.667-202.667-202.667
-						 S0,90.917,0,202.667s90.917,202.667,202.667,202.667c48.206,0,92.482-16.982,127.309-45.191l148.732,148.732
-						 c4.167,4.165,10.919,4.165,15.086,0l15.081-15.082C513.04,489.627,513.04,482.873,508.874,478.708z M202.667,362.667
-						 c-88.229,0-160-71.771-160-160s71.771-160,160-160s160,71.771,160,160S290.896,362.667,202.667,362.667z"/></svg></button></form></div>			<div style="text-transform: uppercase; text-align: center; height: 20 px; letter-spacing: 1px; color: #9e9e9e; font-size: 9px;">Advertisement</div><div style="text-align: center; width:100%; margin-bottom: 5px; "><div id="Ads1"></div></div><h1>Space Waves</h1><div class="title-box"><script src="/themes/spacewaves.io/rs/js/jquery-3.4.1.min.js"></script><div class="rate_fullscreen"><div class="rate_fullscreen-block"><div class="rate-block" ><link rel="stylesheet" href="/themes/spacewaves.io/rs/css/rating-style.css"><div id="rating" > <div class="inner-rating" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating"><div id="full_rate_1" class="full_rate"><div class="text-center"><div class="rating_hover rating-element"><div class="rating" id="default-demo" data-id="748" style="cursor: pointer;" data-score = "4.2" data-readonly = ""></div></div><span class="rating-element" id="rate-avg" rel="v:rating"> <span class="rate-info"><span id="countrate">43942 votes </span><span itemprop="ratingValue" class="rating-num gorgeous" id="averagerate">4.2</span><span class="rating-num gorgeous">/</span><span itemprop="bestRating" class="rating-num gorgeous">5</span></span></span></div></div></div></div><script type="text/javascript">var dir_theme = '/themes/spacewaves.io/';
- var domain_url = 'https://spacewaves.io';</script><script src="/themes/spacewaves.io/rs/js/rating.js"></script></div><div class="full-screen-btn"><div class="full-screen-icon" id="expand"></div></div></div></div><style>#default-demo img{width: 15px !important;margin: 2px !important;padding-top: 6px !important;}#default-demo{width: fit-content !important;}
-			.full-screen-btn{display: none !important;}.rate_fullscreen-block{float: left;padding-left: 5px;}</style></div>				<div class="recommend"><div class="item-game" ><div class="cr-item"><a href="/geometry-dash-spam"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/geometry-dash-spam-m240x240.jpg"title="Geometry Dash Spam"alt="Geometry Dash Spam"></div><div class="cr-info"><span>Geometry Dash Spam</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/geometry-dash-lite"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/geometry-dash-lite1-m240x240.jpg"title="Geometry Dash Lite"alt="Geometry Dash Lite"></div><div class="cr-info"><span>Geometry Dash Lite</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/slope-game"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/slope-game-m240x240.jpg"title="Slope Game"alt="Slope Game"></div><div class="cr-info"><span>Slope Game</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/racing-limits"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/racing-limits-m240x240.jpg"title="Racing Limits"alt="Racing Limits"></div><div class="cr-info"><span>Racing Limits</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/geometry-dash-wave"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/geometry-dash-wave-m240x240.png"title="Geometry Dash Wave"alt="Geometry Dash Wave"></div><div class="cr-info"><span>Geometry Dash Wave</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/draw-climber"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/draw-climber-m240x240.jpg"title="Draw Climber"alt="Draw Climber"></div><div class="cr-info"><span>Draw Climber</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/geometry-dash-wave-spam"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/geometry-dash-wave-spam-m240x240.jpg"title="Geometry Dash Wave Spam"alt="Geometry Dash Wave Spam"></div><div class="cr-info"><span>Geometry Dash Wave Spam</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/minecraft"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/minecraft-m240x240.jpg"title="Minecraft"alt="Minecraft"></div><div class="cr-info"><span>Minecraft</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/geometry-arrow"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/geometry-arrow-m240x240.jpeg"title="Geometry Arrow"alt="Geometry Arrow"></div><div class="cr-info"><span>Geometry Arrow</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/geometry-dash-subzero"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/geometry-dash-subzero-m240x240.jpeg"title="Geometry Dash SubZero"alt="Geometry Dash SubZero"></div><div class="cr-info"><span>Geometry Dash SubZero</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/flip-bottle"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/flip-bottle-m240x240.jpg"title="Flip Bottle"alt="Flip Bottle"></div><div class="cr-info"><span>Flip Bottle</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/italian-brainrot-bike-rush"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/italian-brainrot-bike-rush-m240x240.jpg"title="Italian Brainrot Bike Rush"alt="Italian Brainrot Bike Rush"></div><div class="cr-info"><span>Italian Brainrot Bike Rush</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/stickman-hook"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/stickman-hook-m240x240.jpg"title="Stickman Hook"alt="Stickman Hook"></div><div class="cr-info"><span>Stickman Hook</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/stack-ball-fall-3d"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/stack-ball-fall-3d-m240x240.jpg"title="Stack Ball Fall 3D"alt="Stack Ball Fall 3D"></div><div class="cr-info"><span>Stack Ball Fall 3D</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/baldis-basics"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/baldis-basics-m240x240.jpg"title="Baldi's Basics"alt="Baldi's Basics"></div><div class="cr-info"><span>Baldi's Basics</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/tallman-run"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/tallman-run-m240x240.jpg"title="Tallman Run"alt="Tallman Run"></div><div class="cr-info"><span>Tallman Run</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/snowball-racing"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/snowball-racing-m240x240.jpeg"title="Snowball Racing"alt="Snowball Racing"></div><div class="cr-info"><span>Snowball Racing</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/apple-worm"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/apple-worm2-m240x240.jpg"title="Apple Worm"alt="Apple Worm"></div><div class="cr-info"><span>Apple Worm</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/minefunio"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/minefun.io-m240x240.jpg"title="MineFun.io"alt="MineFun.io"></div><div class="cr-info"><span>MineFun.io</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/flappy-bird"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/flappy-bird-m240x240.jpg"title="Flappy Bird"alt="Flappy Bird"></div><div class="cr-info"><span>Flappy Bird</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/rail-slide"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/rail-slide-m240x240.jpeg"title="Rail Slide"alt="Rail Slide"></div><div class="cr-info"><span>Rail Slide</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/geometry-dash-spam-test"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/geometry-dash-spam-test-m240x240.jpg"title="Geometry Dash Spam Test"alt="Geometry Dash Spam Test"></div><div class="cr-info"><span>Geometry Dash Spam Test</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/geometry-dash-wave-challenge"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/geometry-dash-wave-challenge-m240x240.jpg"title="Geometry Dash Wave Challenge"alt="Geometry Dash Wave Challenge"></div><div class="cr-info"><span>Geometry Dash Wave Challenge</span> </div>	</div>	</div></a></div> </div><div class="item-game" ><div class="cr-item"><a href="/arrow-wave"><div class="cr-detail"><div class="cr-item-content"><div class="cr-img"><img loading="lazy" src="/upload/cache/upload/imgs/arrow-wave-m240x240.jpg"title="Arrow Wave"alt="Arrow Wave"></div><div class="cr-info"><span>Arrow Wave</span> </div>	</div>	</div></a></div> </div></div><h2>About Space Waves</h2><p>Space Waves is an exciting side-scrolling game that combines fast-paced action and challenges. Control an arrow to fly through space tunnels full of obstacles.</p><p>This game requires the player to control an arrow to avoid obstacles until you touch the end of each level. There are 33 levels of varying difficulty, categorized by emojis, allowing you to choose the level of challenge you want to face.</p><p>Space Waves was released in April 2024 by do.games and is a popular game among players today.</p><h2>How to play</h2><h3>What is your goal?</h3><p>You aim to dodge obstacles, destroy enemy spaceships, and collect power-ups to increase your score and survive as long as possible. Each level of Space Waves has a similar goal of completing the level without letting the arrows collide with walls, spinning gears, or spikes.</p><h3>Countless obstacles</h3><p>Space tunnels are endlessly generated, ensuring a unique and challenging experience every time you play. Along the way, obstacles will appear, such as walls, spikes, and spinning gears. It would help to control your arrow to avoid collisions with these obstacles.</p><h3>Level of difficult</h3><p>"Green" levels will have more space and more accessible angles, allowing you to increase the straight speed of your arrow. You can expect to encounter more obstacles, narrower edges, and more when you choose more difficult levels. You can choose any level you want to play, so you can start with the hardest one, which can quickly help you realize the need for quick reactions.</p><h3>Enemy spaceship</h3><p>Be careful because enemy spaceships will periodically appear and shoot at you. Destroy them to earn points and power-ups. Collect power-ups to enhance your spaceship's abilities, such as increasing firepower, temporary invulnerability, or slowing down the game speed.</p><p><img src="https://spacewaves.io/upload/imgs/space-waves1.png" alt="space waves" width="768" height="400" /></p><h3>How to control</h3><ul><li>You can use the left and right arrows on your device screen to move the spaceship horizontally.</li><li>To shoot, you can tap the screen to fire the spaceship's laser.</li><li>PC controls: Use the left mouse button / W key / Spacebar key to go up and release to go down.</li><li>Mobile controls: Tap the screen to go up and let go to go down.</li></ul><h2>Game modes</h2><h3>World Mode 1</h3><p>World 1 mode is the first level in the Space Waves. This level usually has a lower difficulty, with more space and fewer obstacles, helping players get used to the game's controls and gameplay. World Mode 1 is the ideal mode for new players to start and learn to control their arrows accurately.</p><h3>Endless Mode</h3><p>Endless mode is a game mode with no specific endpoint, where you try to go as far as possible. In this mode, you will face constant obstacles and test your ability to react quickly. Endless is a great game mode to challenge yourself and see how quickly you can maintain focus and respond in a pressure-filled environment.</p><p>Both modes offer excellent opportunities to develop your gaming skills and strategies. World 1 mode helps you get used to the game, while Endless mode challenges you to achieve the highest score. Try both modes to see which suits you best and how you want to conquer Space Waves!</p><h2>Tips and strategies to play Space Waves</h2><p>You should play a lot if you want to be good at any game. The more you play, the easier it will be to master controlling the spacecraft and avoiding obstacles better.</p><ul><li>Know how to use power-ups wisely and strategically to gain an advantage in difficult situations.</li><li>Along the way, many things will distract you, such as backgrounds or visual effects. Try to focus on obstacles and enemy spaceships on your way. Move in a zigzag pattern when obstacles are ahead; this will help you maintain straight momentum.</li><li>As you progress, you can upgrade your starship's statistics, such as speed, firepower, and power-up item duration.</li></ul>		 <div class="menu-footer"><a href="/about-us" rel="nofollow">About Us</a><a href="/contact-us" rel="nofollow">Contact Us</a><a href="/copyright-infringement-notice-procedure" rel="nofollow">Copyright Infringement Notice Procedure</a><a href="/term-of-use" rel="nofollow">Terms of Use</a><a href="/privacy-policy" rel="nofollow">Privacy Policy</a></div>
+        .spinner {
+            width: 50px; height: 50px; border: 5px solid #333;
+            border-top: 5px solid #3498db; border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
 
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-		</div></div>	<style>img{	
- height: auto;
-}</style><div id="AdsInGame"><div class="row_loadding"><div class="ads_loadding_text">Advertisement</div><div class="ads_inGame"><div class="ads_loadding_content"><div style="width:300px; height:300px; background: #555;">ads</div></div><div class="tilte-game" style="margin-top: 3px !important;"></div><div id="vaule_countdown"></div><div id="btn_close"><button class="btn_play" onclick="none_ads_inGame()">Close</button></div><div class="box-full"></div></div></div></div><!-- Game --><link rel="stylesheet" href="/game/space-wave/TemplateData/style.css"><div id="unity-container"><canvas id="unity-canvas"></canvas></div><div id="loading-cover" style="display:none;"><div id="unity-loading-bar"><div id="unity-logo"><img src="/game/space-wave/logo.png"></div><div id="unity-progress-bar-empty" style="display: none; background: none;margin: 5px !important;"><div id="unity-progress-bar-full" style="margin-top:0px "></div></div><div class="spinner"></div></div></div><script src="/game/space-wave/microsoftDataMigrationDO.js"></script><script>document.addEventListener("DOMContentLoaded", () => {
- microsoftMigration();
- });
-	 
- window.addEventListener("PlayerPrefsReady", () => {
- migratePlayerPrefs();
- });</script><script>window.addEventListener("load", function () {
- if ("serviceWorker" in navigator) {
- navigator.serviceWorker.register("ServiceWorker.js");
- }
- });
-	 
-	 const container = document.querySelector("#unity-container");
- const canvas = document.querySelector("#unity-canvas");
- const loadingCover = document.querySelector("#loading-cover");
- const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
- const progressBarFull = document.querySelector("#unity-progress-bar-full");
- const spinner = document.querySelector('.spinner');
+        #progress-bar {
+            width: 200px; height: 10px; background: #333;
+            border-radius: 5px; margin-top: 20px; overflow: hidden;
+        }
 
- const buildUrl = "https://slope3.com/game/space-wave/Build";
- const loaderUrl = buildUrl + "/dae5c7bd2b15915f51ae4e56b8f5367d.loader.js";
- const config = {
- dataUrl: buildUrl + "/568ea6b3af616bd57f419c508c933303.data.unityweb",
- frameworkUrl: buildUrl + "/c699bc4c24abfbdb4c8b3e15b0af7d3f.framework.js.unityweb",
- codeUrl: buildUrl + "/7fb5141de5923189bc1dc5f94eb619f2.wasm.unityweb",
- streamingAssetsUrl: "StreamingAssets",
- companyName: "do.Games",
- productName: "Space Waves",
- productVersion: "1.1.2-ms",
-		matchWebGLToCanvasSize: "false"
- };
-	 
- loadingCover.style.display = "";
-	 
-	 var needMigrate = false;
-	 var gameInstance;
- var script = document.createElement("script");
- script.src = loaderUrl;
- script.onload = () => {
- createUnityInstance(canvas, config, (progress) => {
-		 spinner.style.display = "none";
- progressBarEmpty.style.display = "";
- progressBarFull.style.width = 100 * progress + "%";
- }).then((unityInstance) => {
-		 console.log("<do.G> Unity inited");
- gameInstance = unityInstance;
- loadingCover.style.display = "none";
-		 resizeCanvas();
-		 loadAds();
-		 
-		 if (needMigrate) {
-			needMigrate = false;
-		 gameInstance.SendMessage('MSStartSDK', 'OnMigratePlayerPrefs', window["fetchPlayerPrefs"]);
-		 }
-		 
- }).catch((message) => {
- alert(message);
- });
- };
- document.body.appendChild(script);
-	 
-	 // Focus
- 	 function setFocus() {
- 	 container.focus();
- 		window.focus();
- 		canvas.focus();
- 	 }
+        #progress-fill { width: 0%; height: 100%; background: #3498db; transition: 0.2s; }
+        
+        /* Hidden UI for Panic */
+        #panic-overlay { display: none; }
+    </style>
+</head>
+<body>
 
- 	 window.addEventListener("touchstart", () => {
- 	 setFocus();
- 	 });
- 	 window.addEventListener("pointerdown", () => {
- 	 setFocus();
- 	 });
- 	 window.addEventListener("resize", () => {
- 	 setFocus();
-		resizeCanvas();
- 	 });
-	 
-	 function resizeCanvas() {
-		var pixelRatio = window.devicePixelRatio || 1;
-		var width = canvas.clientWidth * pixelRatio;
-		var height = canvas.clientHeight * pixelRatio;
-			
-		if (canvas.width != width || canvas.height != height) {
-			if (height > 1080) {
-				canvas.width = Math.floor(width / height * 1080);
-				canvas.height = 1080;
-			}
-			else
-			{
-				canvas.width = width;
-				canvas.height = height;
-			}
-		}
-	 }
-	 
-	 function migratePlayerPrefs() {
-	 if (typeof gameInstance !== 'undefined') {
-		 gameInstance.SendMessage('MSStartSDK', 'OnMigratePlayerPrefs', window["fetchPlayerPrefs"]);
-		} else {
-		 needMigrate = true;
-		}
-	 }</script><script src="https://assets.msn.com/staticsb/statics/latest/msstart-games-sdk/msstart-v1.0.0-rc.13.min.js"></script><script>
-	 var _interstitialAdInstance = null;
-	 var _rewardedAdInstance = null;
-	 
-	 function loadAds() {
-	 loadInterstitialAd();
-	 loadRewardedAd();
-	 }
-	 
-	 function loadInterstitialAd() {
-	 _interstitialAdInstance = null;
-		
-		$msstart.loadAdsAsync().then(adInstance => {
-		 // Use the adInstance.instanceId to make a call to showAdsAsync
-		 _interstitialAdInstance = adInstance;
-		 console.log("Interstitial ad successfully loaded!");
-	 }).catch(e => {
-		 console.error('<do.G> Error loading interstitial ad. Will retry in 20 seconds...', e);
-		 setTimeout(loadInterstitialAd, 20000);
-		});
-	 }
-	 
-	 function loadRewardedAd() {
-	 _rewardedAdInstance = null;
-		
-		$msstart.loadAdsAsync(true).then(adInstance => {
-		 // Pass in boolean true for the optional parameter isRewardedAd, to fetch Rewarded ads
-		 _rewardedAdInstance = adInstance;
-		 console.log("Rewarded ad successfully loaded!");
-	 }).catch(e => {
-		 console.error('<do.G> Error loading rewarded ad. Will retry in 20 seconds...', e);
-		 setTimeout(loadRewardedAd, 20000);
-		});
-	 }
-	 
-	 async function showInterstitialAd() {
-	 if (_interstitialAdInstance == null) {
-		 gameInstance.SendMessage('MSStartSDK', 'OnInterstitialAdShowError');
-		 return;
-		}
-		
-		let t;
-		
-		try {
-		 t = await $msstart.showAdsAsync(_interstitialAdInstance.instanceId);
-		} catch (e) {
-		 console.error('<do.G> Error show interstitial ad: ', e);
-		 gameInstance.SendMessage('MSStartSDK', 'OnInterstitialAdShowError');
-		 loadInterstitialAd();
-		}
-		
-		if (t) {
-		 try {
-		 await t.showAdsCompletedAsync;
-			gameInstance.SendMessage('MSStartSDK', 'OnInterstitialAdClose');
-			loadInterstitialAd();
-		 } catch (e) {
- console.error('<do.G> Error interstitial showAdsCompletedAsync: ', e);
-		 gameInstance.SendMessage('MSStartSDK', 'OnInterstitialAdShowError');
-		 loadInterstitialAd();
- }
-		}
-	 }
-	 
-	 async function showRewardedAd() {
-	 if (_rewardedAdInstance == null) {
-		 gameInstance.SendMessage('MSStartSDK', 'OnRewardedAdShowError');
-		 return;
-		}
-		
-		let t;
-		
-		try {
-		 t = await $msstart.showAdsAsync(_rewardedAdInstance.instanceId);
-		} catch (e) {
-		 console.error('<do.G> Error show rewarded ad: ', e);
-		 gameInstance.SendMessage('MSStartSDK', 'OnRewardedAdShowError');
-		 loadRewardedAd();
-		}
-		
-		if (t) {
-		 try {
-		 await t.showAdsCompletedAsync;
-			gameInstance.SendMessage('MSStartSDK', 'OnReward');
-			loadRewardedAd();
-		 } catch (e) {
- console.error('<do.G> Error rewarded showAdsCompletedAsync: ', e);
-		 gameInstance.SendMessage('MSStartSDK', 'OnRewardedAdShowError');
-		 loadRewardedAd();
- }
-		}
-	 }
-	 </script><!-- End Game --><script src="/themes/spacewaves.io/rs/js/jquery-3.4.1.min.js?"></script><script defer src="/themes/spacewaves.io/rs/plugins/raty/jquery.raty.min.js"></script><script>let FlagTimeout = 0;
-	let timeTimeout = 39000;
-	function ChangeFlagTimeout() {		
-		FlagTimeout = 1;
-		setTimeout(function() {
-			FlagTimeout = 0;
-		}, timeTimeout);
-	}
+    <div id="unity-container">
+        <canvas id="unity-canvas" tabindex="-1"></canvas>
+        <div id="loading-cover">
+            <div class="spinner"></div>
+            <div id="progress-bar"><div id="progress-fill"></div></div>
+            <p style="color: #666; font-family: sans-serif; margin-top: 10px;">Loading Space Waves...</p>
+        </div>
+    </div>
 
- function none_ads_inGame() {
-		document.getElementById("AdsInGame").style.display = "none";
-		document.getElementById("btn_close").style.display = "none";
-		document.getElementById("vaule_countdown").style.display = "block";
- }
-	function show_Ads1() {
-		let ads1 = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3669370410817131" crossorigin="anonymous"><\/script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3669370410817131" data-ad-slot="5290016702" data-ad-format="auto" data-full-width-responsive="true"></ins>';
-		document.getElementById("Ads1").innerHTML = ads1;
-		(adsbygoogle = window.adsbygoogle || []).push({});
-	}
-	function show_ads_inGame_dp() {
- document.getElementById("AdsInGame").style.display = "block";
-	 let ads_innt='<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3669370410817131" crossorigin="anonymous"><\/script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3669370410817131" data-ad-slot="5290016702" data-ad-format="auto" data-full-width-responsive="true"></ins>';
-		document.getElementsByClassName("ads_loadding_content")[0].innerHTML = ads_innt;
-		(adsbygoogle = window.adsbygoogle || []).push({});	
- var countDownClose = 6;
- var x = setInterval(function () {
- countDownClose = countDownClose - 1;
- document.getElementById("vaule_countdown").innerHTML = "Continue in " + countDownClose;
- if (countDownClose < 0) {
- clearInterval(x);
- document.getElementById("vaule_countdown").style.display = "none";
- document.getElementById("btn_close").style.display = "block";
- countDownClose = 6;
- document.getElementById("vaule_countdown").innerHTML = "Continue in " + countDownClose;
+    <script>
+        const canvas = document.querySelector("#unity-canvas");
+        const loadingCover = document.querySelector("#loading-cover");
+        const progressFill = document.querySelector("#progress-fill");
 
- }
- }, 1000);
- }
-	function show_ads_inGame(){
-		if(FlagTimeout==0){		
-			show_ads_inGame_dp();
-			ChangeFlagTimeout();
-		}else{
-			none_ads_inGame(false);
-		}
-	}
-	document.getElementsByClassName("tilte-game")[0].innerHTML = 'Space Waves';
-	show_ads_inGame();
-	show_Ads1();</script> <script>(function() {
- function isEditable(el) {
- if (!el) return false;
- if (el.isContentEditable) return true;
- var tag = (el.tagName || '').toUpperCase();
- return tag === 'INPUT' || tag === 'TEXTAREA';
- }
+        const buildUrl = "https://slope3.com/game/space-wave/Build";
+        const config = {
+            dataUrl: buildUrl + "/568ea6b3af616bd57f419c508c933303.data.unityweb",
+            frameworkUrl: buildUrl + "/c699bc4c24abfbdb4c8b3e15b0af7d3f.framework.js.unityweb",
+            codeUrl: buildUrl + "/7fb5141de5923189bc1dc5f94eb619f2.wasm.unityweb",
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "do.Games",
+            productName: "Space Waves",
+            productVersion: "1.1.2-ms",
+        };
 
- var origAddEventListener = EventTarget.prototype.addEventListener;
- EventTarget.prototype.addEventListener = function(type, listener, options) {
- if (['keydown','keypress','keyup'].includes(type) &&
- (this === document || this === window)) {
- var wrapped = function(ev) {
- if (isEditable(ev.target)) {
- return; 
- }
- return listener.call(this, ev);
- };
- return origAddEventListener.call(this, type, wrapped, options);
- }
- return origAddEventListener.call(this, type, listener, options);
- };
-})();</script><script> 
-		function ToggleInfo(){
-			let width_panel = $("div.main-panel").css('width');
-			width_panel = width_panel.replaceAll('px','');
-			if (( width_panel >= 300)) {
-				$("div.main-panel").css('width', '0px');
-				$("div.main-panel-ads").css('display', 'none'); 
-				$("div.main-panel-content").css('display', 'none'); 			
-				$('button.hide-main-panel').children('i').html('Info');
-			} else {
-				$("div.main-panel").css('width', $("div.main-panel").css('max-width'));
-				$("div.main-panel-ads").css('display', 'block'); 
-				$("div.main-panel-content").css('display', 'block'); 
-				$('button.hide-main-panel').children('i').html('>>');
-			}
-		}
-		function ShowInfo(){
-			$("div.main-panel").css('width', $("div.main-panel").css('max-width'));
-			$("div.main-panel-ads").css('display', 'block'); 
-			$("div.main-panel-content").css('display', 'block'); 
-			$('button.hide-main-panel').children('i').html('>>');
-		}
-		function HideInfo(){			
-			$("div.main-panel").css('width', '0px');
-			$("div.main-panel-ads").css('display', 'none'); 
-			$("div.main-panel-content").css('display', 'none'); 			
-			$('button.hide-main-panel').children('i').html('Info');
-		}
-		$('button.hide-main-panel').click(function () {				
-			ToggleInfo();
-		});		
-	 </script> </div><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"c7068728fe2d4e47b5f71794ca0429b2","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-</body></html>
+        // --- PANIC INTEGRATION ---
+        window.addEventListener('keydown', (e) => {
+            if (e.shiftKey && e.key === '1') window.top.location.href = "https://classroom.google.com";
+        });
+
+        const script = document.createElement("script");
+        script.src = buildUrl + "/dae5c7bd2b15915f51ae4e56b8f5367d.loader.js";
+        script.onload = () => {
+            createUnityInstance(canvas, config, (progress) => {
+                progressFill.style.width = (100 * progress) + "%";
+            }).then((unityInstance) => {
+                loadingCover.style.display = "none";
+                // Auto-focus the game
+                canvas.focus();
+            }).catch((message) => {
+                console.error(message);
+            });
+        };
+        document.body.appendChild(script);
+
+        // Keep focus on the game
+        window.addEventListener("mousedown", () => canvas.focus());
+    </script>
+</body>
+</html>

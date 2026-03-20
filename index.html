@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="tab-title">My Apps</title>
+    <link id="tab-icon" rel="icon" href="">
     
     <style>
         :root { 
@@ -26,6 +27,7 @@
             font-family: 'Courier New', monospace !important;
         }
 
+        /* Retro Scanline Effect */
         .scanlines {
             display: none;
             position: fixed;
@@ -56,7 +58,7 @@
             background: none; border: none; color: var(--text); 
             opacity: 0.7; text-align: left; padding: 12px; 
             cursor: pointer; border-radius: 8px; font-size: 14px; 
-            margin-bottom: 5px; width: 100%; 
+            margin-bottom: 5px; width: 100%; transition: 0.2s;
         }
         .side-btn:hover, .side-btn.active { 
             background: var(--border); opacity: 1; color: var(--accent); 
@@ -80,15 +82,15 @@
         
         #game-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
             gap: 15px; 
         }
 
         .game-card { 
             background: var(--card); border: 1px solid var(--border); 
-            padding: 25px 10px; border-radius: 12px; cursor: pointer; 
+            padding: 20px 10px; border-radius: 12px; cursor: pointer; 
             text-align: center; font-size: 13px; font-weight: bold; 
-            min-height: 85px; display: flex; align-items: center; 
+            min-height: 90px; display: flex; align-items: center; 
             justify-content: center; color: var(--text); transition: 0.2s; 
         }
         .game-card:hover { border-color: var(--accent); transform: translateY(-3px); }
@@ -98,8 +100,9 @@
 
         .config-box { padding: 20px; background: var(--card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
         .setting-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+        .config-input { width: 100%; padding: 10px; margin-top: 5px; background: #000; border: 1px solid var(--border); color: #fff; border-radius: 6px; }
 
-        /* Switch UI */
+        /* Toggle Switch */
         .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #444; transition: .4s; border-radius: 20px; }
@@ -117,11 +120,14 @@
         <h1 id="main-logo" style="color:var(--accent); margin-left:10px; font-size:22px; margin-bottom:20px;">Project 404</h1>
         <button id="nav-home" class="side-btn active" onclick="showTab('home')">Home</button>
         <button id="nav-settings" class="side-btn" onclick="showTab('settings')">Settings</button>
+        <div style="margin-top: auto; padding: 10px;">
+            <button class="side-btn" style="font-size: 11px; opacity: 0.5; border: 1px solid var(--border);" onclick="runHistoryCloak()">Run History Cloak</button>
+        </div>
     </div>
 
     <div id="main">
         <div id="top-nav">
-            <input type="text" id="search" placeholder="Search games..." oninput="renderGames()">
+            <input type="text" id="search" placeholder="Search for apps..." oninput="renderGames()">
             <button class="side-btn" style="background:#ff4444; color:white; width:auto; padding:10px 15px; font-weight:bold;" onclick="panic()">PANIC</button>
         </div>
 
@@ -132,10 +138,23 @@
         <div id="settings-area">
             <div style="max-width: 600px; margin: 0 auto;">
                 <h1>Settings</h1>
+                
                 <div class="config-box">
-                    <h2>Visuals</h2>
+                    <h2 style="font-size:16px; margin-top:0;">Tab Cloaking</h2>
+                    <div style="margin-bottom:15px;">
+                        <label style="font-size:12px; opacity:0.7;">Tab Name</label>
+                        <input type="text" id="cloak-name" class="config-input" placeholder="e.g. Google Docs" oninput="saveCloak()">
+                    </div>
+                    <div>
+                        <label style="font-size:12px; opacity:0.7;">Favicon URL</label>
+                        <input type="text" id="cloak-icon" class="config-input" placeholder="https://..." oninput="saveCloak()">
+                    </div>
+                </div>
+
+                <div class="config-box">
+                    <h2 style="font-size:16px; margin-top:0;">Visuals & Themes</h2>
                     <div class="setting-row">
-                        <span>OG Look (Green/Black)</span>
+                        <span>OG Terminal Look (Green/Black)</span>
                         <label class="switch">
                             <input type="checkbox" id="og-toggle" onchange="toggleOGLook(this.checked)">
                             <span class="slider"></span>
@@ -201,8 +220,8 @@
             { name: "Death Run 3D (TEST)", path: "./games/DR3D/index.html" },
             { name: "Big Neon Tower Tiny Square (TEST)", path: "./games/BNTTS.html" },
             { name: "Duck Life 1 (TEST)", path: "./games/DuckLife1/index.html" },
-            { name: "Tube Jumpers (TEST)", path: "./games/TJ.html" },
-            { name: "Tetris (OG)", path: "./games/tetris/index.html" }
+            { name: "Slither.io (TEST)", path: "./games/Slither.io/slither.io/index.html" },
+            { name: "Tube Jumpers (TEST)", path: "./games/TJ.html" }
         ];
 
         const themes = {
@@ -213,13 +232,27 @@
             aero: { bg: "#f0f2f5", side: "#ffffff", text: "#1a1a1a", card: "#ffffff", border: "#ddd", accent: "#0078d4" }
         };
 
+        function saveCloak() {
+            const cloak = {
+                name: document.getElementById('cloak-name').value,
+                icon: document.getElementById('cloak-icon').value
+            };
+            localStorage.setItem('p404_cloak', JSON.stringify(cloak));
+            applyCloak(cloak);
+        }
+
+        function applyCloak(cloak) {
+            if (cloak.name) document.title = cloak.name;
+            if (cloak.icon) document.getElementById('tab-icon').href = cloak.icon;
+        }
+
         function toggleOGLook(enabled) {
             document.body.setAttribute('data-og-look', enabled);
             localStorage.setItem('p404_og_look', enabled);
         }
 
         function setTheme(key) {
-            const t = themes[key];
+            const t = themes[key] || themes.default;
             const r = document.documentElement.style;
             r.setProperty('--bg', t.bg);
             r.setProperty('--side', t.side);
@@ -246,11 +279,11 @@
                 card.className = 'game-card';
                 let displayName = g.name.replace("(TEST)", "").replace("(OG)", "").trim();
                 
-                if(g.name.includes("(TEST)")) {
+                if (g.name.includes("(TEST)")) {
                     card.style.borderColor = "var(--accent)";
-                    card.innerHTML = `<div>${displayName}<br><span style="font-size:9px; color:var(--accent);">TEST</span></div>`;
-                } else if(g.name.includes("(OG)")) {
-                    card.innerHTML = `<div>${displayName}<br><span style="font-size:9px; opacity:0.5;">OG</span></div>`;
+                    card.innerHTML = `<div>${displayName}<br><span style="font-size:9px; color:var(--accent); letter-spacing:1px;">DEV BUILD</span></div>`;
+                } else if (g.name.includes("(OG)")) {
+                    card.innerHTML = `<div>${displayName}<br><span style="font-size:9px; opacity:0.5; letter-spacing:1px;">ORIGINAL</span></div>`;
                 } else {
                     card.innerText = displayName;
                 }
@@ -270,21 +303,39 @@
             document.getElementById('settings-area').style.display = isHome ? 'none' : 'block';
             document.getElementById('player-container').style.display = 'none';
             document.getElementById('game-view').src = '';
-            document.getElementById('nav-home').classList.toggle('active', isHome);
-            document.getElementById('nav-settings').classList.toggle('active', !isHome);
+            document.getElementById('nav-home').className = isHome ? 'side-btn active' : 'side-btn';
+            document.getElementById('nav-settings').className = isHome ? 'side-btn' : 'side-btn active';
+        }
+
+        function runHistoryCloak() {
+            const win = window.open('about:blank', '_blank');
+            if (win) {
+                win.document.body.style.margin = '0';
+                win.document.body.style.height = '100vh';
+                const iframe = win.document.createElement('iframe');
+                iframe.style.width = '100%'; iframe.style.height = '100%'; iframe.style.border = 'none';
+                iframe.src = window.location.href;
+                win.document.body.appendChild(iframe);
+                window.location.replace('https://google.com');
+            }
         }
 
         function init() {
-            const ogEnabled = localStorage.getItem('p404_og_look') === 'true';
-            document.getElementById('og-toggle').checked = ogEnabled;
-            toggleOGLook(ogEnabled);
+            // Load OG Look
+            const og = localStorage.getItem('p404_og_look') === 'true';
+            document.getElementById('og-toggle').checked = og;
+            toggleOGLook(og);
 
-            const savedTheme = localStorage.getItem('p404_theme') || 'default';
-            setTheme(savedTheme);
-            document.getElementById('theme-select').value = savedTheme;
-
+            // Load Theme & Accent
+            setTheme(localStorage.getItem('p404_theme') || 'default');
             const savedAccent = localStorage.getItem('p404_accent');
             if (savedAccent) updateAccent(savedAccent);
+
+            // Load Cloak
+            const cloak = JSON.parse(localStorage.getItem('p404_cloak')) || {name: '', icon: ''};
+            document.getElementById('cloak-name').value = cloak.name;
+            document.getElementById('cloak-icon').value = cloak.icon;
+            applyCloak(cloak);
 
             renderGames();
         }

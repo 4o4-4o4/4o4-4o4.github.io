@@ -8,79 +8,77 @@
     
     <style>
         :root { 
-            --bg: #0b0b0b; --side: #121212; --text: #efefef; 
+            --bg: #0b0b0b; --bg2: #0b0b0b; --side: #121212; --text: #efefef; 
             --card: rgba(30, 30, 30, 0.9); --border: #333; --accent: #3498db;
             --glow: rgba(52, 152, 219, 0.4);
         }
 
-        /* --- THE 25 STYLES --- */
-        [data-look="1"] { --bg: #000800; --side: #000500; --text: #00ff00; --card: rgba(0, 15, 0, 0.9); --border: #004400; --accent: #00ff00; }
-        [data-look="2"] { --bg: #0a0000; --side: #150000; --text: #ff4d4d; --card: rgba(35, 0, 0, 0.9); --border: #550000; --accent: #ff0000; }
-        [data-look="3"] { --bg: #000b1a; --side: #00122e; --text: #00fff2; --card: rgba(0, 20, 50, 0.9); --border: #00fff2; --accent: #f0f; }
-        [data-look="4"] { --bg: #ffffff; --side: #f0f0f0; --text: #111; --card: rgba(220, 220, 220, 0.9); --border: #bbb; --accent: #3498db; }
-        [data-look="5"] { --bg: #1a0026; --side: #11001a; --text: #e600ff; --card: rgba(40, 0, 60, 0.9); --border: #e600ff; --accent: #e600ff; }
-        [data-look="6"] { --bg: #001a0d; --side: #000d06; --text: #00ff80; --card: rgba(0, 40, 20, 0.9); --border: #00ff80; --accent: #00ff80; }
-        [data-look="7"] { --bg: #1a0f00; --side: #0d0800; --text: #ff9900; --card: rgba(40, 25, 0, 0.9); --border: #ff9900; --accent: #ff9900; }
-        [data-look="8"] { --bg: #00141a; --side: #000a0d; --text: #00d9ff; --card: rgba(0, 30, 40, 0.9); --border: #00d9ff; --accent: #00d9ff; }
-        [data-look="9"] { --bg: #1a0000; --side: #0d0000; --text: #ff0000; --card: rgba(50, 0, 0, 0.9); --border: #ff0000; --accent: #ff0000; }
-        [data-look="10"] { --bg: #0d0d0d; --side: #000; --text: #fff; --card: rgba(30, 30, 30, 0.9); --border: #fff; --accent: #fff; }
-        [data-look="11"] { --bg: #1a1a00; --side: #0d0d00; --text: #ffff00; --card: rgba(40, 40, 0, 0.9); --border: #ffff00; --accent: #ffff00; }
-        [data-look="12"] { --bg: #0a0a1a; --side: #05050d; --text: #5c5cff; --card: rgba(15, 15, 45, 0.9); --border: #5c5cff; --accent: #5c5cff; }
-        [data-look="13"] { --bg: #1a000d; --side: #0d0006; --text: #ff0080; --card: rgba(40, 0, 20, 0.9); --border: #ff0080; --accent: #ff0080; }
-        [data-look="14"] { --bg: #001a1a; --side: #000d0d; --text: #00ffff; --card: rgba(0, 40, 40, 0.9); --border: #00ffff; --accent: #00ffff; }
-        [data-look="15"] { --bg: #0d1a00; --side: #060d00; --text: #80ff00; --card: rgba(20, 40, 0, 0.9); --border: #80ff00; --accent: #80ff00; }
-        [data-look="16"] { --bg: #1a0d00; --side: #0d0600; --text: #ff8000; --card: rgba(40, 20, 0, 0.9); --border: #ff8000; --accent: #ff8000; }
-        [data-look="17"] { --bg: #000d1a; --side: #00060d; --text: #0080ff; --card: rgba(0, 20, 40, 0.9); --border: #0080ff; --accent: #0080ff; }
-        [data-look="18"] { --bg: #0d001a; --side: #06000d; --text: #8000ff; --card: rgba(20, 0, 40, 0.9); --border: #8000ff; --accent: #8000ff; }
-        [data-look="19"] { --bg: #1a001a; --side: #0d000d; --text: #ff00ff; --card: rgba(40, 0, 40, 0.9); --border: #ff00ff; --accent: #ff00ff; }
-        [data-look="20"] { --bg: #001a00; --side: #000d00; --text: #00ff00; --card: rgba(0, 40, 0, 0.9); --border: #00ff00; --accent: #00ff00; }
-        [data-look="21"] { --bg: #222; --side: #111; --text: #888; --card: rgba(40, 40, 40, 0.9); --border: #444; --accent: #666; }
-        [data-look="22"] { --bg: #050505; --side: #000; --text: #bb86fc; --card: rgba(20, 20, 20, 0.9); --border: #bb86fc; --accent: #bb86fc; }
-        [data-look="23"] { --bg: #050505; --side: #000; --text: #03dac6; --card: rgba(20, 20, 20, 0.9); --border: #03dac6; --accent: #03dac6; }
-        [data-look="24"] { --bg: #002b36; --side: #073642; --text: #839496; --card: rgba(0, 43, 54, 0.9); --border: #93a1a1; --accent: #268bd2; }
-        [data-look="25"] { --bg: #282c34; --side: #21252b; --text: #abb2bf; --card: rgba(44, 49, 58, 0.9); --border: #61afef; --accent: #c678dd; }
+        /* --- THE 25 NAMED STYLES --- */
+        [data-look="1"] { --bg: #000800; --bg2: #000800; --side: #000500; --text: #00ff00; --card: rgba(0, 15, 0, 0.9); --border: #004400; --accent: #00ff00; }
+        [data-look="2"] { --bg: #0a0000; --bg2: #0a0000; --side: #150000; --text: #ff4d4d; --card: rgba(35, 0, 0, 0.9); --border: #550000; --accent: #ff0000; }
+        [data-look="3"] { --bg: #000b1a; --bg2: #000b1a; --side: #00122e; --text: #00fff2; --card: rgba(0, 20, 50, 0.9); --border: #00fff2; --accent: #f0f; }
+        [data-look="4"] { --bg: #ffffff; --bg2: #ffffff; --side: #f0f0f0; --text: #111; --card: rgba(220, 220, 220, 0.9); --border: #bbb; --accent: #3498db; }
+        [data-look="5"] { --bg: #1a0026; --bg2: #1a0026; --side: #11001a; --text: #e600ff; --card: rgba(40, 0, 60, 0.9); --border: #e600ff; --accent: #e600ff; }
+        [data-look="6"] { --bg: #001a0d; --bg2: #001a0d; --side: #000d06; --text: #00ff80; --card: rgba(0, 40, 20, 0.9); --border: #00ff80; --accent: #00ff80; }
+        [data-look="7"] { --bg: #1a0f00; --bg2: #1a0f00; --side: #0d0800; --text: #ff9900; --card: rgba(40, 25, 0, 0.9); --border: #ff9900; --accent: #ff9900; }
+        [data-look="8"] { --bg: #00141a; --bg2: #00141a; --side: #000a0d; --text: #00d9ff; --card: rgba(0, 30, 40, 0.9); --border: #00d9ff; --accent: #00d9ff; }
+        [data-look="9"] { --bg: #1a0000; --bg2: #1a0000; --side: #0d0000; --text: #ff0000; --card: rgba(50, 0, 0, 0.9); --border: #ff0000; --accent: #ff0000; }
+        [data-look="10"] { --bg: #0d0d0d; --bg2: #0d0d0d; --side: #000; --text: #fff; --card: rgba(30, 30, 30, 0.9); --border: #fff; --accent: #fff; }
+        [data-look="11"] { --bg: #1a1a00; --bg2: #1a1a00; --side: #0d0d00; --text: #ffff00; --card: rgba(40, 40, 0, 0.9); --border: #ffff00; --accent: #ffff00; }
+        [data-look="12"] { --bg: #0a0a1a; --bg2: #0a0a1a; --side: #05050d; --text: #5c5cff; --card: rgba(15, 15, 45, 0.9); --border: #5c5cff; --accent: #5c5cff; }
+        [data-look="13"] { --bg: #1a000d; --bg2: #1a000d; --side: #0d0006; --text: #ff0080; --card: rgba(40, 0, 20, 0.9); --border: #ff0080; --accent: #ff0080; }
+        [data-look="14"] { --bg: #001a1a; --bg2: #001a1a; --side: #000d0d; --text: #00ffff; --card: rgba(0, 40, 40, 0.9); --border: #00ffff; --accent: #00ffff; }
+        [data-look="15"] { --bg: #0d1a00; --bg2: #0d1a00; --side: #060d00; --text: #80ff00; --card: rgba(20, 40, 0, 0.9); --border: #80ff00; --accent: #80ff00; }
+        [data-look="16"] { --bg: #1a0d00; --bg2: #1a0d00; --side: #0d0600; --text: #ff8000; --card: rgba(40, 20, 0, 0.9); --border: #ff8000; --accent: #ff8000; }
+        [data-look="17"] { --bg: #000d1a; --bg2: #000d1a; --side: #00060d; --text: #0080ff; --card: rgba(0, 20, 40, 0.9); --border: #0080ff; --accent: #0080ff; }
+        [data-look="18"] { --bg: #0d001a; --bg2: #0d001a; --side: #06000d; --text: #8000ff; --card: rgba(20, 0, 40, 0.9); --border: #8000ff; --accent: #8000ff; }
+        [data-look="19"] { --bg: #1a001a; --bg2: #1a001a; --side: #0d000d; --text: #ff00ff; --card: rgba(40, 0, 40, 0.9); --border: #ff00ff; --accent: #ff00ff; }
+        [data-look="20"] { --bg: #001a00; --bg2: #001a00; --side: #000d00; --text: #00ff00; --card: rgba(0, 40, 0, 0.9); --border: #00ff00; --accent: #00ff00; }
+        [data-look="21"] { --bg: #222; --bg2: #222; --side: #111; --text: #888; --card: rgba(40, 40, 40, 0.9); --border: #444; --accent: #666; }
+        [data-look="22"] { --bg: #050505; --bg2: #050505; --side: #000; --text: #bb86fc; --card: rgba(20, 20, 20, 0.9); --border: #bb86fc; --accent: #bb86fc; }
+        [data-look="23"] { --bg: #050505; --bg2: #050505; --side: #000; --text: #03dac6; --card: rgba(20, 20, 20, 0.9); --border: #03dac6; --accent: #03dac6; }
+        [data-look="24"] { --bg: #002b36; --bg2: #002b36; --side: #073642; --text: #839496; --card: rgba(0, 43, 54, 0.9); --border: #93a1a1; --accent: #268bd2; }
+        [data-look="25"] { --bg: #282c34; --bg2: #282c34; --side: #21252b; --text: #abb2bf; --card: rgba(44, 49, 58, 0.9); --border: #61afef; --accent: #c678dd; }
 
-        * { box-sizing: border-box; outline: none; transition: 0.2s; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100vh; background: var(--bg); overflow: hidden; display: flex; font-family: 'Segoe UI', sans-serif; color: var(--text); }
+        * { box-sizing: border-box; outline: none; transition: background 0.2s, color 0.2s, border 0.2s; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100vh; background: linear-gradient(135deg, var(--bg), var(--bg2)); overflow: hidden; display: flex; font-family: 'Segoe UI', sans-serif; color: var(--text); }
         
-        /* Cursor logic */
         body.unlocked, body.unlocked * { cursor: none !important; }
-
         #trail-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
-        .game-card, .side-btn, h2, h3, p, input { text-shadow: 2px 2px 4px rgba(0,0,0,1); }
 
         #gatekeeper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; z-index: 10000; cursor: default !important; }
         #gatekeeper img { width: 100%; height: 100%; object-fit: cover; border: none; }
 
-        #sidebar { width: 260px; background: var(--side); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px 15px; flex-shrink: 0; }
-        .side-btn { background: none; border: 1px solid transparent; color: var(--text); opacity: 0.8; text-align: left; padding: 12px 15px; border-radius: 8px; font-size: 14px; margin-bottom: 5px; }
+        #sidebar { width: 260px; background: var(--side); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px 15px; flex-shrink: 0; z-index: 10; }
+        .side-btn { background: none; border: 1px solid transparent; color: var(--text); opacity: 0.8; text-align: left; padding: 12px 15px; border-radius: 8px; font-size: 14px; margin-bottom: 5px; cursor: none !important; }
         .side-btn.active, .side-btn:hover { background: var(--border); opacity: 1; color: var(--accent); border-left: 4px solid var(--accent); }
 
-        #main { flex-grow: 1; display: flex; flex-direction: column; position: relative; }
+        #main { flex-grow: 1; display: flex; flex-direction: column; position: relative; z-index: 1; }
         #top-nav { height: 60px; background: var(--side); display: flex; align-items: center; padding: 0 20px; gap: 15px; border-bottom: 1px solid var(--border); }
-        #search { flex-grow: 1; background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px; color: var(--text); }
+        #search { flex-grow: 1; background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px; color: var(--text); cursor: none !important; }
         
         #content-area, #records-area, #settings-area { flex-grow: 1; overflow-y: auto; padding: 30px; display: none; }
         #game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
-        .game-card { background: var(--card); border: 1px solid var(--border); padding: 45px 10px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        .game-card { background: var(--card); border: 1px solid var(--border); padding: 45px 10px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 16px; transition: 0.3s; cursor: none !important; }
         .game-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 0 15px var(--glow); }
 
-        /* Pulsing Glow for (TEST) Games */
         @keyframes pulse-glow {
             0% { box-shadow: 0 0 5px var(--accent); }
-            50% { box-shadow: 0 0 18px var(--accent); }
+            50% { box-shadow: 0 0 20px var(--accent); }
             100% { box-shadow: 0 0 5px var(--accent); }
         }
         .test-glow { animation: pulse-glow 2s infinite ease-in-out; border-color: var(--accent) !important; }
 
         #launcher { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 5000; display: none; }
         #game-frame { width: 100%; height: 100%; border: none; }
-        #close-launcher { position: absolute; top: 20px; right: 20px; background: #ff4444; color: white; border: none; padding: 10px 25px; border-radius: 5px; font-weight: bold; z-index: 5001; }
+        #close-launcher { position: absolute; top: 20px; right: 20px; background: #ff4444; color: white; border: none; padding: 10px 25px; border-radius: 5px; font-weight: bold; z-index: 5001; cursor: none !important; }
         
         .config-box { background: var(--card); padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
-        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
-        .style-btn { background: var(--side); border: 1px solid var(--border); color: var(--text); padding: 8px; border-radius: 4px; font-size: 12px; transition: 0.1s; cursor: none !important; }
-        .style-btn:hover { border-color: var(--accent); background: var(--border); }
+        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+
+        .theme-controls { display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; }
+        .color-input-wrap { display: flex; flex-direction: column; gap: 5px; font-size: 12px; }
+        input[type="color"] { width: 50px; height: 35px; border: 2px solid var(--border); border-radius: 4px; background: none; cursor: none !important; }
     </style>
 </head>
 <body onload="init()">
@@ -105,23 +103,56 @@
             <button class="side-btn" style="background:#cc0000; color:white; opacity:1;" onclick="panic()">PANIC</button>
         </div>
         <div id="content-area" style="display: block;"><div id="game-grid"></div></div>
-        <div id="records-area"><textarea id="records-text" oninput="saveRecords()" style="width:100%; height:450px; background:rgba(0,0,0,0.3); color:var(--text); padding:20px; border:none; resize:none;"></textarea></div>
+        <div id="records-area"><textarea id="records-text" oninput="saveRecords()" style="width:100%; height:450px; background:rgba(0,0,0,0.3); color:var(--text); padding:20px; border:none; resize:none; cursor: none !important;"></textarea></div>
+        
         <div id="settings-area">
             <div class="config-box">
-                <h2>Quick Cloaks (Shift + 1-6)</h2>
+                <h2>Custom Theme Builder (Gradient Support)</h2>
+                <div class="theme-controls">
+                    <div class="color-input-wrap">
+                        <label>BG Color 1</label>
+                        <input type="color" id="color-bg" oninput="updateCustomTheme()">
+                    </div>
+                    <div class="color-input-wrap">
+                        <label>BG Color 2</label>
+                        <input type="color" id="color-bg2" oninput="updateCustomTheme()">
+                    </div>
+                    <div class="color-input-wrap">
+                        <label>Sidebar</label>
+                        <input type="color" id="color-side" oninput="updateCustomTheme()">
+                    </div>
+                    <div class="color-input-wrap">
+                        <label>Accent & Cursor</label>
+                        <input type="color" id="color-accent" oninput="updateCustomTheme()">
+                    </div>
+                    <div class="color-input-wrap">
+                        <label>Text</label>
+                        <input type="color" id="color-text" oninput="updateCustomTheme()">
+                    </div>
+                    <button class="side-btn" onclick="resetToPreset()">Reset to Presets</button>
+                </div>
+            </div>
+
+            <div class="config-box">
+                <h2>Cloak Presets</h2>
                 <div class="grid-layout">
-                    <button class="side-btn" onclick="setPreset('My Apps', 'https://filescdn.classlink.com/resources/customlinks/1601307234673-fbb20dacacaf8359984dc1276e57ddc6.png')">[1] My Apps</button>
-                    <button class="side-btn" onclick="setPreset('Classroom | Home', 'https://ssl.gstatic.com/classroom/favicon.png')">[2] Classroom</button>
-                    <button class="side-btn" onclick="setPreset('IXL | Dashboard', 'https://www.ixl.com/favicon.ico')">[3] IXL</button>
-                    <button class="side-btn" onclick="setPreset('Google Slides', 'slides.png')">[4] Slides</button>
-                    <button class="side-btn" onclick="setPreset('Google Docs', 'google-docs.png')">[5] Docs</button>
-                    <button class="side-btn" onclick="setPreset('New Tab', 'https://www.google.com/favicon.ico')">[6] Google</button>
+                    <button class="side-btn" onclick="setPreset('My Apps', 'https://filescdn.classlink.com/resources/customlinks/1601307234673-fbb20dacacaf8359984dc1276e57ddc6.png')">My Apps</button>
+                    <button class="side-btn" onclick="setPreset('Classroom | Home', 'https://ssl.gstatic.com/classroom/favicon.png')">Classroom</button>
+                    <button class="side-btn" onclick="setPreset('IXL | Dashboard', 'https://www.ixl.com/favicon.ico')">IXL</button>
+                    <button class="side-btn" onclick="setPreset('Google Slides', 'slides.png')">Slides</button>
+                    <button class="side-btn" onclick="setPreset('Google Docs', 'google-docs.png')">Docs</button>
+                    <button class="side-btn" onclick="setPreset('New Tab', 'https://www.googfhdsdsgerrdfgdgsle.com/favicon.ico')">Google</button>
                 </div>
             </div>
             
             <div class="config-box">
-                <h2>Manual Style Selection</h2>
+                <h2>Visual Themes</h2>
                 <div id="style-grid" class="grid-layout"></div>
+            </div>
+            
+            <div class="config-box" style="border-color: #ff4444;">
+                <h2 style="color: #ff4444;">Danger Zone</h2>
+                <button class="side-btn" style="background:#ff4444; color:white; opacity:1;" onclick="nukeStorage()">Reset Everything (Clear Data)</button>
             </div>
         </div>
     </div>
@@ -130,40 +161,11 @@
         const combo = "404"; let inputSeq = ""; 
         const canvas = document.getElementById('trail-canvas'); const ctx = canvas.getContext('2d'); 
         let points = []; let ripple = {x:0, y:0, r:0, a:0};
-        let currentLook = 1;
+        
+        const styleNames = ["Matrix", "Bloodlust", "Vaporwave", "Ghost", "Nebula", "Toxic", "Lava", "Ocean", "Crimson", "Noir", "Lemon", "Cobalt", "Barbie", "Cyan", "Lime", "Autumn", "Sky", "Amethyst", "Magenta", "Emerald", "Slate", "Midnight", "Teal", "Solar", "Atom"];
 
         const games = [
-            {n: "Bloons TD", p: "./games/bloonstd/index.html"},
-            {n: "Geo Dash", p: "./games/geodash/index.html"},
-            {n: "Duck Life 3", p: "./games/ducklife3/index.html"},
-            {n: "Slope", p: "./games/slope/index.html"},
-            {n: "2048", p: "./games/2048/index.html"},
-            {n: "World's Hardest Game", p: "./games/worlds-hardest-game/index.html"},
-            {n: "Flappy Bird", p: "./games/flappybird/index.html"},
-            {n: "Sand", p: "./games/Sand.html"},
-            {n: "Basket Random", p: "./games/basket-random/index.html"},
-            {n: "Drive Mad", p: "./games/drive-mad/index.html"},
-            {n: "1v1 LOL", p: "./games/1v1lol/index.html"},
-            {n: "BTTS", p: "./BTTS/index.html"},
-            {n: "Vex 7", p: "./games/vex7/index.html"},
-            {n: "MOTOX3M POOL", p: "./games/motox3m-pool/index.html"},
-            {n: "OVO", p: "./games/OVO/index.html"},
-            {n: "Ball Blast", p: "./games/Ball Blast.html"},
-            {n: "Dunes", p: "./games/Dune.html"},
-            {n: "Appel", p: "./games/Appel v1.html"},
-            {n: "Paper Minecraft", p: "./games/Paper Minecraft v11.html"},
-            {n: "Square Sling", p: "./games/SS.html"},
-            {n: "Dunk Shot", p: "./games/DS.html"},
-            {n: "Sky Ball", p: "./games/SB.html"},
-            {n: "BITTS", p: "./games/BITTS/BITTS.html"},
-            {n: "Tag #2", p: "./games/Tag-main/index.html"},
-            {n: "Cookie Clicker", p: "./CC/index.html"},
-            {n: "BNTTS (TEST)", p: "./games/BNTTS.html"},
-            {n: "Tag OG (TEST)", p: "./games/TAG/index.html"},
-            {n: "Duck Life 1 (TEST)", p: "./games/DuckLife1/index.html"},
-            {n: "Cut The Rope (TEST)", p: "./games/CTR.html"},
-            {n: "Space Waves (TEST)", p: "./games/cba.html"},
-            {n: "Tube Jumpers (TEST)", p: "./games/TJ.html"}
+            {n: "Bloons TD", p: "./games/bloonstd/index.html"}, {n: "Geo Dash", p: "./games/geodash/index.html"}, {n: "Duck Life 3", p: "./games/ducklife3/index.html"}, {n: "Slope", p: "./games/slope/index.html"}, {n: "2048", p: "./games/2048/index.html"}, {n: "World's Hardest Game", p: "./games/worlds-hardest-game/index.html"}, {n: "Flappy Bird", p: "./games/flappybird/index.html"}, {n: "Sand", p: "./games/Sand.html"}, {n: "Basket Random", p: "./games/basket-random/index.html"}, {n: "Drive Mad", p: "./games/drive-mad/index.html"}, {n: "1v1 LOL", p: "./games/1v1lol/index.html"}, {n: "BTTS", p: "./BTTS/index.html"}, {n: "Vex 7", p: "./games/vex7/index.html"}, {n: "MOTOX3M POOL", p: "./games/motox3m-pool/index.html"}, {n: "OVO", p: "./games/OVO/index.html"}, {n: "Ball Blast", p: "./games/Ball Blast.html"}, {n: "Dunes", p: "./games/Dune.html"}, {n: "Appel", p: "./games/Appel v1.html"}, {n: "Paper Minecraft", p: "./games/Paper Minecraft v11.html"}, {n: "Square Sling", p: "./games/SS.html"}, {n: "Dunk Shot", p: "./games/DS.html"}, {n: "Sky Ball", p: "./games/SB.html"}, {n: "BITTS", p: "./games/BITTS/BITTS.html"}, {n: "Tag #2", p: "./games/Tag-main/index.html"}, {n: "Cookie Clicker", p: "./CC/index.html"}, {n: "BNTTS (TEST)", p: "./games/BNTTS.html"}, {n: "Tag OG (TEST)", p: "./games/TAG/index.html"}, {n: "Duck Life 1 (TEST)", p: "./games/DuckLife1/index.html"}, {n: "Cut The Rope (TEST)", p: "./games/CTR.html"}, {n: "Space Waves (TEST)", p: "./games/cba.html"}, {n: "Tube Jumpers (TEST)", p: "./games/TJ.html"}
         ];
 
         window.onkeydown = e => {
@@ -173,36 +175,61 @@
                     document.getElementById('gatekeeper').style.display = 'none';
                     document.body.classList.add('unlocked');
                 }
-                return;
-            }
-            if (e.shiftKey) {
-                if(["1","2","3","4","5","6"].includes(e.key)) {
-                    const presets = [
-                        ['My Apps', 'https://filescdn.classlink.com/resources/customlinks/1601307234673-fbb20dacacaf8359984dc1276e57ddc6.png'],
-                        ['Classroom | Home', 'https://ssl.gstatic.com/classroom/favicon.png'],
-                        ['IXL | Dashboard', 'https://www.ixl.com/favicon.ico'],
-                        ['Google Slides', 'slides.png'],
-                        ['Google Docs', 'google-docs.png'],
-                        ['New Tab', 'https://www.google.com/favicon.ico']
-                    ];
-                    setPreset(presets[parseInt(e.key)-1][0], presets[parseInt(e.key)-1][1]);
-                }
-                if(e.key === "Escape") { currentLook = (currentLook % 25) + 1; setLook(currentLook); }
             }
         };
 
+        function updateCustomTheme() {
+            const bg = document.getElementById('color-bg').value;
+            const bg2 = document.getElementById('color-bg2').value;
+            const side = document.getElementById('color-side').value;
+            const acc = document.getElementById('color-accent').value;
+            const txt = document.getElementById('color-text').value;
+
+            document.body.removeAttribute('data-look');
+            document.documentElement.style.setProperty('--bg', bg);
+            document.documentElement.style.setProperty('--bg2', bg2);
+            document.documentElement.style.setProperty('--side', side);
+            document.documentElement.style.setProperty('--accent', acc);
+            document.documentElement.style.setProperty('--text', txt);
+            document.documentElement.style.setProperty('--border', acc + '66');
+            document.documentElement.style.setProperty('--card', side + 'e6');
+            
+            localStorage.setItem('p404_custom', JSON.stringify({bg, bg2, side, acc, txt}));
+        }
+
+        function resetToPreset() { localStorage.removeItem('p404_custom'); location.reload(); }
+        
+        function nukeStorage() {
+            if(confirm("Are you sure? This will delete all custom themes, records, and presets.")) {
+                localStorage.removeItem('p404_custom');
+                localStorage.removeItem('p404_look');
+                localStorage.removeItem('p404_t');
+                localStorage.removeItem('p404_i');
+                localStorage.removeItem('p404_rec');
+                location.reload();
+            }
+        }
+
         function launchGame(url) { document.getElementById('launcher').style.display = 'block'; document.getElementById('game-frame').src = url; }
         function closeGame() { document.getElementById('launcher').style.display = 'none'; document.getElementById('game-frame').src = ""; }
-        function setLook(v) { currentLook = parseInt(v); document.body.setAttribute('data-look', v); localStorage.setItem('p404_look', v); }
+        
+        function setLook(v) { 
+            document.body.setAttribute('data-look', v); 
+            localStorage.setItem('p404_look', v);
+            localStorage.removeItem('p404_custom');
+        }
+
         function setPreset(t, i) { document.title = t; document.getElementById('tab-icon').href = i; localStorage.setItem('p404_t', t); localStorage.setItem('p404_i', i); }
         function panic() { window.location.href = "https://classroom.google.com"; }
 
         function renderGames() {
+            if(document.getElementById('search').value.length > 0) showTab('home');
             const grid = document.getElementById('game-grid'); const term = document.getElementById('search').value.toLowerCase();
             grid.innerHTML = '';
             games.filter(g => g.n.toLowerCase().includes(term)).forEach(g => {
                 const card = document.createElement('div'); card.className = `game-card`;
-                card.innerText = g.n; 
+                // Strips (TEST) from display text but keeps the glow check intact below
+                card.innerText = g.n.replace(" (TEST)", ""); 
                 if (g.n.includes("(TEST)")) card.classList.add('test-glow');
                 card.onclick = () => launchGame(g.p); grid.appendChild(card);
             });
@@ -210,10 +237,10 @@
 
         function buildStyleGrid() {
             const grid = document.getElementById('style-grid');
-            for(let i=1; i<=25; i++) {
-                const b = document.createElement('button'); b.className = 'style-btn'; b.innerText = `Style ${i}`;
-                b.onclick = () => setLook(i); grid.appendChild(b);
-            }
+            styleNames.forEach((name, i) => {
+                const b = document.createElement('button'); b.className = 'side-btn'; b.innerText = name;
+                b.onclick = () => setLook(i+1); grid.appendChild(b);
+            });
         }
 
         function showTab(t) {
@@ -244,8 +271,23 @@
 
         function init() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            
+            // Randomly shuffle the games array exactly once when the page loads
+            games.sort(() => Math.random() - 0.5);
+
             renderGames(); buildStyleGrid(); animate();
-            const l = localStorage.getItem('p404_look') || '1'; setLook(l);
+            const custom = localStorage.getItem('p404_custom');
+            if(custom) {
+                const c = JSON.parse(custom);
+                document.getElementById('color-bg').value = c.bg;
+                document.getElementById('color-bg2').value = c.bg2 || c.bg;
+                document.getElementById('color-side').value = c.side;
+                document.getElementById('color-accent').value = c.acc;
+                document.getElementById('color-text').value = c.txt;
+                updateCustomTheme();
+            } else {
+                const l = localStorage.getItem('p404_look') || '1'; setLook(l);
+            }
             const t = localStorage.getItem('p404_t'); const i = localStorage.getItem('p404_i');
             const r = localStorage.getItem('p404_rec');
             if(t) document.title = t; if(i) document.getElementById('tab-icon').href = i;

@@ -13,28 +13,22 @@
             --input-bg: #000; --panic: #ff4444; 
         }
 
-        /* --- THE DECOY GATEKEEPER (NO GAMES / NO EFFECTS) --- */
+        /* --- THE CLEAN DECOY GATEKEEPER --- */
         #gatekeeper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #f9f9f9; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; z-index: 10000; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            color: #333; text-align: center; cursor: default;
+            background-color: #f9f9f9; display: flex; align-items: center; 
+            justify-content: center; z-index: 10000; cursor: default;
         }
+        #gatekeeper img { max-width: 100%; height: auto; }
 
-        #gh-text { font-size: 80px; font-weight: 400; margin: 0; color: #000; }
-        #gh-subtext { color: #666; font-size: 18px; font-weight: 600; margin-top: 25px; margin-bottom: 20px; }
-        #gh-desc { color: #6a737d; font-size: 16px; line-height: 1.5; max-width: 500px; margin-bottom: 30px; }
-        #gate-img-container img { width: 380px; height: auto; border-radius: 8px; }
-
-        /* --- GAME DASHBOARD (THE HIDDEN CORE) --- */
+        /* --- DASHBOARD STYLES --- */
         #trail-canvas { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             pointer-events: none; z-index: 9999; display: none; 
         }
 
         * { box-sizing: border-box; }
-        .dashboard-active * { cursor: none; } /* Cursor only disappears in games mode */
+        .dashboard-active * { cursor: none; } 
 
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100vh; background: var(--bg); 
@@ -63,12 +57,12 @@
         .game-card { background: var(--card); border: 1px solid var(--border); padding: 40px 15px; border-radius: 16px; text-align: center; font-size: 15px; font-weight: bold; transition: 0.3s; }
         .game-card:hover { border-color: var(--accent); transform: translateY(-8px); }
 
-        #player-container { display: none; flex-grow: 1; background: #000; }
+        #player-container { display: none; flex-grow: 1; background: #000; height: calc(100vh - 65px); }
         iframe { width: 100%; height: 100%; border: none; }
 
         .config-box { padding: 30px; background: var(--card); border-radius: 16px; border: 1px solid var(--border); margin-bottom: 30px; }
         .theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-        .theme-opt { padding: 15px; border: 1px solid var(--border); border-radius: 10px; text-align: center; font-size: 12px; cursor: pointer; }
+        .theme-opt { padding: 15px; border: 1px solid var(--border); border-radius: 10px; text-align: center; font-size: 12px; cursor: pointer; color: #fff; font-weight: bold; }
         .config-input { width: 100%; padding: 12px; margin-bottom: 15px; background: var(--input-bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; }
     </style>
 </head>
@@ -78,24 +72,21 @@
     <canvas id="trail-canvas"></canvas>
 
     <div id="gatekeeper">
-        <h1 id="gh-text">404</h1>
-        <p id="gh-subtext">There isn't a GitHub Pages site here.</p>
-        <p id="gh-desc">If you're trying to publish one, <a onclick="failRedirect()" style="color:#0366d6; cursor:pointer;">read the full documentation</a>.</p>
-        <div id="gate-img-container"><img src="abcabc.png"></div>
+        <img src="abcabc.png" alt="Decoy">
     </div>
 
     <div id="sidebar">
         <h1 style="color:var(--accent); margin: 20px 0 40px 10px; font-size: 26px; font-weight: 900;">DASHBOARD</h1>
         <button id="nav-home" class="side-btn active" onclick="showTab('home')">Library</button>
         <button id="nav-settings" class="side-btn" onclick="showTab('settings')">Settings</button>
-        <div style="margin-top: auto; padding: 10px; opacity: 0.4; font-size: 10px;">V6.2 PRO</div>
+        <div style="margin-top: auto; padding: 10px; opacity: 0.4; font-size: 10px;">V7.0 FINAL</div>
     </div>
 
     <div id="main">
         <div id="top-nav">
             <input type="text" id="search" placeholder="Search 26 games..." oninput="renderGames()">
             <button id="back-lib" class="side-btn" style="display:none; width:auto; background:var(--border);" onclick="goHome()">Back</button>
-            <button class="side-btn" style="width:auto; background:var(--panic); color:white;" onclick="panic()">PANIC</button>
+            <button class="side-btn" style="width:auto; background:var(--panic); color:white; font-weight: bold;" onclick="panic()">PANIC</button>
         </div>
 
         <div id="content-area">
@@ -104,17 +95,13 @@
 
         <div id="settings-area" style="display: none;">
             <div class="config-box">
-                <h3>Tab Masking</h3>
-                <input type="text" id="cloak-name" class="config-input" placeholder="Tab Title" oninput="saveSettings()">
-                <input type="text" id="cloak-url" class="config-input" placeholder="Icon URL" oninput="saveSettings()">
-            </div>
-            <div class="config-box">
                 <h3>Background Modes (15)</h3>
                 <div class="theme-grid" id="theme-grid"></div>
             </div>
             <div class="config-box">
-                <h3>Records</h3>
-                <textarea id="records-input" class="config-input" style="height: 150px;" oninput="saveRecords()"></textarea>
+                <h3>Cloaking</h3>
+                <input type="text" id="cloak-name" class="config-input" placeholder="Tab Title" oninput="saveSettings()">
+                <input type="text" id="cloak-url" class="config-input" placeholder="Icon URL" oninput="saveSettings()">
             </div>
         </div>
 
@@ -127,22 +114,34 @@
         const combo = "404";
         let inputSeq = "";
         let panicSeq = "";
-        const trap = "https://4o44o4.github.io/abcabc.html";
         
         const gameList = [
-            {n: "Bloons TD", p: "./games/bloonstd/index.html"}, {n: "Geo Dash", p: "./games/geodash/index.html"},
-            {n: "Duck Life 3", p: "./games/ducklife3/index.html"}, {n: "Slope", p: "./games/slope/index.html"},
-            {n: "2048", p: "./games/2048/index.html"}, {n: "World's Hardest Game", p: "./games/worlds-hardest-game/index.html"},
-            {n: "Flappy Bird", p: "./games/flappybird/index.html"}, {n: "Sand", p: "./games/Sand.html"},
-            {n: "Basket Random", p: "./games/basket-random/index.html"}, {n: "Drive Mad", p: "./games/drive-mad/index.html"},
-            {n: "1v1 LOL", p: "./games/1v1lol/index.html"}, {n: "BTTS", p: "./BTTS/index.html"},
-            {n: "Vex 7", p: "./games/vex7/index.html"}, {n: "MOTOX3M POOL", p: "./games/motox3m-pool/index.html"},
-            {n: "OVO", p: "./games/OVO/index.html"}, {n: "Ball Blast", p: "./games/Ball Blast.html"},
-            {n: "Dunes", p: "./games/Dune.html"}, {n: "Appel", p: "./games/Appel v1.html"},
-            {n: "Paper Minecraft", p: "./games/Paper Minecraft v11.html"}, {n: "Square Sling", p: "./games/SS.html"},
-            {n: "Dunk Shot", p: "./games/DS.html"}, {n: "Sky Ball", p: "./games/SB.html"},
-            {n: "BITTS", p: "./games/BITTS/BITTS.html"}, {n: "Tag #2", p: "./games/Tag-main/index.html"},
-            {n: "Cookie Clicker", p: "./CC/index.html"}, {n: "Tube Jumpers", p: "./games/TJ.html"}
+            {n: "Bloons TD", p: "./games/bloonstd/index.html"}, 
+            {n: "Geo Dash", p: "./games/geodash/index.html"},
+            {n: "Duck Life 3", p: "./games/ducklife3/index.html"}, 
+            {n: "Slope", p: "./games/slope/index.html"},
+            {n: "2048", p: "./games/2048/index.html"}, 
+            {n: "World's Hardest Game", p: "./games/worlds-hardest-game/index.html"},
+            {n: "Flappy Bird", p: "./games/flappybird/index.html"}, 
+            {n: "Sand", p: "./games/Sand.html"},
+            {n: "Basket Random", p: "./games/basket-random/index.html"}, 
+            {n: "Drive Mad", p: "./games/drive-mad/index.html"},
+            {n: "1v1 LOL", p: "./games/1v1lol/index.html"}, 
+            {n: "BTTS", p: "./BTTS/index.html"},
+            {n: "Vex 7", p: "./games/vex7/index.html"}, 
+            {n: "MOTOX3M POOL", p: "./games/motox3m-pool/index.html"},
+            {n: "OVO", p: "./games/OVO/index.html"}, 
+            {n: "Ball Blast", p: "./games/Ball Blast.html"},
+            {n: "Dunes", p: "./games/Dune.html"}, 
+            {n: "Appel", p: "./games/Appel v1.html"},
+            {n: "Paper Minecraft", p: "./games/Paper Minecraft v11.html"},
+            {n: "Square Sling", p: "./games/SS.html"},
+            {n: "Dunk Shot", p: "./games/DS.html"}, 
+            {n: "Sky Ball", p: "./games/SB.html"},
+            {n: "BITTS", p: "./games/BITTS/BITTS.html"}, 
+            {n: "Tag #2", p: "./games/Tag-main/index.html"},
+            {n: "Cookie Clicker", p: "./CC/index.html"}, 
+            {n: "Tube Jumpers", p: "./games/TJ.html"}
         ];
 
         const themes = [
@@ -167,11 +166,11 @@
             if (get('gatekeeper').style.display !== 'none') {
                 inputSeq += e.key;
                 if (inputSeq.endsWith(combo)) unlock();
-                else if (inputSeq.length > 10) failRedirect();
+                if (inputSeq.length > 5) inputSeq = ""; 
             }
             panicSeq += e.key.toLowerCase();
             if (panicSeq.endsWith("panic")) panic();
-            if (panicSeq.length > 20) panicSeq = "";
+            if (panicSeq.length > 10) panicSeq = "";
         };
 
         function get(id) { return document.getElementById(id); }
@@ -182,8 +181,6 @@
             document.body.classList.add('dashboard-active');
             sessionStorage.setItem('auth_404', 'true');
         }
-
-        function failRedirect() { window.location.replace(trap); }
 
         function renderGames() {
             const grid = get('game-grid');
@@ -253,7 +250,7 @@
             requestAnimationFrame(drawTrail);
         }
 
-        /* --- TRAIL ENGINE (DASHBOARD ONLY) --- */
+        /* --- TRAIL ENGINE --- */
         const canvas = get('trail-canvas');
         const ctx = canvas.getContext('2d');
         let points = [];

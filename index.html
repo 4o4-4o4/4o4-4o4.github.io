@@ -9,131 +9,110 @@
     <style>
         :root { 
             --bg: #0b0b0b; --side: #121212; --text: #efefef; 
-            --card: #1e1e1e; --border: #333; --accent: #3498db;
+            --card: rgba(30, 30, 30, 0.9); --border: #333; --accent: #3498db;
             --glow: rgba(52, 152, 219, 0.4);
         }
 
-        /* --- THE 25 THEME ENGINE --- */
-        [data-look="1"] { --bg: #000800; --side: #000500; --text: #00ff00; --card: #000c00; --border: #003300; --accent: #00ff00; --glow: rgba(0, 255, 0, 0.6); font-family: 'Courier New', monospace; }
-        [data-look="2"] { --bg: #0a0000; --side: #150000; --text: #ff4d4d; --card: #200000; --border: #400000; --accent: #ff0000; --glow: rgba(255, 0, 0, 0.5); }
-        [data-look="3"] { --bg: #000b1a; --side: #00122e; --text: #00fff2; --card: #001a41; --border: #00fff2; --accent: #f0f; --glow: rgba(255, 0, 255, 0.6); }
-        [data-look="4"] { --bg: #ffffff; --side: #f0f0f0; --text: #222; --card: #e0e0e0; --border: #ccc; --accent: #999; --glow: rgba(0, 0, 0, 0.1); }
-        [data-look="5"] { --bg: #1a0026; --side: #11001a; --text: #e600ff; --card: #240033; --border: #e600ff; --accent: #e600ff; --glow: rgba(230, 0, 255, 0.5); }
-        [data-look="6"] { --bg: #001a0d; --side: #000d06; --text: #00ff80; --card: #002613; --border: #00ff80; --accent: #00ff80; --glow: rgba(0, 255, 128, 0.5); }
-        [data-look="7"] { --bg: #1a0f00; --side: #0d0800; --text: #ff9900; --card: #261700; --border: #ff9900; --accent: #ff9900; --glow: rgba(255, 153, 0, 0.5); }
-        [data-look="8"] { --bg: #00141a; --side: #000a0d; --text: #00d9ff; --card: #001f26; --border: #00d9ff; --accent: #00d9ff; --glow: rgba(0, 217, 255, 0.5); }
-        [data-look="9"] { --bg: #1a0000; --side: #0d0000; --text: #ff0000; --card: #260000; --border: #ff0000; --accent: #ff0000; --glow: rgba(255, 0, 0, 0.5); }
-        [data-look="10"] { --bg: #0d0d0d; --side: #000000; --text: #ffffff; --card: #1a1a1a; --border: #ffffff; --accent: #ffffff; --glow: rgba(255, 255, 255, 0.5); }
-        [data-look="11"] { --bg: #1a1a00; --side: #0d0d00; --text: #ffff00; --card: #262600; --border: #ffff00; --accent: #ffff00; --glow: rgba(255, 255, 0, 0.5); }
-        [data-look="12"] { --bg: #0a0a1a; --side: #05050d; --text: #5c5cff; --card: #0f0f26; --border: #5c5cff; --accent: #5c5cff; --glow: rgba(92, 92, 255, 0.5); }
-        [data-look="13"] { --bg: #1a000d; --side: #0d0006; --text: #ff0080; --card: #260013; --border: #ff0080; --accent: #ff0080; --glow: rgba(255, 0, 128, 0.5); }
-        [data-look="14"] { --bg: #001a1a; --side: #000d0d; --text: #00ffff; --card: #002626; --border: #00ffff; --accent: #00ffff; --glow: rgba(0, 255, 255, 0.5); }
-        [data-look="15"] { --bg: #0d1a00; --side: #060d00; --text: #80ff00; --card: #132600; --border: #80ff00; --accent: #80ff00; --glow: rgba(128, 255, 0, 0.5); }
-        [data-look="16"] { --bg: #1a0d00; --side: #0d0600; --text: #ff8000; --card: #261300; --border: #ff8000; --accent: #ff8000; --glow: rgba(255, 128, 0, 0.5); }
-        [data-look="17"] { --bg: #000d1a; --side: #00060d; --text: #0080ff; --card: #001326; --border: #0080ff; --accent: #0080ff; --glow: rgba(0, 128, 255, 0.5); }
-        [data-look="18"] { --bg: #0d001a; --side: #06000d; --text: #8000ff; --card: #130026; --border: #8000ff; --accent: #8000ff; --glow: rgba(128, 0, 255, 0.5); }
-        [data-look="19"] { --bg: #1a001a; --side: #0d000d; --text: #ff00ff; --card: #260026; --border: #ff00ff; --accent: #ff00ff; --glow: rgba(255, 0, 255, 0.5); }
-        [data-look="20"] { --bg: #001a00; --side: #000d00; --text: #00ff00; --card: #002600; --border: #00ff00; --accent: #00ff00; --glow: rgba(0, 255, 0, 0.5); }
-        [data-look="21"] { --bg: #2a2a2a; --side: #1a1a1a; --text: #ddd; --card: #333; --border: #555; --accent: #888; --glow: rgba(255, 255, 255, 0.1); }
-        [data-look="22"] { --bg: #121212; --side: #000; --text: #bb86fc; --card: #1e1e1e; --border: #bb86fc; --accent: #bb86fc; --glow: rgba(187, 134, 252, 0.4); }
-        [data-look="23"] { --bg: #121212; --side: #000; --text: #03dac6; --card: #1e1e1e; --border: #03dac6; --accent: #03dac6; --glow: rgba(3, 218, 198, 0.4); }
-        [data-look="24"] { --bg: #002b36; --side: #073642; --text: #839496; --card: #002b36; --border: #93a1a1; --accent: #268bd2; --glow: rgba(38, 139, 210, 0.3); }
-        [data-look="25"] { --bg: #282c34; --side: #21252b; --text: #abb2bf; --card: #2c313a; --border: #61afef; --accent: #61afef; --glow: rgba(97, 175, 239, 0.4); }
+        /* --- THE 25 STYLES --- */
+        [data-look="1"] { --bg: #000800; --side: #000500; --text: #00ff00; --card: rgba(0, 15, 0, 0.9); --border: #004400; --accent: #00ff00; }
+        [data-look="2"] { --bg: #0a0000; --side: #150000; --text: #ff4d4d; --card: rgba(35, 0, 0, 0.9); --border: #550000; --accent: #ff0000; }
+        [data-look="3"] { --bg: #000b1a; --side: #00122e; --text: #00fff2; --card: rgba(0, 20, 50, 0.9); --border: #00fff2; --accent: #f0f; }
+        [data-look="4"] { --bg: #ffffff; --side: #f0f0f0; --text: #111; --card: rgba(220, 220, 220, 0.9); --border: #bbb; --accent: #3498db; }
+        [data-look="5"] { --bg: #1a0026; --side: #11001a; --text: #e600ff; --card: rgba(40, 0, 60, 0.9); --border: #e600ff; --accent: #e600ff; }
+        [data-look="6"] { --bg: #001a0d; --side: #000d06; --text: #00ff80; --card: rgba(0, 40, 20, 0.9); --border: #00ff80; --accent: #00ff80; }
+        [data-look="7"] { --bg: #1a0f00; --side: #0d0800; --text: #ff9900; --card: rgba(40, 25, 0, 0.9); --border: #ff9900; --accent: #ff9900; }
+        [data-look="8"] { --bg: #00141a; --side: #000a0d; --text: #00d9ff; --card: rgba(0, 30, 40, 0.9); --border: #00d9ff; --accent: #00d9ff; }
+        [data-look="9"] { --bg: #1a0000; --side: #0d0000; --text: #ff0000; --card: rgba(50, 0, 0, 0.9); --border: #ff0000; --accent: #ff0000; }
+        [data-look="10"] { --bg: #0d0d0d; --side: #000; --text: #fff; --card: rgba(30, 30, 30, 0.9); --border: #fff; --accent: #fff; }
+        [data-look="11"] { --bg: #1a1a00; --side: #0d0d00; --text: #ffff00; --card: rgba(40, 40, 0, 0.9); --border: #ffff00; --accent: #ffff00; }
+        [data-look="12"] { --bg: #0a0a1a; --side: #05050d; --text: #5c5cff; --card: rgba(15, 15, 45, 0.9); --border: #5c5cff; --accent: #5c5cff; }
+        [data-look="13"] { --bg: #1a000d; --side: #0d0006; --text: #ff0080; --card: rgba(40, 0, 20, 0.9); --border: #ff0080; --accent: #ff0080; }
+        [data-look="14"] { --bg: #001a1a; --side: #000d0d; --text: #00ffff; --card: rgba(0, 40, 40, 0.9); --border: #00ffff; --accent: #00ffff; }
+        [data-look="15"] { --bg: #0d1a00; --side: #060d00; --text: #80ff00; --card: rgba(20, 40, 0, 0.9); --border: #80ff00; --accent: #80ff00; }
+        [data-look="16"] { --bg: #1a0d00; --side: #0d0600; --text: #ff8000; --card: rgba(40, 20, 0, 0.9); --border: #ff8000; --accent: #ff8000; }
+        [data-look="17"] { --bg: #000d1a; --side: #00060d; --text: #0080ff; --card: rgba(0, 20, 40, 0.9); --border: #0080ff; --accent: #0080ff; }
+        [data-look="18"] { --bg: #0d001a; --side: #06000d; --text: #8000ff; --card: rgba(20, 0, 40, 0.9); --border: #8000ff; --accent: #8000ff; }
+        [data-look="19"] { --bg: #1a001a; --side: #0d000d; --text: #ff00ff; --card: rgba(40, 0, 40, 0.9); --border: #ff00ff; --accent: #ff00ff; }
+        [data-look="20"] { --bg: #001a00; --side: #000d00; --text: #00ff00; --card: rgba(0, 40, 0, 0.9); --border: #00ff00; --accent: #00ff00; }
+        [data-look="21"] { --bg: #222; --side: #111; --text: #888; --card: rgba(40, 40, 40, 0.9); --border: #444; --accent: #666; }
+        [data-look="22"] { --bg: #050505; --side: #000; --text: #bb86fc; --card: rgba(20, 20, 20, 0.9); --border: #bb86fc; --accent: #bb86fc; }
+        [data-look="23"] { --bg: #050505; --side: #000; --text: #03dac6; --card: rgba(20, 20, 20, 0.9); --border: #03dac6; --accent: #03dac6; }
+        [data-look="24"] { --bg: #002b36; --side: #073642; --text: #839496; --card: rgba(0, 43, 54, 0.9); --border: #93a1a1; --accent: #268bd2; }
+        [data-look="25"] { --bg: #282c34; --side: #21252b; --text: #abb2bf; --card: rgba(44, 49, 58, 0.9); --border: #61afef; --accent: #c678dd; }
 
-        /* --- CORE UI --- */
-        * { box-sizing: border-box; outline: none; transition: 0.2s; }
+        * { cursor: none !important; box-sizing: border-box; outline: none; transition: 0.2s; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100vh; background: var(--bg); overflow: hidden; display: flex; font-family: 'Segoe UI', sans-serif; color: var(--text); }
         
         #trail-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
-        #gatekeeper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f9f9f9; display: flex; align-items: center; justify-content: center; z-index: 10000; }
-        #gatekeeper img { max-width: 100%; height: auto; user-select: none; }
+        .game-card, .side-btn, h2, h3, p, input { text-shadow: 2px 2px 4px rgba(0,0,0,1); }
 
+        #gatekeeper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f9f9f9; display: flex; align-items: center; justify-content: center; z-index: 10000; }
         #sidebar { width: 260px; background: var(--side); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px 15px; flex-shrink: 0; }
-        .side-btn { background: none; border: 1px solid transparent; color: var(--text); opacity: 0.6; text-align: left; padding: 12px 15px; cursor: pointer; border-radius: 8px; font-size: 14px; margin-bottom: 5px; }
-        .side-btn.active, .side-btn:hover { background: var(--border); opacity: 1; color: var(--accent); font-weight: bold; }
+        .side-btn { background: none; border: 1px solid transparent; color: var(--text); opacity: 0.8; text-align: left; padding: 12px 15px; border-radius: 8px; font-size: 14px; margin-bottom: 5px; }
+        .side-btn.active, .side-btn:hover { background: var(--border); opacity: 1; color: var(--accent); border-left: 4px solid var(--accent); }
 
         #main { flex-grow: 1; display: flex; flex-direction: column; position: relative; }
         #top-nav { height: 60px; background: var(--side); display: flex; align-items: center; padding: 0 20px; gap: 15px; border-bottom: 1px solid var(--border); }
         #search { flex-grow: 1; background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px; color: var(--text); }
         
         #content-area, #records-area, #settings-area { flex-grow: 1; overflow-y: auto; padding: 30px; display: none; }
-        
         #game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
-        .game-card { background: var(--card); border: 1px solid var(--border); padding: 40px 10px; border-radius: 15px; cursor: pointer; text-align: center; font-weight: bold; }
-        .game-card:hover { transform: translateY(-5px); border-color: var(--accent); }
-        .game-card.dev-outline { border: 2px solid var(--bg) !important; box-shadow: 0 0 15px var(--accent); }
+        .game-card { background: var(--card); border: 1px solid var(--border); padding: 45px 10px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        .game-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 0 15px var(--glow); }
 
         #launcher { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 5000; display: none; }
         #game-frame { width: 100%; height: 100%; border: none; }
-        #close-launcher { position: absolute; top: 20px; right: 20px; background: #ff4444; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; z-index: 5001; }
+        #close-launcher { position: absolute; top: 20px; right: 20px; background: #ff4444; color: white; border: none; padding: 10px 25px; border-radius: 5px; font-weight: bold; z-index: 5001; }
         
-        .config-box { background: var(--card); padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 25px; }
-        .cloak-input { width: 100%; background: #000; border: 1px solid var(--border); color: #fff; padding: 12px; margin: 10px 0; border-radius: 6px; }
+        .config-box { background: var(--card); padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
+        .cloak-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     </style>
 </head>
 <body onload="init()">
     <canvas id="trail-canvas"></canvas>
-
     <div id="gatekeeper"><img src="abcabc.png" alt="Decoy"></div>
 
     <div id="launcher">
-        <button id="close-launcher" onclick="closeGame()">EXIT TO HUB</button>
+        <button id="close-launcher" onclick="closeGame()">EXIT HOME</button>
         <iframe id="game-frame" src=""></iframe>
     </div>
 
     <div id="sidebar">
-        <h2 style="margin-left:10px; color:var(--accent); font-size: 24px;">404</h2>
-        <button id="nav-home" class="side-btn active" onclick="showTab('home')">Library</button>
+        <h2 style="margin-left:10px; color:var(--accent); font-size: 28px;">404</h2>
+        <button id="nav-home" class="side-btn active" onclick="showTab('home')">Home</button>
         <button id="nav-records" class="side-btn" onclick="showTab('records')">Records</button>
         <button id="nav-settings" class="side-btn" onclick="showTab('settings')">Settings</button>
     </div>
 
     <div id="main">
         <div id="top-nav">
-            <input type="text" id="search" placeholder="Filter 26 games..." oninput="renderGames()">
-            <button class="side-btn" style="background:#ff4444; color:white; width:auto; opacity:1;" onclick="panic()">PANIC</button>
+            <input type="text" id="search" placeholder="Search Home..." oninput="renderGames()">
+            <button class="side-btn" style="background:#cc0000; color:white; opacity:1;" onclick="panic()">PANIC</button>
         </div>
-
-        <div id="content-area" style="display: block;">
-            <div id="game-grid"></div>
-        </div>
-
-        <div id="records-area">
-            <div class="config-box">
-                <h2>Persistent Notes</h2>
-                <textarea id="records-text" oninput="saveRecords()" style="width:100%; height:450px; background:#000; color:var(--text); border:none; padding:20px; font-family:monospace; resize:none;"></textarea>
-            </div>
-        </div>
-
+        <div id="content-area" style="display: block;"><div id="game-grid"></div></div>
+        <div id="records-area"><textarea id="records-text" oninput="saveRecords()" style="width:100%; height:450px; background:rgba(0,0,0,0.3); color:var(--text); padding:20px; border:none; resize:none;"></textarea></div>
         <div id="settings-area">
             <div class="config-box">
-                <h2>Tab Cloaker</h2>
-                <button class="side-btn" style="opacity:1; background:var(--border); margin-right:10px;" onclick="setPreset('My Apps', 'https://shelley.instructure.com/favicon.ico')">Shelley (Circle)</button>
-                <button class="side-btn" style="opacity:1; background:var(--border);" onclick="setPreset('Google Docs', 'https://ssl.gstatic.com/docs/documents/images/favicon_v3.ico')">Docs</button>
-                <input type="text" id="user-title" class="cloak-input" placeholder="Custom Title..." oninput="applyCloak()">
-                <input type="text" id="user-icon" class="cloak-input" placeholder="Custom Icon URL..." oninput="applyCloak()">
+                <h2>Quick Cloaks (Shift + 1-6)</h2>
+                <div class="cloak-grid">
+                    <button class="side-btn" onclick="setPreset('My Apps', 'https://filescdn.classlink.com/resources/customlinks/1601307234673-fbb20dacacaf8359984dc1276e57ddc6.png')">[1] Shelley</button>
+                    <button class="side-btn" onclick="setPreset('Home', 'https://ssl.gstatic.com/classroom/favicon.png')">[2] Classroom</button>
+                    <button class="side-btn" onclick="setPreset('IXL | Dashboard', 'https://www.ixl.com/favicon.ico')">[3] IXL</button>
+                    <button class="side-btn" onclick="setPreset('Google Docs', 'https://ssl.gstatic.com/docs/documents/images/favicon_v3.ico')">[4] Docs</button>
+                    <button class="side-btn" onclick="setPreset('Google Slides', 'https://ssl.gstatic.com/docs/presentations/images/favicon_v3.ico')">[5] Slides</button>
+                    <button class="side-btn" onclick="setPreset('Google', 'https://www.google.com/favicon.ico')">[6] Home</button>
+                </div>
             </div>
-            <div class="config-box">
-                <h2>Appearance</h2>
-                <select id="look-select" class="cloak-input" onchange="setLook(this.value)">
-                    <option value="default">Default Dark</option>
-                    <option value="1">OG Terminal</option><option value="2">Blood Moon</option>
-                    <option value="3">Cyberpunk</option><option value="4">Ghost White</option>
-                    <option value="5">Nebula</option><option value="22">Purple Rain</option>
-                    <option value="25">One Dark</option>
-                </select>
-            </div>
+            <div class="config-box"><h2>Styles (Shift + Esc to Cycle)</h2><p>Use hotkeys to cycle through 25 themes instantly.</p></div>
         </div>
     </div>
 
     <script>
-        const combo = "404"; 
-        let inputSeq = ""; 
-        const canvas = document.getElementById('trail-canvas'); 
-        const ctx = canvas.getContext('2d'); 
-        let points = [];
+        const combo = "404"; let inputSeq = ""; 
+        const canvas = document.getElementById('trail-canvas'); const ctx = canvas.getContext('2d'); 
+        let points = []; let ripple = {x:0, y:0, r:0, a:0};
+        let currentLook = 0;
 
-        /* --- THE 26 GAMES (YOUR ORIGINAL LIST) --- */
         const games = [
             {n: "Bloons TD", p: "./games/bloonstd/index.html", dev: true},
             {n: "Geo Dash", p: "./games/geodash/index.html", dev: false},
@@ -163,104 +142,67 @@
             {n: "Tube Jumpers", p: "./games/TJ.html", dev: false}
         ];
 
-        function launchGame(url) {
-            document.getElementById('launcher').style.display = 'block';
-            document.getElementById('game-frame').src = url;
-        }
-
-        function closeGame() {
-            document.getElementById('launcher').style.display = 'none';
-            document.getElementById('game-frame').src = "";
-        }
-
-        function renderGames() {
-            const grid = document.getElementById('game-grid');
-            const term = document.getElementById('search').value.toLowerCase();
-            grid.innerHTML = '';
-            games.filter(g => g.n.toLowerCase().includes(term)).forEach(g => {
-                const card = document.createElement('div');
-                card.className = `game-card ${g.dev ? 'dev-outline' : ''}`;
-                card.innerText = g.n;
-                card.onclick = () => launchGame(g.p);
-                grid.appendChild(card);
-            });
-        }
-
         window.onkeydown = e => {
             if (document.getElementById('gatekeeper').style.display !== 'none') {
                 inputSeq += e.key;
-                if (inputSeq.endsWith(combo)) {
-                    document.getElementById('gatekeeper').style.display = 'none';
-                }
+                if (inputSeq.endsWith(combo)) document.getElementById('gatekeeper').style.display = 'none';
+                return;
+            }
+            // HOTKEYS
+            if (e.shiftKey) {
+                if(e.key === "1") setPreset('My Apps', 'https://filescdn.classlink.com/resources/customlinks/1601307234673-fbb20dacacaf8359984dc1276e57ddc6.png');
+                if(e.key === "2") setPreset('Home', 'https://ssl.gstatic.com/classroom/favicon.png');
+                if(e.key === "3") setPreset('IXL | Dashboard', 'https://www.ixl.com/favicon.ico');
+                if(e.key === "4") setPreset('Google Docs', 'https://ssl.gstatic.com/docs/documents/images/favicon_v3.ico');
+                if(e.key === "5") setPreset('Google Slides', 'https://ssl.gstatic.com/docs/presentations/images/favicon_v3.ico');
+                if(e.key === "6") setPreset('Google', 'https://www.google.com/favicon.ico');
+                if(e.key === "Escape") { currentLook = (currentLook % 25) + 1; setLook(currentLook); }
             }
         };
 
-        function setPreset(t, i) {
-            document.getElementById('user-title').value = t;
-            document.getElementById('user-icon').value = i;
-            applyCloak();
-        }
+        function launchGame(url) { document.getElementById('launcher').style.display = 'block'; document.getElementById('game-frame').src = url; }
+        function closeGame() { document.getElementById('launcher').style.display = 'none'; document.getElementById('game-frame').src = ""; }
+        function setLook(v) { document.body.setAttribute('data-look', v); localStorage.setItem('p404_look', v); }
+        function setPreset(t, i) { document.title = t; document.getElementById('tab-icon').href = i; localStorage.setItem('p404_t', t); localStorage.setItem('p404_i', i); }
 
-        function applyCloak() {
-            const t = document.getElementById('user-title').value;
-            const i = document.getElementById('user-icon').value;
-            if(t) document.title = t;
-            if(i) document.getElementById('tab-icon').href = i;
-            localStorage.setItem('p404_t', t);
-            localStorage.setItem('p404_i', i);
-        }
-
-        function setLook(v) {
-            document.body.setAttribute('data-look', v);
-            localStorage.setItem('p404_look', v);
+        function renderGames() {
+            const grid = document.getElementById('game-grid'); const term = document.getElementById('search').value.toLowerCase();
+            grid.innerHTML = '';
+            games.filter(g => g.n.toLowerCase().includes(term)).forEach(g => {
+                const card = document.createElement('div'); card.className = `game-card ${g.dev ? 'dev-outline' : ''}`;
+                card.innerText = g.n; card.onclick = () => launchGame(g.p); grid.appendChild(card);
+            });
         }
 
         function showTab(t) {
-            ['content', 'settings', 'records'].forEach(id => {
-                document.getElementById(id + '-area').style.display = 'none';
-                const navId = id === 'content' ? 'nav-home' : `nav-${id}`;
-                document.getElementById(navId).classList.remove('active');
-            });
+            ['content', 'settings', 'records'].forEach(id => document.getElementById(id + '-area').style.display = 'none');
             document.getElementById(`${t === 'home' ? 'content' : t}-area`).style.display = 'block';
-            document.getElementById(`nav-${t}`).classList.add('active');
         }
-
-        function saveRecords() {
-            localStorage.setItem('p404_rec', document.getElementById('records-text').value);
-        }
-
-        function panic() { window.location.replace("https://classroom.google.com"); }
 
         window.onmousemove = e => { points.push({ x: e.clientX, y: e.clientY, age: 0 }); };
+        window.onclick = e => { ripple = {x: e.clientX, y: e.clientY, r: 0, a: 1}; };
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
-            ctx.lineWidth = 4; ctx.lineJoin = 'round'; ctx.beginPath();
-            for (let i = 0; i < points.length; i++) {
-                const p = points[i]; p.age++;
-                if (i === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
+            const acc = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+            if(points.length > 0) {
+                const h = points[points.length-1]; ctx.fillStyle = acc; ctx.beginPath(); ctx.arc(h.x, h.y, 5, 0, 7); ctx.fill();
             }
-            ctx.stroke();
-            points = points.filter(p => p.age < 20);
+            ctx.strokeStyle = acc; ctx.lineWidth = 3; ctx.beginPath();
+            points.forEach((p, i) => { p.age++; if(i==0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); });
+            ctx.stroke(); points = points.filter(p => p.age < 20);
+            if(ripple.a > 0) {
+                ctx.strokeStyle = acc; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(ripple.x, ripple.y, ripple.r+=4, 0, 7); ctx.stroke(); ripple.a -= 0.02;
+            }
             requestAnimationFrame(animate);
         }
 
         function init() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
             renderGames(); animate();
-            
-            const t = localStorage.getItem('p404_t');
-            const i = localStorage.getItem('p404_i');
-            const l = localStorage.getItem('p404_look') || 'default';
-            const r = localStorage.getItem('p404_rec');
-            
-            if(t) { document.title = t; document.getElementById('user-title').value = t; }
-            if(i) { document.getElementById('tab-icon').href = i; document.getElementById('user-icon').value = i; }
-            if(r) { document.getElementById('records-text').value = r; }
-            setLook(l);
-            document.getElementById('look-select').value = l;
+            const l = localStorage.getItem('p404_look') || '1'; setLook(l);
+            const t = localStorage.getItem('p404_t'); const i = localStorage.getItem('p404_i');
+            if(t) document.title = t; if(i) document.getElementById('tab-icon').href = i;
         }
     </script>
 </body>

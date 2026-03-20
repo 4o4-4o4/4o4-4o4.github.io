@@ -8,284 +8,259 @@
     
     <style>
         :root { 
-            --bg: #0b0b0b; --side: #121212; --accent: #4CAF50; 
-            --text: #efefef; --card: #1e1e1e; --border: #333; 
-            --input-bg: #000; --panic: #ff4444; 
+            --bg: #0b0b0b; --side: #121212; --text: #efefef; 
+            --card: #1e1e1e; --border: #333; --accent: #3498db;
+            --glow: rgba(52, 152, 219, 0.4);
         }
 
-        /* --- THE CLEAN DECOY GATEKEEPER --- */
-        #gatekeeper {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #f9f9f9; display: flex; align-items: center; 
-            justify-content: center; z-index: 10000; cursor: default;
-        }
-        #gatekeeper img { max-width: 100%; height: auto; }
+        /* --- THE 25 THEME ENGINE --- */
+        [data-look="1"] { --bg: #000800; --side: #000500; --text: #00ff00; --card: #000c00; --border: #003300; --accent: #00ff00; --glow: rgba(0, 255, 0, 0.6); font-family: 'Courier New', monospace; }
+        [data-look="2"] { --bg: #0a0000; --side: #150000; --text: #ff4d4d; --card: #200000; --border: #400000; --accent: #ff0000; --glow: rgba(255, 0, 0, 0.5); }
+        [data-look="3"] { --bg: #000b1a; --side: #00122e; --text: #00fff2; --card: #001a41; --border: #00fff2; --accent: #f0f; --glow: rgba(255, 0, 255, 0.6); }
+        [data-look="4"] { --bg: #ffffff; --side: #f0f0f0; --text: #222; --card: #e0e0e0; --border: #ccc; --accent: #999; --glow: rgba(0, 0, 0, 0.1); }
+        [data-look="5"] { --bg: #1a0026; --side: #11001a; --text: #e600ff; --card: #240033; --border: #e600ff; --accent: #e600ff; --glow: rgba(230, 0, 255, 0.5); }
+        [data-look="6"] { --bg: #001a0d; --side: #000d06; --text: #00ff80; --card: #002613; --border: #00ff80; --accent: #00ff80; --glow: rgba(0, 255, 128, 0.5); }
+        [data-look="7"] { --bg: #1a0f00; --side: #0d0800; --text: #ff9900; --card: #261700; --border: #ff9900; --accent: #ff9900; --glow: rgba(255, 153, 0, 0.5); }
+        [data-look="8"] { --bg: #00141a; --side: #000a0d; --text: #00d9ff; --card: #001f26; --border: #00d9ff; --accent: #00d9ff; --glow: rgba(0, 217, 255, 0.5); }
+        [data-look="9"] { --bg: #1a0000; --side: #0d0000; --text: #ff0000; --card: #260000; --border: #ff0000; --accent: #ff0000; --glow: rgba(255, 0, 0, 0.5); }
+        [data-look="10"] { --bg: #0d0d0d; --side: #000000; --text: #ffffff; --card: #1a1a1a; --border: #ffffff; --accent: #ffffff; --glow: rgba(255, 255, 255, 0.5); }
+        [data-look="11"] { --bg: #1a1a00; --side: #0d0d00; --text: #ffff00; --card: #262600; --border: #ffff00; --accent: #ffff00; --glow: rgba(255, 255, 0, 0.5); }
+        [data-look="12"] { --bg: #0a0a1a; --side: #05050d; --text: #5c5cff; --card: #0f0f26; --border: #5c5cff; --accent: #5c5cff; --glow: rgba(92, 92, 255, 0.5); }
+        [data-look="13"] { --bg: #1a000d; --side: #0d0006; --text: #ff0080; --card: #260013; --border: #ff0080; --accent: #ff0080; --glow: rgba(255, 0, 128, 0.5); }
+        [data-look="14"] { --bg: #001a1a; --side: #000d0d; --text: #00ffff; --card: #002626; --border: #00ffff; --accent: #00ffff; --glow: rgba(0, 255, 255, 0.5); }
+        [data-look="15"] { --bg: #0d1a00; --side: #060d00; --text: #80ff00; --card: #132600; --border: #80ff00; --accent: #80ff00; --glow: rgba(128, 255, 0, 0.5); }
+        [data-look="16"] { --bg: #1a0d00; --side: #0d0600; --text: #ff8000; --card: #261300; --border: #ff8000; --accent: #ff8000; --glow: rgba(255, 128, 0, 0.5); }
+        [data-look="17"] { --bg: #000d1a; --side: #00060d; --text: #0080ff; --card: #001326; --border: #0080ff; --accent: #0080ff; --glow: rgba(0, 128, 255, 0.5); }
+        [data-look="18"] { --bg: #0d001a; --side: #06000d; --text: #8000ff; --card: #130026; --border: #8000ff; --accent: #8000ff; --glow: rgba(128, 0, 255, 0.5); }
+        [data-look="19"] { --bg: #1a001a; --side: #0d000d; --text: #ff00ff; --card: #260026; --border: #ff00ff; --accent: #ff00ff; --glow: rgba(255, 0, 255, 0.5); }
+        [data-look="20"] { --bg: #001a00; --side: #000d00; --text: #00ff00; --card: #002600; --border: #00ff00; --accent: #00ff00; --glow: rgba(0, 255, 0, 0.5); }
+        [data-look="21"] { --bg: #2a2a2a; --side: #1a1a1a; --text: #ddd; --card: #333; --border: #555; --accent: #888; --glow: rgba(255, 255, 255, 0.1); }
+        [data-look="22"] { --bg: #121212; --side: #000; --text: #bb86fc; --card: #1e1e1e; --border: #bb86fc; --accent: #bb86fc; --glow: rgba(187, 134, 252, 0.4); }
+        [data-look="23"] { --bg: #121212; --side: #000; --text: #03dac6; --card: #1e1e1e; --border: #03dac6; --accent: #03dac6; --glow: rgba(3, 218, 198, 0.4); }
+        [data-look="24"] { --bg: #002b36; --side: #073642; --text: #839496; --card: #002b36; --border: #93a1a1; --accent: #268bd2; --glow: rgba(38, 139, 210, 0.3); }
+        [data-look="25"] { --bg: #282c34; --side: #21252b; --text: #abb2bf; --card: #2c313a; --border: #61afef; --accent: #61afef; --glow: rgba(97, 175, 239, 0.4); }
 
-        /* --- DASHBOARD STYLES --- */
-        #trail-canvas { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            pointer-events: none; z-index: 9999; display: none; 
-        }
-
-        * { box-sizing: border-box; }
-        .dashboard-active * { cursor: none; } 
-
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100vh; background: var(--bg); 
-            overflow: hidden; display: flex; font-family: 'Segoe UI', sans-serif; color: var(--text); 
-        }
-
-        #sidebar { 
-            width: 260px; background: var(--side); border-right: 1px solid var(--border); 
-            display: flex; flex-direction: column; padding: 15px 10px; flex-shrink: 0; 
-        }
-
-        .side-btn { 
-            background: none; border: none; color: var(--text); opacity: 0.7; 
-            text-align: left; padding: 12px; border-radius: 8px; 
-            font-size: 14px; margin-bottom: 5px; transition: 0.2s; 
-        }
-        .side-btn:hover, .side-btn.active { background: var(--border); opacity: 1; color: var(--accent); }
-
-        #main { display: flex; flex-direction: column; flex-grow: 1; height: 100vh; position: relative; overflow: hidden; }
-        #top-nav { height: 65px; background: var(--side); padding: 0 20px; display: flex; gap: 12px; align-items: center; border-bottom: 1px solid var(--border); }
-        #search { flex-grow: 1; background: var(--card); border: 1px solid var(--border); padding: 12px; border-radius: 8px; color: var(--text); outline: none; }
+        /* --- CORE UI --- */
+        * { box-sizing: border-box; outline: none; transition: 0.2s; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100vh; background: var(--bg); overflow: hidden; display: flex; font-family: 'Segoe UI', sans-serif; color: var(--text); }
         
-        #content-area, #settings-area { flex-grow: 1; overflow-y: auto; padding: 30px; }
+        #trail-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+        #gatekeeper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f9f9f9; display: flex; align-items: center; justify-content: center; z-index: 10000; }
+        #gatekeeper img { max-width: 100%; height: auto; user-select: none; }
 
-        #game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 25px; }
-        .game-card { background: var(--card); border: 1px solid var(--border); padding: 40px 15px; border-radius: 16px; text-align: center; font-size: 15px; font-weight: bold; transition: 0.3s; }
-        .game-card:hover { border-color: var(--accent); transform: translateY(-8px); }
+        #sidebar { width: 260px; background: var(--side); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px 15px; flex-shrink: 0; }
+        .side-btn { background: none; border: 1px solid transparent; color: var(--text); opacity: 0.6; text-align: left; padding: 12px 15px; cursor: pointer; border-radius: 8px; font-size: 14px; margin-bottom: 5px; }
+        .side-btn.active, .side-btn:hover { background: var(--border); opacity: 1; color: var(--accent); font-weight: bold; }
 
-        #player-container { display: none; flex-grow: 1; background: #000; height: calc(100vh - 65px); }
-        iframe { width: 100%; height: 100%; border: none; }
+        #main { flex-grow: 1; display: flex; flex-direction: column; position: relative; }
+        #top-nav { height: 60px; background: var(--side); display: flex; align-items: center; padding: 0 20px; gap: 15px; border-bottom: 1px solid var(--border); }
+        #search { flex-grow: 1; background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px; color: var(--text); }
+        
+        #content-area, #records-area, #settings-area { flex-grow: 1; overflow-y: auto; padding: 30px; display: none; }
+        
+        #game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+        .game-card { background: var(--card); border: 1px solid var(--border); padding: 40px 10px; border-radius: 15px; cursor: pointer; text-align: center; font-weight: bold; }
+        .game-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .game-card.dev-outline { border: 2px solid var(--bg) !important; box-shadow: 0 0 15px var(--accent); }
 
-        .config-box { padding: 30px; background: var(--card); border-radius: 16px; border: 1px solid var(--border); margin-bottom: 30px; }
-        .theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-        .theme-opt { padding: 15px; border: 1px solid var(--border); border-radius: 10px; text-align: center; font-size: 12px; cursor: pointer; color: #fff; font-weight: bold; }
-        .config-input { width: 100%; padding: 12px; margin-bottom: 15px; background: var(--input-bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; }
+        #launcher { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 5000; display: none; }
+        #game-frame { width: 100%; height: 100%; border: none; }
+        #close-launcher { position: absolute; top: 20px; right: 20px; background: #ff4444; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; z-index: 5001; }
+        
+        .config-box { background: var(--card); padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 25px; }
+        .cloak-input { width: 100%; background: #000; border: 1px solid var(--border); color: #fff; padding: 12px; margin: 10px 0; border-radius: 6px; }
     </style>
 </head>
-
 <body onload="init()">
-
     <canvas id="trail-canvas"></canvas>
 
-    <div id="gatekeeper">
-        <img src="abcabc.png" alt="Decoy">
+    <div id="gatekeeper"><img src="abcabc.png" alt="Decoy"></div>
+
+    <div id="launcher">
+        <button id="close-launcher" onclick="closeGame()">EXIT TO HUB</button>
+        <iframe id="game-frame" src=""></iframe>
     </div>
 
     <div id="sidebar">
-        <h1 style="color:var(--accent); margin: 20px 0 40px 10px; font-size: 26px; font-weight: 900;">DASHBOARD</h1>
+        <h2 style="margin-left:10px; color:var(--accent); font-size: 24px;">404</h2>
         <button id="nav-home" class="side-btn active" onclick="showTab('home')">Library</button>
+        <button id="nav-records" class="side-btn" onclick="showTab('records')">Records</button>
         <button id="nav-settings" class="side-btn" onclick="showTab('settings')">Settings</button>
-        <div style="margin-top: auto; padding: 10px; opacity: 0.4; font-size: 10px;">V7.0 FINAL</div>
     </div>
 
     <div id="main">
         <div id="top-nav">
-            <input type="text" id="search" placeholder="Search 26 games..." oninput="renderGames()">
-            <button id="back-lib" class="side-btn" style="display:none; width:auto; background:var(--border);" onclick="goHome()">Back</button>
-            <button class="side-btn" style="width:auto; background:var(--panic); color:white; font-weight: bold;" onclick="panic()">PANIC</button>
+            <input type="text" id="search" placeholder="Filter 26 games..." oninput="renderGames()">
+            <button class="side-btn" style="background:#ff4444; color:white; width:auto; opacity:1;" onclick="panic()">PANIC</button>
         </div>
 
-        <div id="content-area">
+        <div id="content-area" style="display: block;">
             <div id="game-grid"></div>
         </div>
 
-        <div id="settings-area" style="display: none;">
+        <div id="records-area">
             <div class="config-box">
-                <h3>Background Modes (15)</h3>
-                <div class="theme-grid" id="theme-grid"></div>
-            </div>
-            <div class="config-box">
-                <h3>Cloaking</h3>
-                <input type="text" id="cloak-name" class="config-input" placeholder="Tab Title" oninput="saveSettings()">
-                <input type="text" id="cloak-url" class="config-input" placeholder="Icon URL" oninput="saveSettings()">
+                <h2>Persistent Notes</h2>
+                <textarea id="records-text" oninput="saveRecords()" style="width:100%; height:450px; background:#000; color:var(--text); border:none; padding:20px; font-family:monospace; resize:none;"></textarea>
             </div>
         </div>
 
-        <div id="player-container">
-            <iframe id="game-view" src=""></iframe>
+        <div id="settings-area">
+            <div class="config-box">
+                <h2>Tab Cloaker</h2>
+                <button class="side-btn" style="opacity:1; background:var(--border); margin-right:10px;" onclick="setPreset('My Apps', 'https://shelley.instructure.com/favicon.ico')">Shelley (Circle)</button>
+                <button class="side-btn" style="opacity:1; background:var(--border);" onclick="setPreset('Google Docs', 'https://ssl.gstatic.com/docs/documents/images/favicon_v3.ico')">Docs</button>
+                <input type="text" id="user-title" class="cloak-input" placeholder="Custom Title..." oninput="applyCloak()">
+                <input type="text" id="user-icon" class="cloak-input" placeholder="Custom Icon URL..." oninput="applyCloak()">
+            </div>
+            <div class="config-box">
+                <h2>Appearance</h2>
+                <select id="look-select" class="cloak-input" onchange="setLook(this.value)">
+                    <option value="default">Default Dark</option>
+                    <option value="1">OG Terminal</option><option value="2">Blood Moon</option>
+                    <option value="3">Cyberpunk</option><option value="4">Ghost White</option>
+                    <option value="5">Nebula</option><option value="22">Purple Rain</option>
+                    <option value="25">One Dark</option>
+                </select>
+            </div>
         </div>
     </div>
 
     <script>
-        const combo = "404";
-        let inputSeq = "";
-        let panicSeq = "";
-        
-        const gameList = [
-            {n: "Bloons TD", p: "./games/bloonstd/index.html"}, 
-            {n: "Geo Dash", p: "./games/geodash/index.html"},
-            {n: "Duck Life 3", p: "./games/ducklife3/index.html"}, 
-            {n: "Slope", p: "./games/slope/index.html"},
-            {n: "2048", p: "./games/2048/index.html"}, 
-            {n: "World's Hardest Game", p: "./games/worlds-hardest-game/index.html"},
-            {n: "Flappy Bird", p: "./games/flappybird/index.html"}, 
-            {n: "Sand", p: "./games/Sand.html"},
-            {n: "Basket Random", p: "./games/basket-random/index.html"}, 
-            {n: "Drive Mad", p: "./games/drive-mad/index.html"},
-            {n: "1v1 LOL", p: "./games/1v1lol/index.html"}, 
-            {n: "BTTS", p: "./BTTS/index.html"},
-            {n: "Vex 7", p: "./games/vex7/index.html"}, 
-            {n: "MOTOX3M POOL", p: "./games/motox3m-pool/index.html"},
-            {n: "OVO", p: "./games/OVO/index.html"}, 
-            {n: "Ball Blast", p: "./games/Ball Blast.html"},
-            {n: "Dunes", p: "./games/Dune.html"}, 
-            {n: "Appel", p: "./games/Appel v1.html"},
-            {n: "Paper Minecraft", p: "./games/Paper Minecraft v11.html"},
-            {n: "Square Sling", p: "./games/SS.html"},
-            {n: "Dunk Shot", p: "./games/DS.html"}, 
-            {n: "Sky Ball", p: "./games/SB.html"},
-            {n: "BITTS", p: "./games/BITTS/BITTS.html"}, 
-            {n: "Tag #2", p: "./games/Tag-main/index.html"},
-            {n: "Cookie Clicker", p: "./CC/index.html"}, 
-            {n: "Tube Jumpers", p: "./games/TJ.html"}
+        const combo = "404"; 
+        let inputSeq = ""; 
+        const canvas = document.getElementById('trail-canvas'); 
+        const ctx = canvas.getContext('2d'); 
+        let points = [];
+
+        /* --- THE 26 GAMES (YOUR ORIGINAL LIST) --- */
+        const games = [
+            {n: "Bloons TD", p: "./games/bloonstd/index.html", dev: true},
+            {n: "Geo Dash", p: "./games/geodash/index.html", dev: false},
+            {n: "Duck Life 3", p: "./games/ducklife3/index.html", dev: false},
+            {n: "Slope", p: "./games/slope/index.html", dev: true},
+            {n: "2048", p: "./games/2048/index.html", dev: false},
+            {n: "World's Hardest Game", p: "./games/worlds-hardest-game/index.html", dev: true},
+            {n: "Flappy Bird", p: "./games/flappybird/index.html", dev: false},
+            {n: "Sand", p: "./games/Sand.html", dev: false},
+            {n: "Basket Random", p: "./games/basket-random/index.html", dev: false},
+            {n: "Drive Mad", p: "./games/drive-mad/index.html", dev: false},
+            {n: "1v1 LOL", p: "./games/1v1lol/index.html", dev: true},
+            {n: "BTTS", p: "./BTTS/index.html", dev: false},
+            {n: "Vex 7", p: "./games/vex7/index.html", dev: false},
+            {n: "MOTOX3M POOL", p: "./games/motox3m-pool/index.html", dev: false},
+            {n: "OVO", p: "./games/OVO/index.html", dev: false},
+            {n: "Ball Blast", p: "./games/Ball Blast.html", dev: false},
+            {n: "Dunes", p: "./games/Dune.html", dev: false},
+            {n: "Appel", p: "./games/Appel v1.html", dev: false},
+            {n: "Paper Minecraft", p: "./games/Paper Minecraft v11.html", dev: true},
+            {n: "Square Sling", p: "./games/SS.html", dev: false},
+            {n: "Dunk Shot", p: "./games/DS.html", dev: false},
+            {n: "Sky Ball", p: "./games/SB.html", dev: false},
+            {n: "BITTS", p: "./games/BITTS/BITTS.html", dev: false},
+            {n: "Tag #2", p: "./games/Tag-main/index.html", dev: false},
+            {n: "Cookie Clicker", p: "./CC/index.html", dev: false},
+            {n: "Tube Jumpers", p: "./games/TJ.html", dev: false}
         ];
 
-        const themes = [
-            {name: "Dark", bg: "#0b0b0b", side: "#121212", acc: "#4CAF50"},
-            {name: "Midnight", bg: "#050a14", side: "#0a1428", acc: "#3498db"},
-            {name: "Emerald", bg: "#06140c", side: "#0b2618", acc: "#2ecc71"},
-            {name: "Purple", bg: "#120514", side: "#1e0a24", acc: "#9b59b6"},
-            {name: "Crimson", bg: "#140505", side: "#260b0b", acc: "#e74c3c"},
-            {name: "Cyber", bg: "#000", side: "#0a0a0a", acc: "#ff00ff"},
-            {name: "Gold", bg: "#141105", side: "#1f1a08", acc: "#f1c40f"},
-            {name: "Ocean", bg: "#000c18", side: "#001529", acc: "#00d2ff"},
-            {name: "Vampire", bg: "#000", side: "#000", acc: "#800000"},
-            {name: "Ghost", bg: "#1a1a1a", side: "#222", acc: "#fff"},
-            {name: "Solar", bg: "#1a0f05", side: "#291808", acc: "#e67e22"},
-            {name: "Nebula", bg: "#12051a", side: "#1c0829", acc: "#8e44ad"},
-            {name: "Rust", bg: "#1a0d05", side: "#291508", acc: "#d35400"},
-            {name: "Glacier", bg: "#0f1a1a", side: "#182929", acc: "#1abc9c"},
-            {name: "Sakura", bg: "#1a0f12", side: "#29181c", acc: "#e91e63"}
-        ];
+        function launchGame(url) {
+            document.getElementById('launcher').style.display = 'block';
+            document.getElementById('game-frame').src = url;
+        }
 
-        window.onkeydown = e => {
-            if (get('gatekeeper').style.display !== 'none') {
-                inputSeq += e.key;
-                if (inputSeq.endsWith(combo)) unlock();
-                if (inputSeq.length > 5) inputSeq = ""; 
-            }
-            panicSeq += e.key.toLowerCase();
-            if (panicSeq.endsWith("panic")) panic();
-            if (panicSeq.length > 10) panicSeq = "";
-        };
-
-        function get(id) { return document.getElementById(id); }
-
-        function unlock() {
-            get('gatekeeper').style.display = 'none';
-            get('trail-canvas').style.display = 'block';
-            document.body.classList.add('dashboard-active');
-            sessionStorage.setItem('auth_404', 'true');
+        function closeGame() {
+            document.getElementById('launcher').style.display = 'none';
+            document.getElementById('game-frame').src = "";
         }
 
         function renderGames() {
-            const grid = get('game-grid');
-            const term = get('search').value.toLowerCase();
+            const grid = document.getElementById('game-grid');
+            const term = document.getElementById('search').value.toLowerCase();
             grid.innerHTML = '';
-            gameList.filter(g => g.n.toLowerCase().includes(term)).forEach(g => {
-                const c = document.createElement('div');
-                c.className = 'game-card';
-                c.innerText = g.n;
-                c.onclick = () => {
-                    get('content-area').style.display = 'none';
-                    get('player-container').style.display = 'block';
-                    get('back-lib').style.display = 'block';
-                    get('game-view').src = g.p;
-                };
-                grid.appendChild(c);
+            games.filter(g => g.n.toLowerCase().includes(term)).forEach(g => {
+                const card = document.createElement('div');
+                card.className = `game-card ${g.dev ? 'dev-outline' : ''}`;
+                card.innerText = g.n;
+                card.onclick = () => launchGame(g.p);
+                grid.appendChild(card);
             });
         }
 
-        function goHome() {
-            get('game-view').src = '';
-            get('player-container').style.display = 'none';
-            get('back-lib').style.display = 'none';
-            get('content-area').style.display = 'block';
+        window.onkeydown = e => {
+            if (document.getElementById('gatekeeper').style.display !== 'none') {
+                inputSeq += e.key;
+                if (inputSeq.endsWith(combo)) {
+                    document.getElementById('gatekeeper').style.display = 'none';
+                }
+            }
+        };
+
+        function setPreset(t, i) {
+            document.getElementById('user-title').value = t;
+            document.getElementById('user-icon').value = i;
+            applyCloak();
+        }
+
+        function applyCloak() {
+            const t = document.getElementById('user-title').value;
+            const i = document.getElementById('user-icon').value;
+            if(t) document.title = t;
+            if(i) document.getElementById('tab-icon').href = i;
+            localStorage.setItem('p404_t', t);
+            localStorage.setItem('p404_i', i);
+        }
+
+        function setLook(v) {
+            document.body.setAttribute('data-look', v);
+            localStorage.setItem('p404_look', v);
         }
 
         function showTab(t) {
-            goHome();
-            get('content-area').style.display = t === 'home' ? 'block' : 'none';
-            get('settings-area').style.display = t === 'settings' ? 'block' : 'none';
-            document.querySelectorAll('.side-btn').forEach(b => b.classList.remove('active'));
-            get('nav-' + t).classList.add('active');
-        }
-
-        function applyTheme(t) {
-            const r = document.documentElement.style;
-            r.setProperty('--bg', t.bg);
-            r.setProperty('--side', t.side);
-            r.setProperty('--accent', t.acc);
-            localStorage.setItem('p404_theme', JSON.stringify(t));
-        }
-
-        function saveSettings() {
-            const n = get('cloak-name').value;
-            const u = get('cloak-url').value;
-            localStorage.setItem('p404_cloak', JSON.stringify({n, u}));
-            document.title = n || "Page not found · GitHub Pages";
-            get('tab-icon').href = u || "https://github.githubassets.com/favicons/favicon.svg";
-        }
-
-        function panic() { window.top.location.replace('https://classroom.google.com'); }
-
-        function init() {
-            const grid = get('theme-grid');
-            themes.forEach(t => {
-                const o = document.createElement('div');
-                o.className = 'theme-opt';
-                o.innerText = t.name;
-                o.style.background = t.bg;
-                o.onclick = () => applyTheme(t);
-                grid.appendChild(o);
+            ['content', 'settings', 'records'].forEach(id => {
+                document.getElementById(id + '-area').style.display = 'none';
+                const navId = id === 'content' ? 'nav-home' : `nav-${id}`;
+                document.getElementById(navId).classList.remove('active');
             });
-            const st = JSON.parse(localStorage.getItem('p404_theme'));
-            if (st) applyTheme(st);
-            renderGames();
-            if (sessionStorage.getItem('auth_404') === 'true') unlock();
-            requestAnimationFrame(drawTrail);
+            document.getElementById(`${t === 'home' ? 'content' : t}-area`).style.display = 'block';
+            document.getElementById(`nav-${t}`).classList.add('active');
         }
 
-        /* --- TRAIL ENGINE --- */
-        const canvas = get('trail-canvas');
-        const ctx = canvas.getContext('2d');
-        let points = [];
-        let mouse = {x: 0, y: 0};
+        function saveRecords() {
+            localStorage.setItem('p404_rec', document.getElementById('records-text').value);
+        }
 
-        window.onmousemove = e => {
-            if (get('gatekeeper').style.display !== 'none') return;
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-            points.push({x: mouse.x, y: mouse.y, age: 0});
-        };
+        function panic() { window.location.replace("https://classroom.google.com"); }
 
-        function drawTrail() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        window.onmousemove = e => { points.push({ x: e.clientX, y: e.clientY, age: 0 }); };
+
+        function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (get('gatekeeper').style.display !== 'none') return requestAnimationFrame(drawTrail);
-
-            ctx.beginPath();
-            ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent');
-            ctx.lineWidth = 3;
-            ctx.lineJoin = 'round';
+            ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+            ctx.lineWidth = 4; ctx.lineJoin = 'round'; ctx.beginPath();
             for (let i = 0; i < points.length; i++) {
-                const p = points[i];
-                p.age += 1;
-                if (i === 0) ctx.moveTo(p.x, p.y);
-                else ctx.lineTo(p.x, p.y);
+                const p = points[i]; p.age++;
+                if (i === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
             }
             ctx.stroke();
-            points = points.filter(p => p.age < 25);
-            ctx.fillStyle = ctx.strokeStyle;
-            ctx.beginPath();
-            ctx.arc(mouse.x, mouse.y, 4, 0, Math.PI * 2);
-            ctx.fill();
-            requestAnimationFrame(drawTrail);
+            points = points.filter(p => p.age < 20);
+            requestAnimationFrame(animate);
+        }
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            renderGames(); animate();
+            
+            const t = localStorage.getItem('p404_t');
+            const i = localStorage.getItem('p404_i');
+            const l = localStorage.getItem('p404_look') || 'default';
+            const r = localStorage.getItem('p404_rec');
+            
+            if(t) { document.title = t; document.getElementById('user-title').value = t; }
+            if(i) { document.getElementById('tab-icon').href = i; document.getElementById('user-icon').value = i; }
+            if(r) { document.getElementById('records-text').value = r; }
+            setLook(l);
+            document.getElementById('look-select').value = l;
         }
     </script>
 </body>

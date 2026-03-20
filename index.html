@@ -40,15 +40,17 @@
         [data-look="24"] { --bg: #002b36; --side: #073642; --text: #839496; --card: rgba(0, 43, 54, 0.9); --border: #93a1a1; --accent: #268bd2; }
         [data-look="25"] { --bg: #282c34; --side: #21252b; --text: #abb2bf; --card: rgba(44, 49, 58, 0.9); --border: #61afef; --accent: #c678dd; }
 
-        * { cursor: none !important; box-sizing: border-box; outline: none; transition: 0.2s; }
+        * { box-sizing: border-box; outline: none; transition: 0.2s; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100vh; background: var(--bg); overflow: hidden; display: flex; font-family: 'Segoe UI', sans-serif; color: var(--text); }
         
+        /* Cursor logic */
+        body.unlocked, body.unlocked * { cursor: none !important; }
+
         #trail-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
         .game-card, .side-btn, h2, h3, p, input { text-shadow: 2px 2px 4px rgba(0,0,0,1); }
 
-        #gatekeeper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f9f9f9; display: flex; align-items: center; justify-content: center; z-index: 10000; }
-        /* Smaller abcabc image that fits on screen */
-        #gatekeeper img { max-width: 90vw; max-height: 90vh; border: 2px solid #ccc; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        #gatekeeper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; z-index: 10000; cursor: default !important; }
+        #gatekeeper img { width: 100%; height: 100%; object-fit: cover; border: none; }
 
         #sidebar { width: 260px; background: var(--side); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px 15px; flex-shrink: 0; }
         .side-btn { background: none; border: 1px solid transparent; color: var(--text); opacity: 0.8; text-align: left; padding: 12px 15px; border-radius: 8px; font-size: 14px; margin-bottom: 5px; }
@@ -62,6 +64,14 @@
         #game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
         .game-card { background: var(--card); border: 1px solid var(--border); padding: 45px 10px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 16px; transition: 0.3s; }
         .game-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 0 15px var(--glow); }
+
+        /* Pulsing Glow for (TEST) Games */
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 5px var(--accent); }
+            50% { box-shadow: 0 0 18px var(--accent); }
+            100% { box-shadow: 0 0 5px var(--accent); }
+        }
+        .test-glow { animation: pulse-glow 2s infinite ease-in-out; border-color: var(--accent) !important; }
 
         #launcher { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 5000; display: none; }
         #game-frame { width: 100%; height: 100%; border: none; }
@@ -101,18 +111,17 @@
                 <h2>Quick Cloaks (Shift + 1-6)</h2>
                 <div class="grid-layout">
                     <button class="side-btn" onclick="setPreset('My Apps', 'https://filescdn.classlink.com/resources/customlinks/1601307234673-fbb20dacacaf8359984dc1276e57ddc6.png')">[1] My Apps</button>
-                    <button class="side-btn" onclick="setPreset('Home', 'https://ssl.gstatic.com/classroom/favicon.png')">[2] Classroom</button>
+                    <button class="side-btn" onclick="setPreset('Classroom | Home', 'https://ssl.gstatic.com/classroom/favicon.png')">[2] Classroom</button>
                     <button class="side-btn" onclick="setPreset('IXL | Dashboard', 'https://www.ixl.com/favicon.ico')">[3] IXL</button>
-                    <button class="side-btn" onclick="setPreset('Google Docs', 'https://ssl.gstatic.com/docs/documents/images/favicon_v3.ico')">[4] Docs</button>
-                    <button class="side-btn" onclick="setPreset('Google Slides', 'https://ssl.gstatic.com/docs/presentations/images/favicon_v3.ico')">[5] Slides</button>
-                    <button class="side-btn" onclick="setPreset('Google', 'https://www.google.com/favicon.ico')">[6] Google</button>
+                    <button class="side-btn" onclick="setPreset('Google Slides', 'slides.png')">[4] Slides</button>
+                    <button class="side-btn" onclick="setPreset('Google Docs', 'google-docs.png')">[5] Docs</button>
+                    <button class="side-btn" onclick="setPreset('New Tab', 'https://www.google.com/favicon.ico')">[6] Google</button>
                 </div>
             </div>
             
             <div class="config-box">
                 <h2>Manual Style Selection</h2>
-                <div id="style-grid" class="grid-layout">
-                    </div>
+                <div id="style-grid" class="grid-layout"></div>
             </div>
         </div>
     </div>
@@ -160,7 +169,10 @@
         window.onkeydown = e => {
             if (document.getElementById('gatekeeper').style.display !== 'none') {
                 inputSeq += e.key;
-                if (inputSeq.endsWith(combo)) document.getElementById('gatekeeper').style.display = 'none';
+                if (inputSeq.endsWith(combo)) {
+                    document.getElementById('gatekeeper').style.display = 'none';
+                    document.body.classList.add('unlocked');
+                }
                 return;
             }
             if (e.shiftKey) {
@@ -171,7 +183,7 @@
                         ['IXL | Dashboard', 'https://www.ixl.com/favicon.ico'],
                         ['Google Slides', 'slides.png'],
                         ['Google Docs', 'google-docs.png'],
-                        ['New Tab', 'https://www.goosdfdfgdsgfdsafsdle.com/favicon.ico']
+                        ['New Tab', 'https://www.google.com/favicon.ico']
                     ];
                     setPreset(presets[parseInt(e.key)-1][0], presets[parseInt(e.key)-1][1]);
                 }
@@ -190,18 +202,17 @@
             grid.innerHTML = '';
             games.filter(g => g.n.toLowerCase().includes(term)).forEach(g => {
                 const card = document.createElement('div'); card.className = `game-card`;
-                card.innerText = g.n; card.onclick = () => launchGame(g.p); grid.appendChild(card);
+                card.innerText = g.n; 
+                if (g.n.includes("(TEST)")) card.classList.add('test-glow');
+                card.onclick = () => launchGame(g.p); grid.appendChild(card);
             });
         }
 
         function buildStyleGrid() {
             const grid = document.getElementById('style-grid');
             for(let i=1; i<=25; i++) {
-                const b = document.createElement('button');
-                b.className = 'style-btn';
-                b.innerText = `Style ${i}`;
-                b.onclick = () => setLook(i);
-                grid.appendChild(b);
+                const b = document.createElement('button'); b.className = 'style-btn'; b.innerText = `Style ${i}`;
+                b.onclick = () => setLook(i); grid.appendChild(b);
             }
         }
 
@@ -213,9 +224,8 @@
         }
 
         function saveRecords() { localStorage.setItem('p404_rec', document.getElementById('records-text').value); }
-        
-        window.onmousemove = e => { points.push({ x: e.clientX, y: e.clientY, age: 0 }); };
-        window.onclick = e => { ripple = {x: e.clientX, y: e.clientY, r: 0, a: 1}; };
+        window.onmousemove = e => { if(document.body.classList.contains('unlocked')) points.push({ x: e.clientX, y: e.clientY, age: 0 }); };
+        window.onclick = e => { if(document.body.classList.contains('unlocked')) ripple = {x: e.clientX, y: e.clientY, r: 0, a: 1}; };
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);

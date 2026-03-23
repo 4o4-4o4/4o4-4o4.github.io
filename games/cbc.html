@@ -10,7 +10,7 @@
             background-color: #000; overflow: hidden;
             display: flex; align-items: center; justify-content: center;
         }
-        #game-container { width: 100%; height: 100%; position: relative; }
+        #game-container { width: 100%; height: 100%; position: relative; z-index: 1; }
         iframe { width: 100%; height: 100%; border: none; }
         
         #loading-cover {
@@ -30,11 +30,11 @@
 
     <div id="loading-cover">
         <div class="spinner"></div>
-        <p style="color: #eee; font-family: sans-serif; margin-top: 15px;">Loading Capybara...</p>
+        <p style="color: #eee; font-family: sans-serif; margin-top: 15px;">Initializing Proxy...</p>
     </div>
 
     <div id="game-container">
-        <iframe src="https://capybara-game.com/game/capybara-clicker/" id="game-frame"></iframe>
+        <iframe src="https://webglmath.github.io/capybara-clicker/" id="game-frame"></iframe>
     </div>
 
     <script>
@@ -48,15 +48,37 @@
             }
         });
 
-        // Remove loader when iframe is ready
+        // Hide loader when iframe finishes loading
         frame.onload = () => {
-            loader.style.display = 'none';
-            frame.focus();
+            setTimeout(() => {
+                loader.style.display = 'none';
+                frame.focus();
+            }, 1200);
         };
 
-        // Anti-Ad Script Injection
+        // --- SUCCESS SIGNAL & AD BLOCKING ---
+        // This overrides common ad SDKs (GameMonetize, Poki, etc.)
+        window.SDK_OPTIONS = {
+            gameId: "capybara",
+            onEvent: function(event) {
+                switch (event.name) {
+                    case "SDK_READY":
+                        console.log("SDK Ready");
+                        break;
+                    case "SDK_ERROR":
+                        console.log("SDK Error - Bypassing");
+                        break;
+                }
+            }
+        };
+
+        // Trick ad logic to skip
+        window.adConfig = (config) => { config.complete(); };
         window.showInterstitialAd = () => Promise.resolve();
-        window.show_ads_inGame = () => { console.log("Ads Blocked"); };
+        window.can_show_ads = false;
+        
+        // Ensure focus stays on game for controls
+        window.addEventListener("mousedown", () => frame.focus());
     </script>
 </body>
 </html>

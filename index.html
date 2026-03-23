@@ -59,8 +59,8 @@
         #top-nav { height: 60px; background: var(--side); display: flex; align-items: center; padding: 0 20px; gap: 15px; border-bottom: 1px solid var(--border); }
         #search { flex-grow: 1; background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px; color: var(--text); cursor: none !important; }
         
-        #content-area, #records-area, #settings-area { flex-grow: 1; overflow-y: auto; padding: 30px; display: none; }
-        #game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+        #content-area, #records-area, #settings-area, #tests-area { flex-grow: 1; overflow-y: auto; padding: 30px; display: none; }
+        #game-grid, #tests-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
         .game-card { background: var(--card); border: 1px solid var(--border); padding: 45px 10px; border-radius: 12px; text-align: center; font-weight: bold; font-size: 16px; transition: 0.3s; cursor: none !important; }
         .game-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 0 15px var(--glow); }
 
@@ -102,43 +102,30 @@
     <div id="sidebar">
         <h2 style="margin-left:10px; color:var(--accent); font-size: 28px;">404</h2>
         <button id="nav-home" class="side-btn active" onclick="showTab('home')">Home</button>
+        <button id="nav-tests" class="side-btn" onclick="showTab('tests')">Tests</button>
         <button id="nav-records" class="side-btn" onclick="showTab('records')">Records</button>
         <button id="nav-settings" class="side-btn" onclick="showTab('settings')">Settings</button>
     </div>
 
     <div id="main">
         <div id="top-nav">
-            <input type="text" id="search" placeholder="Search Home..." oninput="renderGames()">
+            <input type="text" id="search" placeholder="Search..." oninput="renderGames()">
             <button class="side-btn" style="background:#cc0000; color:white; opacity:1;" onclick="panic()">PANIC</button>
         </div>
         <div id="content-area" style="display: block;"><div id="game-grid"></div></div>
+        <div id="tests-area"><div id="tests-grid"></div></div>
         <div id="records-area"><textarea id="records-text" oninput="saveRecords()" style="width:100%; height:450px; background:rgba(0,0,0,0.3); color:var(--text); padding:20px; border:none; resize:none; cursor: none !important;"></textarea></div>
         
         <div id="settings-area">
             <div class="config-box">
-                <h2>Custom Theme Builder (Gradient Support)</h2>
+                <h2>Custom Theme Builder</h2>
                 <div class="theme-controls">
-                    <div class="color-input-wrap">
-                        <label>BG Color 1</label>
-                        <input type="color" id="color-bg" oninput="updateCustomTheme()">
-                    </div>
-                    <div class="color-input-wrap">
-                        <label>BG Color 2</label>
-                        <input type="color" id="color-bg2" oninput="updateCustomTheme()">
-                    </div>
-                    <div class="color-input-wrap">
-                        <label>Sidebar</label>
-                        <input type="color" id="color-side" oninput="updateCustomTheme()">
-                    </div>
-                    <div class="color-input-wrap">
-                        <label>Accent & Cursor</label>
-                        <input type="color" id="color-accent" oninput="updateCustomTheme()">
-                    </div>
-                    <div class="color-input-wrap">
-                        <label>Text</label>
-                        <input type="color" id="color-text" oninput="updateCustomTheme()">
-                    </div>
-                    <button class="side-btn" onclick="resetToPreset()">Reset to Presets</button>
+                    <div class="color-input-wrap"><label>BG 1</label><input type="color" id="color-bg" oninput="updateCustomTheme()"></div>
+                    <div class="color-input-wrap"><label>BG 2</label><input type="color" id="color-bg2" oninput="updateCustomTheme()"></div>
+                    <div class="color-input-wrap"><label>Sidebar</label><input type="color" id="color-side" oninput="updateCustomTheme()"></div>
+                    <div class="color-input-wrap"><label>Accent</label><input type="color" id="color-accent" oninput="updateCustomTheme()"></div>
+                    <div class="color-input-wrap"><label>Text</label><input type="color" id="color-text" oninput="updateCustomTheme()"></div>
+                    <button class="side-btn" onclick="resetToPreset()">Reset</button>
                 </div>
             </div>
 
@@ -146,11 +133,9 @@
                 <h2>Cloak Presets</h2>
                 <div class="grid-layout">
                     <button class="side-btn" onclick="setPreset('My Apps', 'https://filescdn.classlink.com/resources/customlinks/1601307234673-fbb20dacacaf8359984dc1276e57ddc6.png')">My Apps</button>
-                    <button class="side-btn" onclick="setPreset('Classroom | Home', 'https://ssl.gstatic.com/classroom/favicon.png')">Classroom</button>
-                    <button class="side-btn" onclick="setPreset('IXL | Dashboard', 'https://www.ixl.com/favicon.ico')">IXL</button>
+                    <button class="side-btn" onclick="setPreset('Classroom', 'https://ssl.gstatic.com/classroom/favicon.png')">Classroom</button>
+                    <button class="side-btn" onclick="setPreset('IXL', 'https://www.ixl.com/favicon.ico')">IXL</button>
                     <button class="side-btn" onclick="setPreset('Google Slides', 'slides.png')">Slides</button>
-                    <button class="side-btn" onclick="setPreset('Google Docs', 'google-docs.png')">Docs</button>
-                    <button class="side-btn" onclick="setPreset('New Tab', 'https://www.googfhdsdsgerrdfgdgsle.com/favicon.ico')">Google</button>
                 </div>
             </div>
             
@@ -161,7 +146,7 @@
             
             <div class="config-box" style="border-color: #ff4444;">
                 <h2 style="color: #ff4444;">Danger Zone</h2>
-                <button class="side-btn" style="background:#ff4444; color:white; opacity:1;" onclick="nukeStorage()">Reset Everything (Clear Data)</button>
+                <button class="side-btn" style="background:#ff4444; color:white; opacity:1;" onclick="nukeStorage()">Reset Everything</button>
             </div>
         </div>
     </div>
@@ -174,7 +159,7 @@
         const styleNames = ["Matrix", "Bloodlust", "Vaporwave", "Ghost", "Nebula", "Toxic", "Lava", "Ocean", "Crimson", "Noir", "Lemon", "Cobalt", "Barbie", "Cyan", "Lime", "Autumn", "Sky", "Amethyst", "Magenta", "Emerald", "Slate", "Midnight", "Teal", "Solar", "Atom"];
 
         const games = [
-            {n: "Bloons TD", p: "./games/bloonstd/index.html"}, 
+            {n: "Bloons TD", p: "./games/bloonstd/index.html"},
             {n: "Geo Dash", p: "./games/geodash/index.html"}, 
             {n: "Duck Life 3", p: "./games/ducklife3/index.html"}, 
             {n: "Slope", p: "./games/slope/index.html"}, 
@@ -184,7 +169,7 @@
             {n: "Sand", p: "./games/Sand.html"}, 
             {n: "Basket Random", p: "./games/basket-random/index.html"}, 
             {n: "Drive Mad", p: "./games/drive-mad/index.html"}, 
-            {n: "1v1 LOL", p: "./games/1v1lol/index.html"}, 
+            {n: "1v1 LOL", p: "./games/1v1lol/index.html"},
             {n: "BTTS", p: "./BTTS/index.html"}, 
             {n: "Vex 7", p: "./games/vex7/index.html"}, 
             {n: "MOTOX3M POOL", p: "./games/motox3m-pool/index.html"}, 
@@ -192,26 +177,29 @@
             {n: "Ball Blast", p: "./games/Ball Blast.html"}, 
             {n: "Dunes", p: "./games/Dune.html"}, 
             {n: "Appel", p: "./games/Appel v1.html"}, 
-            {n: "Paper Minecraft", p: "./games/Paper Minecraft v11.html"}, 
+            {n: "Paper Minecraft", p: "./games/Paper Minecraft v11.html"},
             {n: "Square Sling", p: "./games/SS.html"}, 
-            {n: "Dunk Shot", p: "./games/DS.html"}, 
+            {n: "Dunk Shot", p: "./games/DS.html"},
             {n: "Sky Ball", p: "./games/SB.html"}, 
-            {n: "BITTS", p: "./games/BITTS/BITTS.html"}, 
+            {n: "BITTS", p: "./games/BITTS/BITTS.html"},
             {n: "Tag #2", p: "./games/Tag-main/index.html"}, 
-            {n: "Cookie Clicker", p: "./CC/index.html"}, 
-            {n: "BNTTS (TEST)", p: "./games/BNTTS.html"}, 
-            {n: "Tag OG (TEST)", p: "./games/TAG/index.html"}, 
-            {n: "Duck Life 1 (TEST)", p: "./games/DuckLife1/index.html"}, 
-            {n: "Cut The Rope (TEST)", p: "./games/CTR.html"}, 
-            {n: "Space Waves (TEST)", p: "./games/cba.html"}, 
-            {n: "Big Tower Tiny Square 2 (TEST)", p: "./games/BTTS2.html"}, 
-            {n: "MineCraft (TEST)", p: "./games/EC.html"}, 
-            {n: "Mario 64 (TEST)", p: "./games/SM64.html"}, 
-            {n: "Retro Bowl (TEST)", p: "./games/RB.html"}, 
-            {n: "Tube Jumpers (TEST)", p: "./games/TJ.html"}
+            {n: "Cookie Clicker", p: "./CC/index.html"}
         ];
 
-        // Handles typing 404
+        const tests = [
+            {n: "BNTTS", p: "./games/BNTTS.html"}, 
+            {n: "Tag OG", p: "./games/TAG/index.html"}, 
+            {n: "Duck Life 1", p: "./games/DuckLife1/index.html"}, 
+            {n: "Cut The Rope", p: "./games/CTR.html"}, 
+            {n: "Space Waves", p: "./games/cba.html"}, 
+            {n: "BTTS 2", p: "./games/BTTS2.html"}, 
+            {n: "MineCraft", p: "./games/EC.html"}, 
+            {n: "Mario 64", p: "./games/SM64.html"}, 
+            {n: "Retro Bowl", p: "./games/RB.html"}, 
+            {n: "Tube Jumpers", p: "./games/TJ.html"},
+            {n: "Burrito Bison", p: "./games/BBB.html"}
+        ];
+
         window.onkeydown = e => handleTap(e.key);
 
         function handleTap(key) {
@@ -231,49 +219,41 @@
             const side = document.getElementById('color-side').value;
             const acc = document.getElementById('color-accent').value;
             const txt = document.getElementById('color-text').value;
-
             document.body.removeAttribute('data-look');
             document.documentElement.style.setProperty('--bg', bg);
             document.documentElement.style.setProperty('--bg2', bg2);
             document.documentElement.style.setProperty('--side', side);
             document.documentElement.style.setProperty('--accent', acc);
             document.documentElement.style.setProperty('--text', txt);
-            document.documentElement.style.setProperty('--border', acc + '66');
-            document.documentElement.style.setProperty('--card', side + 'e6');
-            
             localStorage.setItem('p404_custom', JSON.stringify({bg, bg2, side, acc, txt}));
         }
 
         function resetToPreset() { localStorage.removeItem('p404_custom'); location.reload(); }
-        
-        function nukeStorage() {
-            if(confirm("Are you sure? This will delete all custom themes, records, and presets.")) {
-                localStorage.clear();
-                location.reload();
-            }
-        }
+        function nukeStorage() { if(confirm("Nuke all data?")) { localStorage.clear(); location.reload(); } }
 
         function launchGame(url) { document.getElementById('launcher').style.display = 'block'; document.getElementById('game-frame').src = url; }
         function closeGame() { document.getElementById('launcher').style.display = 'none'; document.getElementById('game-frame').src = ""; }
         
-        function setLook(v) { 
-            document.body.setAttribute('data-look', v); 
-            localStorage.setItem('p404_look', v);
-            localStorage.removeItem('p404_custom');
+        function showTab(t) {
+            ['content', 'settings', 'records', 'tests'].forEach(id => document.getElementById(id + '-area').style.display = 'none');
+            document.getElementById(`${t === 'home' ? 'content' : t}-area`).style.display = 'block';
+            ['nav-home', 'nav-records', 'nav-settings', 'nav-tests'].forEach(id => document.getElementById(id).classList.remove('active'));
+            document.getElementById(`nav-${t}`).classList.add('active');
         }
 
-        function setPreset(t, i) { document.title = t; document.getElementById('tab-icon').href = i; localStorage.setItem('p404_t', t); localStorage.setItem('p404_i', i); }
-        function panic() { window.location.href = "https://classroom.google.com"; }
-
         function renderGames() {
-            if(document.getElementById('search').value.length > 0) showTab('home');
-            const grid = document.getElementById('game-grid'); const term = document.getElementById('search').value.toLowerCase();
-            grid.innerHTML = '';
+            const grid = document.getElementById('game-grid'); 
+            const tGrid = document.getElementById('tests-grid');
+            const term = document.getElementById('search').value.toLowerCase();
+            grid.innerHTML = ''; tGrid.innerHTML = '';
+            
             games.filter(g => g.n.toLowerCase().includes(term)).forEach(g => {
-                const card = document.createElement('div'); card.className = `game-card`;
-                card.innerText = g.n.replace(" (TEST)", ""); 
-                if (g.n.includes("(TEST)")) card.classList.add('test-glow');
-                card.onclick = () => launchGame(g.p); grid.appendChild(card);
+                const card = document.createElement('div'); card.className = 'game-card';
+                card.innerText = g.n; card.onclick = () => launchGame(g.p); grid.appendChild(card);
+            });
+            tests.filter(t => t.n.toLowerCase().includes(term)).forEach(t => {
+                const card = document.createElement('div'); card.className = 'game-card test-glow';
+                card.innerText = t.n; card.onclick = () => launchGame(t.p); tGrid.appendChild(card);
             });
         }
 
@@ -281,18 +261,15 @@
             const grid = document.getElementById('style-grid');
             styleNames.forEach((name, i) => {
                 const b = document.createElement('button'); b.className = 'side-btn'; b.innerText = name;
-                b.onclick = () => setLook(i+1); grid.appendChild(b);
+                b.onclick = () => { document.body.setAttribute('data-look', i+1); localStorage.setItem('p404_look', i+1); localStorage.removeItem('p404_custom'); };
+                grid.appendChild(b);
             });
         }
 
-        function showTab(t) {
-            ['content', 'settings', 'records'].forEach(id => document.getElementById(id + '-area').style.display = 'none');
-            document.getElementById(`${t === 'home' ? 'content' : t}-area`).style.display = 'block';
-            ['nav-home', 'nav-records', 'nav-settings'].forEach(id => document.getElementById(id).classList.remove('active'));
-            document.getElementById(`nav-${t}`).classList.add('active');
-        }
-
+        function setPreset(t, i) { document.title = t; document.getElementById('tab-icon').href = i; localStorage.setItem('p404_t', t); localStorage.setItem('p404_i', i); }
+        function panic() { window.location.href = "https://classroom.google.com"; }
         function saveRecords() { localStorage.setItem('p404_rec', document.getElementById('records-text').value); }
+
         window.onmousemove = e => { if(document.body.classList.contains('unlocked')) points.push({ x: e.clientX, y: e.clientY, age: 0 }); };
         window.onclick = e => { if(document.body.classList.contains('unlocked')) ripple = {x: e.clientX, y: e.clientY, r: 0, a: 1}; };
 
@@ -313,7 +290,6 @@
 
         function init() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            games.sort(() => Math.random() - 0.5);
             renderGames(); buildStyleGrid(); animate();
             const custom = localStorage.getItem('p404_custom');
             if(custom) {
@@ -325,7 +301,8 @@
                 document.getElementById('color-text').value = c.txt;
                 updateCustomTheme();
             } else {
-                const l = localStorage.getItem('p404_look') || '1'; setLook(l);
+                const l = localStorage.getItem('p404_look') || '1';
+                document.body.setAttribute('data-look', l);
             }
             const t = localStorage.getItem('p404_t'); const i = localStorage.getItem('p404_i');
             const r = localStorage.getItem('p404_rec');

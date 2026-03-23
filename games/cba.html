@@ -13,7 +13,6 @@
         
         #unity-container { width: 100%; height: 100%; position: relative; }
         
-        /* Fixed: Using an iframe to avoid CORS/Unity data errors */
         iframe {
             width: 100%;
             height: 100%;
@@ -41,6 +40,8 @@
         }
 
         #progress-fill { width: 0%; height: 100%; background: #3498db; transition: 0.5s; }
+
+        p { color: #666; font-family: sans-serif; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -51,7 +52,7 @@
         <div id="loading-cover">
             <div class="spinner"></div>
             <div id="progress-bar"><div id="progress-fill"></div></div>
-            <p style="color: #666; font-family: sans-serif; margin-top: 10px;">Loading Space Waves...</p>
+            <p>Loading Space Waves...</p>
         </div>
     </div>
 
@@ -60,17 +61,18 @@
         const loadingCover = document.getElementById('loading-cover');
         const progressFill = document.getElementById('progress-fill');
 
-        // Simulate progress bar and hide loader when iframe is ready
+        // Fake progress bar logic for better UX
         let progress = 0;
         const interval = setInterval(() => {
-            progress += Math.random() * 20;
+            progress += Math.random() * 15;
             if (progress >= 90) {
                 progress = 90;
                 clearInterval(interval);
             }
             progressFill.style.width = progress + "%";
-        }, 200);
+        }, 150);
 
+        // Actual load detection
         frame.onload = () => {
             progressFill.style.width = "100%";
             setTimeout(() => {
@@ -79,16 +81,20 @@
             }, 500);
         };
 
-        // --- PANIC INTEGRATION ---
+        // --- PANIC KEY: Shift + 1 ---
         window.addEventListener('keydown', (e) => {
-            // Shift + 1 takes you to Google Classroom
             if (e.shiftKey && e.key === '1') {
                 window.top.location.href = "https://classroom.google.com";
             }
         });
 
-        // Keep focus on the game frame
+        // Ensure keyboard input works by forcing focus back to game
         window.addEventListener("mousedown", () => frame.focus());
+        
+        // Some browsers block focus on load, so we try again after a click
+        document.body.addEventListener('click', () => {
+            frame.focus();
+        }, { once: true });
     </script>
 </body>
 </html>

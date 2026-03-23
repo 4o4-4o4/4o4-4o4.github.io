@@ -1,68 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Big NEON Tower | Project 404</title>
-    <style>
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: #000; overflow: hidden;
-            display: flex; align-items: center; justify-content: center;
-        }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Big NEON Tower vs Tiny Square</title>
+    
+    <script>
+        window.sdk = {
+            showBanner: function() { console.log("Ad Blocked: Banner"); },
+            showInterstitial: function() { 
+                console.log("Ad Blocked: Interstitial. Sending 'Ad Done' message.");
+                // This triggers the game's internal 'ad finished' logic
+                window.dispatchEvent(new CustomEvent('ad_done'));
+                window.dispatchEvent(new CustomEvent('SDK_READY'));
+            },
+            init: function() { console.log("Fake SDK Initialized"); }
+        };
         
-        #game-frame {
-            width: 100vw;
-            height: 100vh;
-            border: none;
-        }
+        // Block the real SDK from loading by overwriting the script loader
+        const originalCreateElement = document.createElement;
+        document.createElement = function(tag) {
+            const element = originalCreateElement.call(document, tag);
+            if (tag.toLowerCase() === 'script') {
+                Object.defineProperty(element, 'src', {
+                    set: function(url) {
+                        if (url.includes('gamemonetize.com') || url.includes('st39/sdk')) {
+                            console.log("Blocked loading: " + url);
+                            return;
+                        }
+                        this.setAttribute('src', url);
+                    }
+                });
+            }
+            return element;
+        };
+    </script>
 
-        #loading-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; z-index: 10;
-        }
-
-        .neon-spinner {
-            width: 50px; height: 50px;
-            border: 3px solid #1a1a1a;
-            border-top: 3px solid #00ffcc; /* Neon Cyan */
-            border-radius: 50%;
-            box-shadow: 0 0 10px #00ffcc;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/icestyle.css" type="text/css">
 </head>
 <body>
-
-    <div id="loading-overlay">
-        <div class="neon-spinner"></div>
-        <p style="color: #00ffcc; font-family: 'Courier New', monospace; margin-top: 20px; text-transform: uppercase; letter-spacing: 2px;">Powering Up...</p>
-    </div>
-
-    <iframe id="game-frame" src="https://v6p9d9t4.ssl.hwcdn.net/html/1453303/index.html" allow="autoplay; fullscreen; keyboard"></iframe>
-
-    <script>
-        const frame = document.getElementById('game-frame');
-        const loader = document.getElementById('loading-overlay');
-
-        // Remove loading screen once the internal game engine responds
-        frame.onload = () => {
-            loader.style.display = 'none';
-            frame.focus();
-        };
-
-        // --- PROJECT 404 PANIC REDIRECT (Shift + 1) ---
-        window.addEventListener('keydown', (e) => {
-            if (e.shiftKey && e.key === '1') {
-                window.top.location.href = "https://classroom.google.com";
-            }
-        });
-
-        // Ensure the game keeps keyboard focus
-        window.addEventListener("mousedown", () => frame.focus());
-    </script>
+    <div id="fb-root"></div>
+    
+    <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/icewasm.js"></script>
+    <noscript>
+        <div id="notSupportedWrap">
+            <h2 id="notSupportedTitle">This content requires JavaScript</h2>
+        </div>
+    </noscript>
+    <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/icecheck.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/office.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/mainice.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bubbls/ruffle@cffc5228787a33d303fc45db671a9dd7de905fd5/regisice.js" type="module"></script>
 </body>
 </html>

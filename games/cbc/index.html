@@ -1,100 +1,107 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capybara Clicker</title>
-    <style>
-        body {
-            text-align: center;
-            font-family: Arial, sans-serif;
-            background-color: #8B4513; /* Marrom */
-            color: white;
-        }
-        #capybara {
-            width: 200px;
-            cursor: pointer;
-        }
-        .button {
-            margin: 10px;
-            padding: 10px;
-            font-size: 18px;
-            cursor: pointer;
-            background-color: #D2B48C; /* Marrom claro */
-            border: none;
-            border-radius: 5px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Watch Ad to Play</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #0f172a;
+      color: white;
+      font-family: system-ui, Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .box {
+      max-width: 420px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 250px;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      background: white;
+    }
+
+    button {
+      padding: 14px 22px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background: #22c55e;
+      color: black;
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    button.enabled {
+      opacity: 1;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-    <h1>Capybara Clicker</h1>
-    <p>Capybaras: <span id="count">0</span></p>
-    <button class="button" onclick="addCapybara()">CLIQUE AQUI</button>
-    <br>
-    <button class="button" onclick="buyUpgrade(1, 10, 'upgrade1')">Upgrade +1 por clique - Custo: <span id="upgrade1">10</span></button>
-    <button class="button" onclick="buyUpgrade(2, 50, 'upgrade2')">Upgrade +2 por clique - Custo: <span id="upgrade2">50</span></button>
-    <button class="button" onclick="buyUpgrade(5, 200, 'upgrade3')">Upgrade +5 por clique - Custo: <span id="upgrade3">200</span></button>
-    <button class="button" onclick="buyAuto(1, 100, 'auto1')">Gerador +1/s - Custo: <span id="auto1">100</span></button>
-    <button class="button" onclick="buyAuto(5, 500, 'auto2')">Gerador +5/s - Custo: <span id="auto2">500</span></button>
-    <button class="button" onclick="rebirth()">Rebirth 🔁 - Custo: <span id="rebirthCost">1000</span></button>
-    
-    <script>
-        let capybaras = 0;
-        let perClick = 1;
-        let perSecond = 0;
-        let rebirthCost = 1000;
-        let multiplier = 1;
-        let upgrades = { upgrade1: 10, upgrade2: 50, upgrade3: 200 };
-        let autos = { auto1: 100, auto2: 500 };
 
-        function addCapybara() {
-            capybaras += perClick * multiplier;
-            updateUI();
-        }
+<div class="box">
+  <h2>Watch this ad to play</h2>
 
-        function buyUpgrade(amount, cost, id) {
-            if (capybaras >= upgrades[id]) {
-                capybaras -= upgrades[id];
-                perClick += amount;
-                upgrades[id] = Math.floor(upgrades[id] * 1.5);
-                updateUI();
-            }
-        }
+  <!-- ADSTERRA SMART LINK -->
+  <iframe
+    src="https://www.effectivegatecpm.com/p5mjdi67a?key=b3d42b2d4432daca356e839ace1bcc12"
+    sandbox="allow-scripts allow-same-origin allow-popups allow-forms">
+  </iframe>
 
-        function buyAuto(amount, cost, id) {
-            if (capybaras >= autos[id]) {
-                capybaras -= autos[id];
-                perSecond += amount;
-                autos[id] = Math.floor(autos[id] * 1.5);
-                updateUI();
-            }
-        }
+  <p id="status">Please wait 15 seconds…</p>
 
-        function rebirth() {
-            if (capybaras >= rebirthCost) {
-                capybaras = 0;
-                perClick = 1;
-                perSecond = 0;
-                multiplier *= 2;
-                rebirthCost = Math.floor(rebirthCost * 2);
-                updateUI();
-            }
-        }
+  <button id="playBtn" disabled>
+    Play Game
+  </button>
+</div>
 
-        function updateUI() {
-            document.getElementById("count").innerText = capybaras;
-            document.getElementById("upgrade1").innerText = upgrades.upgrade1;
-            document.getElementById("upgrade2").innerText = upgrades.upgrade2;
-            document.getElementById("upgrade3").innerText = upgrades.upgrade3;
-            document.getElementById("auto1").innerText = autos.auto1;
-            document.getElementById("auto2").innerText = autos.auto2;
-            document.getElementById("rebirthCost").innerText = rebirthCost;
-        }
+<script>
+  const GAME_BASE =
+    "https://capybara-proxy.s8506497.workers.dev/https://bitlifeonline.github.io/capybara-clicker/";
 
-        setInterval(() => {
-            capybaras += perSecond * multiplier;
-            updateUI();
-        }, 1000);
-    </script>
+  // MUST MATCH worker.js
+  const SECRET = "CHANGE_THIS_SECRET";
+
+  const btn = document.getElementById("playBtn");
+  const status = document.getElementById("status");
+
+  let timeLeft = 15;
+
+  const timer = setInterval(() => {
+    timeLeft--;
+    status.textContent = `Please wait ${timeLeft} seconds…`;
+
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      status.textContent = "Ad complete ✔";
+      btn.disabled = false;
+      btn.classList.add("enabled");
+    }
+  }, 1000);
+
+  function makeToken() {
+    const ts = Math.floor(Date.now() / 1000);
+    const sig = btoa(ts + SECRET);
+    return `${ts}.${sig}`;
+  }
+
+  btn.onclick = () => {
+    if (btn.disabled) return;
+    const token = makeToken();
+    window.open(`${GAME_BASE}?token=${token}`, "_blank");
+  };
+</script>
+
 </body>
 </html>

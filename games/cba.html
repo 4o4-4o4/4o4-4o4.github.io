@@ -1,289 +1,2309 @@
 <!DOCTYPE html>
-<html lang="en-us">
-
-	<script>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-    <title>
-      Space Waves
-    </title>
-    <link rel="stylesheet" href="TemplateData/style.css" />
-    <link rel="manifest" href="manifest.json" />
-  </head>
-  <body class="noselect">
-    <div id="unity-container">
-      <canvas id="unity-canvas">
-      </canvas>
-    </div>
-    <div id="loading-cover" style="display:none;">
-      <div id="unity-loading-bar">
-        <div id="unity-logo">
-          <img src="logo.png" />
-        </div>
-        <br />
-        <br />
-        <br />
-        <div id="unity-progress-bar-empty" style="display: none;">
-          <div id="unity-progress-bar-full">
-          </div>
-        </div>
-        <div class="spinner">
-        </div>
-      </div>
-    </div>
-    <script src="./microsoftDataMigrationDO.js">
-    </script>
-    <script>
-      document.addEventListener(&#34;DOMContentLoaded&#34;, () =&gt; {
-        microsoftMigration();
-      });
-	  
-      window.addEventListener(&#34;PlayerPrefsReady&#34;, () =&gt; {
-        migratePlayerPrefs();
-      });
-    </script>
-    <script>
-      window.addEventListener(&#34;load&#34;, function () {
-        if (&#34;serviceWorker&#34; in navigator) {
-          navigator.serviceWorker.register(&#34;ServiceWorker.js&#34;);
-        }
-      });
-	  
-	  const container = document.querySelector(&#34;#unity-container&#34;);
-      const canvas = document.querySelector(&#34;#unity-canvas&#34;);
-      const loadingCover = document.querySelector(&#34;#loading-cover&#34;);
-      const progressBarEmpty = document.querySelector(&#34;#unity-progress-bar-empty&#34;);
-      const progressBarFull = document.querySelector(&#34;#unity-progress-bar-full&#34;);
-      const spinner = document.querySelector(&#39;.spinner&#39;);
-
-      const buildUrl = &#34;Build&#34;;
-      const loaderUrl = buildUrl + &#34;/dae5c7bd2b15915f51ae4e56b8f5367d.loader.js&#34;;
-      const config = {
-        dataUrl: buildUrl + &#34;/568ea6b3af616bd57f419c508c933303.data.unityweb&#34;,
-        frameworkUrl: buildUrl + &#34;/c699bc4c24abfbdb4c8b3e15b0af7d3f.framework.js.unityweb&#34;,
-        codeUrl: buildUrl + &#34;/7fb5141de5923189bc1dc5f94eb619f2.wasm.unityweb&#34;,
-        streamingAssetsUrl: &#34;StreamingAssets&#34;,
-        companyName: &#34;do.Games&#34;,
-        productName: &#34;Space Waves&#34;,
-        productVersion: &#34;1.1.2-ms&#34;,
-		matchWebGLToCanvasSize: &#34;false&#34;
-      };
-	  
-      loadingCover.style.display = &#34;&#34;;
-	  
-	  var needMigrate = false;
-	  var gameInstance;
-      var script = document.createElement(&#34;script&#34;);
-      script.src = loaderUrl;
-      script.onload = () =&gt; {
-        createUnityInstance(canvas, config, (progress) =&gt; {
-		  spinner.style.display = &#34;none&#34;;
-          progressBarEmpty.style.display = &#34;&#34;;
-          progressBarFull.style.width = 100 * progress + &#34;%&#34;;
-        }).then((unityInstance) =&gt; {
-		  console.log(&#34;&lt;do.G&gt; Unity inited&#34;);
-          gameInstance = unityInstance;
-          loadingCover.style.display = &#34;none&#34;;
-		  resizeCanvas();
-		  loadAds();
-		  
-		  if (needMigrate) {
-			needMigrate = false;
-		    gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnMigratePlayerPrefs&#39;, window[&#34;fetchPlayerPrefs&#34;]);
-		  }
-		  
-        }).catch((message) =&gt; {
-          alert(message);
-        });
-      };
-      document.body.appendChild(script);
-	  
-	  // Focus
-  	  function setFocus() {
-  	    container.focus();
-  		window.focus();
-  		canvas.focus();
-  	  }
-
-  	  window.addEventListener(&#34;touchstart&#34;, () =&gt; {
-  	    setFocus();
-  	  });
-  	  window.addEventListener(&#34;pointerdown&#34;, () =&gt; {
-  	    setFocus();
-  	  });
-  	  window.addEventListener(&#34;resize&#34;, () =&gt; {
-  	    setFocus();
-		resizeCanvas();
-  	  });
-	  
-	  function resizeCanvas() {
-		var pixelRatio = window.devicePixelRatio || 1;
-		var width = canvas.clientWidth * pixelRatio;
-		var height = canvas.clientHeight * pixelRatio;
-			
-		if (canvas.width != width || canvas.height != height) {
-			if (height &gt; 1080) {
-				canvas.width = Math.floor(width / height * 1080);
-				canvas.height = 1080;
-			}
-			else
-			{
-				canvas.width = width;
-				canvas.height = height;
-			}
-		}
-	  }
-	  
-	  function migratePlayerPrefs() {
-	    if (typeof gameInstance !== &#39;undefined&#39;) {
-		  gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnMigratePlayerPrefs&#39;, window[&#34;fetchPlayerPrefs&#34;]);
-		} else {
-		  needMigrate = true;
-		}
-	  }
-    </script>
-    <script src="https://assets.msn.com/staticsb/statics/latest/msstart-games-sdk/msstart-v1.0.0-rc.13.min.js">
-    </script>
-    <script>
-      var _interstitialAdInstance = null;
-	  var _rewardedAdInstance = null;
-	  
-	  function loadAds() {
-	    loadInterstitialAd();
-	    loadRewardedAd();
-	  }
-	  
-	  function loadInterstitialAd() {
-	    _interstitialAdInstance = null;
-		
-		$msstart.loadAdsAsync().then(adInstance =&gt; {
-		  // Use the adInstance.instanceId to make a call to showAdsAsync
-		  _interstitialAdInstance = adInstance;
-		  console.log(&#34;Interstitial ad successfully loaded!&#34;);
-	    }).catch(e =&gt; {
-		  console.error(&#39;&lt;do.G&gt; Error loading interstitial ad. Will retry in 20 seconds...&#39;, e);
-		  setTimeout(loadInterstitialAd, 20000);
-		});
-	  }
-	  
-	  function loadRewardedAd() {
-	    _rewardedAdInstance = null;
-		
-		$msstart.loadAdsAsync(true).then(adInstance =&gt; {
-		  // Pass in boolean true for the optional parameter isRewardedAd, to fetch Rewarded ads
-		  _rewardedAdInstance = adInstance;
-		  console.log(&#34;Rewarded ad successfully loaded!&#34;);
-	    }).catch(e =&gt; {
-		  console.error(&#39;&lt;do.G&gt; Error loading rewarded ad. Will retry in 20 seconds...&#39;, e);
-		  setTimeout(loadRewardedAd, 20000);
-		});
-	  }
-	  
-	  async function showInterstitialAd() {
-	    if (_interstitialAdInstance == null) {
-		  gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnInterstitialAdShowError&#39;);
-		  return;
-		}
-		
-		let t;
-		
-		try {
-		  t = await $msstart.showAdsAsync(_interstitialAdInstance.instanceId);
-		} catch (e) {
-		  console.error(&#39;&lt;do.G&gt; Error show interstitial ad: &#39;, e);
-		  gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnInterstitialAdShowError&#39;);
-		  loadInterstitialAd();
-		}
-		
-		if (t) {
-		  try {
-		    await t.showAdsCompletedAsync;
-			gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnInterstitialAdClose&#39;);
-			loadInterstitialAd();
-		  } catch (e) {
-            console.error(&#39;&lt;do.G&gt; Error interstitial showAdsCompletedAsync: &#39;, e);
-		    gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnInterstitialAdShowError&#39;);
-		    loadInterstitialAd();
-          }
-		}
-	  }
-	  
-	  async function showRewardedAd() {
-	    if (_rewardedAdInstance == null) {
-		  gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnRewardedAdShowError&#39;);
-		  return;
-		}
-		
-		let t;
-		
-		try {
-		  t = await $msstart.showAdsAsync(_rewardedAdInstance.instanceId);
-		} catch (e) {
-		  console.error(&#39;&lt;do.G&gt; Error show rewarded ad: &#39;, e);
-		  gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnRewardedAdShowError&#39;);
-		  loadRewardedAd();
-		}
-		
-		if (t) {
-		  try {
-		    await t.showAdsCompletedAsync;
-			gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnReward&#39;);
-			loadRewardedAd();
-		  } catch (e) {
-            console.error(&#39;&lt;do.G&gt; Error rewarded showAdsCompletedAsync: &#39;, e);
-		    gameInstance.SendMessage(&#39;MSStartSDK&#39;, &#39;OnRewardedAdShowError&#39;);
-		    loadRewardedAd();
-          }
-		}
-	  }
-    </script>
-    <!-- Top Notification -->
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Space Waves Pro</title>
 <style>
-#nxtcoreee3-notification {
-  position: fixed;
-  top: -120px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(20,20,20,0.95);
-  backdrop-filter: blur(10px);
-  color: white;
-  padding: 12px 18px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  border-radius: 999px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.35);
-  font-family: sans-serif;
-  font-size: 15px;
-  z-index: 999999;
-  transition: top 0.5s ease;
+body{
+    margin:0;
+    overflow:hidden;
+    background:black;
+    font-family:Arial;
 }
-
-#nxtcoreee3-notification img {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  object-fit: cover;
+canvas{
+    position:absolute;
+    top:0;
+    left:0;
+}
+#overlay{
+    position:absolute;
+    width:100%;
+    text-align:center;
+    color:white;
+    top:20%;
+    z-index:10;
+}
+button{
+    padding:10px 20px;
+    margin:10px;
+    font-size:18px;
+    cursor:pointer;
 }
 </style>
+</head>
+<body>
 
-<div id="nxtcoreee3-notification">
- <img src="https://raw.githubusercontent.com/nxtcoreee3/Drive-Mad/main/IMG_0556.JPG" alt="profile">
-  <span>Cracked by nxtcoreee3</span>
-</div>
+<div id="overlay"></div>
+<canvas id="game"></canvas>
 
-<script>
-const notif = document.getElementById("nxtcoreee3-notification");
-
-setTimeout(() => {
-  notif.style.top = "20px"; // slide down
-}, 300);
-
-setTimeout(() => {
-  notif.style.top = "-120px"; // slide up
-}, 5300);
-</script> 
+<script src="game2.js"></script>
+<audio id="music" src="music.mp3" loop></audio>
 </body>
-</html>
+</html>const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+// DO NOT call initStars here - functions not defined yet
+
+const overlay = document.getElementById("overlay");
+
+let state = "menu";
+let cameraX = 0;
+let targetDirection = 0; // -1 for up, 1 for down, 0 for neutral
+let currentDirection = 0; // smoothly transitions to targetDirection
+
+// USER ACCOUNT SYSTEM
+let username = localStorage.getItem('sw_username') || '';
+let friends = JSON.parse(localStorage.getItem('sw_friends') || '[]');
+let friendRequests = JSON.parse(localStorage.getItem('sw_friendRequests') || '[]');
+let onlinePlayerCount = Math.floor(Math.random() * 50) + 5; // simulated online count
+let multiplayerPlayers = []; // array of player objects for multiplayer
+let isInMultiplayer = false;
+
+// race mode handling
+let raceMode = "single"; // "single", "ai", "multiplayer"
+let aiDifficulty = 'normal'; // 'easy', 'normal' or 'hard' when raceMode==='ai'
+let competitor = null; // second player or AI
+let directionAccel = 0.8; // how quickly direction changes (higher = faster response)
+let speed = 5; // base forward speed (slower)
+let score = 0;
+let highscore = localStorage.getItem("sw_high") || 0;
+let coins = parseInt(localStorage.getItem("sw_coins")) || 0; // player currency
+
+// progress milestones during a level (quarter markers plus finish)
+let milestonesReached = [false,false,false,false]; // 0=1/4,1=1/2,2=3/4,3=finish
+
+// audio / settings
+let audioEnabled = (localStorage.getItem("sw_audio") !== "false");
+let soundVolume = parseFloat(localStorage.getItem("sw_soundVol")) || 0.5;
+let musicVolume = parseFloat(localStorage.getItem("sw_musicVol")) || 0.5;
+
+// audio assets (safe initialization for file:// protocol)
+let sounds = {};
+try {
+    sounds = {
+        die: new Audio('sounds/die.mp3'),
+        pickup: new Audio('sounds/pickup.mp3'),
+        button: new Audio('sounds/button.mp3'),
+        coin: new Audio('sounds/coin.mp3')
+    };
+    for (let k in sounds) { sounds[k].volume = soundVolume; }
+} catch(e) {
+    console.log('Audio files could not load:', e);
+    // fallback: empty sounds object
+}
+let currentMusic = null;
+
+// dynamic gameplay helpers
+let particles = [];
+let powerups = [];
+let speedBoost = 0; // frames remaining for speed boost
+let shakeTime = 0;  // camera shake timer
+let newHighTimer = 0; // show "NEW HIGHSCORE" message
+
+// starfield for parallax background
+let stars = [];
+function initStars(){
+    stars = [];
+    const count = 100;
+    for(let i=0;i<count;i++){
+        stars.push({
+            x: Math.random()*canvas.width,
+            y: Math.random()*canvas.height,
+            size: Math.random()*2+1,
+            speedFactor: Math.random()*0.5+0.2
+        });
+    }
+
+    // sanitize colliders to avoid invisible/off-canvas hitboxes
+    walls = walls.filter(w => w && Number.isFinite(w.x) && Number.isFinite(w.y) && Number.isFinite(w.w) && Number.isFinite(w.h) && w.w > 0 && w.h > 1 && w.y < canvas.height);
+    spikes = spikes.filter(s => s && Number.isFinite(s.x) && Number.isFinite(s.y) && ((s.r && s.r>2) || (s.size && s.size>2)));
+    obstacles = obstacles.filter(o => o && Number.isFinite(o.x) && Number.isFinite(o.w) && Number.isFinite(o.h) && o.w>10 && o.h>10);
+    powerups = powerups.filter(p => p && Number.isFinite(p.x) && Number.isFinite(p.y) && Number.isFinite(p.size) && p.size>4);
+
+}
+
+// pause / fps tracking
+let paused = false;
+
+// exit button for race modes
+const exitBtn = document.createElement('button');
+exitBtn.textContent = 'Exit';
+exitBtn.style.position = 'absolute';
+exitBtn.style.top = '10px';
+exitBtn.style.left = '10px';
+exitBtn.style.display = 'none';
+exitBtn.style.zIndex = 200;
+exitBtn.addEventListener('click',()=>{ showMainMenu(); });
+document.body.appendChild(exitBtn);
+let fps = 0;
+let lastFrameTime = performance.now();
+
+// utility helpers
+function pauseGame(){
+    if(state === 'playing'){
+        paused = true;
+        state = 'paused';
+        overlay.classList.remove('fullscreen');
+        overlay.innerHTML = '<h1>PAUSED</h1><button onclick="resumeGame()">Resume</button>';
+    }
+}
+
+function toggleFullscreen(){
+    if(!document.fullscreenElement){
+        document.documentElement.requestFullscreen();
+    } else {
+        document.exitFullscreen();
+    }
+}
+
+// bind F key for fullscreen
+// added earlier in keydown handler where state handling is done
+function resumeGame(){
+    if(state === 'paused'){
+        paused = false;
+        overlay.innerHTML = '';
+        state = 'playing';
+        playLevelMusic(currentLevel);
+    }
+}
+
+function showSettings(){
+    state = 'settings';
+    overlay.classList.add('fullscreen');
+    const audioText = audioEnabled ? 'On' : 'Off';
+    overlay.innerHTML = `
+        <h1>Settings</h1>
+        <p>Audio: <button onclick="toggleAudio()">${audioText}</button></p>
+        <p>Sound volume: <input id='soundVol' type='range' min='0' max='1' step='0.01' value='${soundVolume}'></p>
+        <p>Music volume: <input id='musicVol' type='range' min='0' max='1' step='0.01' value='${musicVolume}'></p>
+        <p><button onclick='resetProgress()'>Reset Progress</button></p>
+        <button onclick='closeSettings()'>Back</button>
+    `;
+    document.getElementById('soundVol').addEventListener('input',e=>{
+        soundVolume = parseFloat(e.target.value);
+        localStorage.setItem('sw_soundVol',soundVolume);
+        for(let k in sounds) sounds[k].volume = soundVolume;
+    });
+    document.getElementById('musicVol').addEventListener('input',e=>{
+        musicVolume = parseFloat(e.target.value);
+        localStorage.setItem('sw_musicVol',musicVolume);
+        if(currentMusic) currentMusic.volume = musicVolume;
+    });
+}
+
+function showSettingsMenu(){
+    state = 'settings';
+    overlay.classList.add('fullscreen');
+    const audioText = audioEnabled ? 'On' : 'Off';
+    overlay.innerHTML = `
+        <h1>Settings</h1>
+        <p style="font-size:20px;">Username: ${username}</p>
+        <p><button onclick="changeUsername()" style="font-size:16px; padding:8px 16px;">Change Username</button></p>
+        <hr style="margin:20px 0;">
+        <p>Audio: <button onclick="toggleAudio()">${audioText}</button></p>
+        <p>Sound volume: <input id='soundVol' type='range' min='0' max='1' step='0.01' value='${soundVolume}'></p>
+        <p>Music volume: <input id='musicVol' type='range' min='0' max='1' step='0.01' value='${musicVolume}'></p>
+        <p><button onclick='resetProgress()' style="background:#ff6666;">Reset All Progress</button></p>
+        <button onclick='closeSettingsMenu()'>Back to Menu</button>
+    `;
+    document.getElementById('soundVol').addEventListener('input',e=>{
+        soundVolume = parseFloat(e.target.value);
+        localStorage.setItem('sw_soundVol',soundVolume);
+        for(let k in sounds) sounds[k].volume = soundVolume;
+    });
+    document.getElementById('musicVol').addEventListener('input',e=>{
+        musicVolume = parseFloat(e.target.value);
+        localStorage.setItem('sw_musicVol',musicVolume);
+    });
+}
+
+function changeUsername(){
+    const newName = prompt('Enter new username:');
+    if(newName && newName.trim().length > 0){
+        saveUsername(newName);
+        showSettingsMenu();
+    }
+}
+
+function closeSettingsMenu(){
+    overlay.classList.remove('fullscreen');
+    showMainMenu();
+}
+
+function closeSettings(){
+    overlay.classList.remove('fullscreen');
+    showMainMenu();
+}
+
+function resetProgress(){
+    if(confirm('Are you sure you want to reset all progress?')){
+        coins = 0;
+        score = 0;
+        highscore = 0;
+        unlockedSkins = [true,false,false,false];
+        localStorage.setItem('sw_coins',coins);
+        localStorage.setItem('sw_high', highscore);
+        localStorage.setItem('sw_unlockedSkins', JSON.stringify(unlockedSkins));
+        localStorage.removeItem('sw_tutorialDone');
+        showSettingsMenu();
+    }
+}
+
+function showFriends(){
+    state = 'friends';
+    overlay.classList.add('fullscreen');
+    let html = `<div style="text-align:center;">
+        <h1>Friends & Challenges</h1>
+        <div style="display:flex; gap:20px; justify-content:center; margin:20px 0;">
+            <div style="flex:1; background:#1a1a2e; padding:20px; border-radius:8px;">
+                <h2>Add Friend</h2>
+                <input type="text" id="searchUsername" placeholder="Search username..." style="font-size:16px; padding:8px; width:200px;">
+                <br><br>
+                <button onclick="searchAndAddFriend()" style="font-size:16px; padding:8px 16px; background:#00ff00; color:#000;">Send Friend Request</button>
+            </div>
+            <div style="flex:1; background:#1a1a2e; padding:20px; border-radius:8px;">
+                <h2>Friend Requests (${friendRequests.length})</h2>
+                <div style="max-height:150px; overflow-y:auto;">`;
+    
+    if(friendRequests.length === 0) {
+        html += '<p>No pending requests</p>';
+    } else {
+        friendRequests.forEach(req => {
+            html += `<div style="padding:8px; background:#333; margin:5px 0; border-radius:4px;">
+                <span>${req}</span><br>
+                <button onclick="acceptFriendRequest('${req}')" style="font-size:12px; padding:4px 8px; background:#00ff00; color:#000; margin:4px 2px 0 0;">Accept</button>
+                <button onclick="declineFriendRequest('${req}')" style="font-size:12px; padding:4px 8px; background:#ff6666; color:#000;">Decline</button>
+            </div>`;
+        });
+    }
+    
+    html += `</div></div>
+            <div style="flex:1; background:#1a1a2e; padding:20px; border-radius:8px;">
+                <h2>My Friends (${friends.length})</h2>
+                <div style="max-height:200px; overflow-y:auto;">`;
+    
+    if(friends.length === 0) {
+        html += '<p>No friends yet</p>';
+    } else {
+        friends.forEach(friend => {
+            html += `<div style="padding:8px; background:#333; margin:5px 0; border-radius:4px;">
+                <span>${friend}</span><br>
+                <button onclick="challengeFriend('${friend}')" style="font-size:12px; padding:4px 8px; background:#ff00ff; color:#000; margin:4px 2px 0 0;">Challenge</button>
+                <button onclick="removeFriend('${friend}')" style="font-size:12px; padding:4px 8px; background:#ff6666; color:#000;">Remove</button>
+            </div>`;
+        });
+    }
+    
+    html += `</div></div>
+        </div>
+        <button onclick="showMainMenu()" style="font-size:18px; padding:10px 30px; background:#00ffff; color:#000; margin-top:20px;">Back to Menu</button>
+    </div>`;
+    
+    overlay.innerHTML = html;
+}
+
+function searchAndAddFriend() {
+    const searchInput = document.getElementById('searchUsername');
+    if(!searchInput || !searchInput.value.trim()) {
+        alert('Please enter a username');
+        return;
+    }
+    const friendName = searchInput.value.trim();
+    if(addFriendRequest(friendName)) {
+        searchInput.value = '';
+        alert(`Friend request sent to ${friendName}!`);
+        showFriends();
+    } else {
+        alert('Could not send request');
+    }
+}
+
+function removeFriend(friendName) {
+    friends = friends.filter(f => f !== friendName);
+    localStorage.setItem('sw_friends', JSON.stringify(friends));
+    showFriends();
+}
+
+function challengeFriend(friendName) {
+    if (onlinePlayerCount >= 2) {
+        alert(`Sending challenge to ${friendName}...`);
+        showMultiplayerMenu(friendName);
+    } else {
+        alert(`${friendName} is offline. Try again later!`);
+    }
+}
+
+function showMultiplayerMenu(selectedFriend = null){
+    state = 'menu';
+    overlay.classList.remove('fullscreen');
+    updateOnlineCount();
+    
+    if(onlinePlayerCount < 2) {
+        // not enough players online, suggest AI
+        overlay.innerHTML = `<h1>NOT ENOUGH PLAYERS ONLINE</h1>
+            <p style="font-size:20px;">Online players: ${onlinePlayerCount}</p>
+            <p style="font-size:18px;">Not enough players available for multiplayer.</p>
+            <button onclick="chooseMode('ai')" style="font-size:20px; padding:12px 30px; background:#ff6666; color:#fff;">Play vs AI Instead</button>
+            <button onclick="showModeSelect()" style="font-size:18px; padding:10px 20px;">Back</button>`;
+    } else {
+        // enough players - show options
+        let html = `<h1>MULTIPLAYER OPTIONS</h1>
+            <p style="font-size:18px;">Online players: ${onlinePlayerCount}</p>
+            <button onclick="startMultiplayerFriendRace('${selectedFriend || ''}')" style="font-size:18px; padding:12px 30px; background:#ff00ff; color:#fff; margin:10px;">
+                ${selectedFriend ? `Challenge ${selectedFriend}` : 'Challenge Friend'}
+            </button>
+            <br>
+            <button onclick="startMultiplayerRandomRace()" style="font-size:18px; padding:12px 30px; background:#00ff00; color:#000; margin:10px;">
+                Race Random Players
+            </button>
+            <br>
+            <button onclick="showModeSelect()" style="font-size:18px; padding:10px 20px; margin:10px;">Back</button>`;
+        overlay.innerHTML = html;
+    }
+}
+
+function startMultiplayerFriendRace(friendName) {
+    if(!friendName || friendName.length === 0) {
+        alert('Please select a friend first');
+        return;
+    }
+    raceMode = 'multiplayer';
+    multiplayerPlayers = [
+        {name: username, x: 200, y: canvas.height/2, size: 30, angle: 0, color: '#00ffff', alive: true},
+        {name: friendName, x: 200, y: canvas.height/2, size: 30, angle: 0, color: '#ff00ff', alive: true}
+    ];
+    selectedLevelForUI = 0;
+    showLevels();
+}
+
+function startMultiplayerRandomRace() {
+    raceMode = 'multiplayer';
+    const numPlayers = Math.floor(Math.random() * 5) + 2; // 2-6 players
+    const colors = ['#00ffff', '#ff00ff', '#00ff00', '#ff6666', '#ffff00', '#00ffff'];
+    const names = ['You', 'Player 2', 'Player 3', 'Player 4', 'Player 5', 'Player 6'];
+    
+    multiplayerPlayers = [];
+    for(let i = 0; i < numPlayers; i++) {
+        multiplayerPlayers.push({
+            name: (i === 0) ? username : names[i],
+            x: 200,
+            y: canvas.height/2,
+            size: 30,
+            angle: 0,
+            color: colors[i % colors.length],
+            alive: true
+        });
+    }
+    selectedLevelForUI = 0;
+    showLevels();
+}
+
+function toggleAudio(){
+    audioEnabled = !audioEnabled;
+    localStorage.setItem('sw_audio', audioEnabled);
+    showSettings();
+}
+
+// USER SYSTEM HELPERS
+function saveUsername(name) {
+    username = name.trim();
+    localStorage.setItem('sw_username', username);
+    return username;
+}
+
+function addFriendRequest(friendName) {
+    if (!friendRequests.includes(friendName) && friendName !== username) {
+        friendRequests.push(friendName);
+        localStorage.setItem('sw_friendRequests', JSON.stringify(friendRequests));
+        playSfx('coin');
+        return true;
+    }
+    return false;
+}
+
+function acceptFriendRequest(friendName) {
+    friendRequests = friendRequests.filter(f => f !== friendName);
+    if (!friends.includes(friendName)) {
+        friends.push(friendName);
+    }
+    localStorage.setItem('sw_friendRequests', JSON.stringify(friendRequests));
+    localStorage.setItem('sw_friends', JSON.stringify(friends));
+}
+
+function declineFriendRequest(friendName) {
+    friendRequests = friendRequests.filter(f => f !== friendName);
+    localStorage.setItem('sw_friendRequests', JSON.stringify(friendRequests));
+}
+
+function updateOnlineCount() {
+    // simulate online player count changing
+    onlinePlayerCount = Math.floor(Math.random() * 50) + 5;
+    return onlinePlayerCount;
+}
+
+// resize handling
+function resizeCanvas(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', () => { resizeCanvas(); initStars(); });
+
+// touch controls (tap upper/lower half)
+canvas.addEventListener('touchstart', e=>{
+    if(state==='playing'){
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        if(touch.clientY - rect.top < rect.height/2) targetDirection = -1;
+        else targetDirection = 1;
+        e.preventDefault();
+    }
+});
+canvas.addEventListener('touchend', e=>{
+    if(state==='playing'){
+        targetDirection = 1;
+        e.preventDefault();
+    }
+});
+
+
+let player = {
+    x: 200,
+    y: canvas.height/2,
+    size: 30,
+    angle: 0 // rotation angle
+};
+
+// customization options
+let skins = ["#00ffff","#ff0000","#00ff00","#ffff00"]; // player colors
+let trails = ["#00ffff","#ff00ff","#ffffff","#0000ff"];
+
+// PET & EGG SYSTEM
+let eggs = [
+    {name:'Copper Egg', price:50, tier:1},
+    {name:'Iron Egg', price:120, tier:2},
+    {name:'Silver Egg', price:300, tier:3},
+    {name:'Gold Egg', price:700, tier:4},
+    {name:'Platinum Egg', price:1500, tier:5}
+];
+
+let petPool = [
+    {name:'Fluffy', rarity:'common', color:'#faa'},
+    {name:'Spark', rarity:'common', color:'#ffa'},
+    {name:'Puff', rarity:'common', color:'#aff'},
+    {name:'Bolt', rarity:'uncommon', color:'#f5a'},
+    {name:'Whisk', rarity:'uncommon', color:'#5af'},
+    {name:'Glim', rarity:'uncommon', color:'#af5'},
+    {name:'Shade', rarity:'rare', color:'#aaa'},
+    {name:'Blaze', rarity:'rare', color:'#f55'},
+    {name:'Nova', rarity:'epic', color:'#5f5'},
+    {name:'Zenith', rarity:'legendary', color:'#ff5'}
+];
+
+let pets = JSON.parse(localStorage.getItem('sw_pets') || '[]');
+let lastOfflineCheck = parseInt(localStorage.getItem('sw_lastOffline')) || Date.now();
+
+function savePets(){
+    localStorage.setItem('sw_pets', JSON.stringify(pets));
+}
+
+function addOfflineCoins(){
+    const now = Date.now();
+    const elapsed = now - lastOfflineCheck;
+    const hours = elapsed / (1000*60*60);
+    if(hours <= 0) return 0;
+    let total = 0;
+    pets.forEach(p=>{
+        total += (p.offlineRate || 0) * hours;
+    });
+    total = Math.floor(total);
+    if(total>0){
+        coins += total;
+        localStorage.setItem('sw_coins', coins);
+    }
+    lastOfflineCheck = now;
+    localStorage.setItem('sw_lastOffline', lastOfflineCheck);
+    return total;
+}
+
+let selectedSkin = parseInt(localStorage.getItem("sw_skin")) || 0;
+let selectedTrail = parseInt(localStorage.getItem("sw_trail")) || 0;
+let unlockedSkins = JSON.parse(localStorage.getItem('sw_unlockedSkins') || '[true,false,false,false]');
+let skinCost = [0, 50, 100, 200]; // coins required
+
+let trailPoints = []; // store recent positions for trail effect
+let trailCounter = 0; // counter to add trail points less frequently
+let competitorTrail = []; // trail for AI competitor or P2
+let competitorTrailCounter = 0;
+
+let levelsConfig = [
+    {name: "Level 1", corridorHeight: 180, spikeSpacing: 350, bgColor: "#1a1a2e", wallColor: "#0f3460", accentColor: "#e94560", music: "level1"},
+    {name: "Level 2", corridorHeight: 170, spikeSpacing: 320, bgColor: "#1e4d5f", wallColor: "#17758f", accentColor: "#4ecdc4", music: "level2"},
+    {name: "Level 3", corridorHeight: 160, spikeSpacing: 300, bgColor: "#2c3e50", wallColor: "#34495e", accentColor: "#f39c12", music: "level3"},
+    {name: "Level 4", corridorHeight: 150, spikeSpacing: 280, bgColor: "#1a472a", wallColor: "#2d5f3f", accentColor: "#f1c40f", music: "level4"},
+    {name: "Level 5", corridorHeight: 140, spikeSpacing: 260, bgColor: "#3d1a1a", wallColor: "#5c2e2e", accentColor: "#ff6b9d", music: "level5"},
+    {name: "Level 6", corridorHeight: 130, spikeSpacing: 240, bgColor: "#2a1a3d", wallColor: "#452563", accentColor: "#6dd5ed", music: "level6"},
+    {name: "Level 7", corridorHeight: 120, spikeSpacing: 220, bgColor: "#3d3d1a", wallColor: "#5c5c2e", accentColor: "#ff9f00", music: "level7"},
+    {name: "Level 8", corridorHeight: 110, spikeSpacing: 200, bgColor: "#1a3d3d", wallColor: "#2e5c5c", accentColor: "#ff006e", music: "level8"},
+    {name: "Level 9", corridorHeight: 100, spikeSpacing: 180, bgColor: "#3d1a2e", wallColor: "#5c2e4d", accentColor: "#8ae234", music: "level9"},
+    {name: "Level 10", corridorHeight: 90, spikeSpacing: 150, bgColor: "#0a0a1a", wallColor: "#1a1a3d", accentColor: "#ff00ff", music: "level10"},
+    {name: "Level 11", corridorHeight: 85, spikeSpacing: 140, bgColor: "#1a001a", wallColor: "#2a002a", accentColor: "#ff0055", music: "level11"},
+    {name: "Level 12", corridorHeight: 80, spikeSpacing: 130, bgColor: "#001a1a", wallColor: "#002a2a", accentColor: "#55ff00", music: "level12"},
+    {name: "Level 13", corridorHeight: 78, spikeSpacing: 120, bgColor: "#0a1a00", wallColor: "#1a2a00", accentColor: "#ffaa00", music: "level13"},
+    {name: "Level 14", corridorHeight: 76, spikeSpacing: 115, bgColor: "#1a0a0a", wallColor: "#2a1a1a", accentColor: "#00ffaa", music: "level14"},
+    {name: "Level 15", corridorHeight: 74, spikeSpacing: 110, bgColor: "#0a0a3d", wallColor: "#1a1a5c", accentColor: "#ff6b00", music: "level15"},
+    {name: "Level 16", corridorHeight: 72, spikeSpacing: 105, bgColor: "#3d001a", wallColor: "#5c002a", accentColor: "#00ffff", music: "level16"},
+    {name: "Level 17", corridorHeight: 70, spikeSpacing: 100, bgColor: "#001a3d", wallColor: "#002a5c", accentColor: "#ff00aa", music: "level17"},
+    {name: "Level 18", corridorHeight: 70, spikeSpacing: 95, bgColor: "#1a1a00", wallColor: "#2a2a00", accentColor: "#00ffaa", music: "level18"},
+    {name: "Level 19", corridorHeight: 70, spikeSpacing: 90, bgColor: "#0a3d1a", wallColor: "#1a5c2a", accentColor: "#aa00ff", music: "level19"},
+    {name: "Level 20", corridorHeight: 70, spikeSpacing: 85, bgColor: "#3d1a3d", wallColor: "#5c2a5c", accentColor: "#ffaa55", music: "level20"},
+    {name: "Level 21", corridorHeight: 70, spikeSpacing: 80, bgColor: "#1a3d1a", wallColor: "#2a5c2a", accentColor: "#55ffaa", music: "level21"},
+    {name: "Level 22", corridorHeight: 70, spikeSpacing: 75, bgColor: "#3d0a1a", wallColor: "#5c0a2a", accentColor: "#aa55ff", music: "level22"},
+    {name: "Level 23", corridorHeight: 70, spikeSpacing: 70, bgColor: "#0a1a3d", wallColor: "#1a2a5c", accentColor: "#ffaa00", music: "level23"},
+    {name: "Level 24", corridorHeight: 70, spikeSpacing: 65, bgColor: "#1a0a3d", wallColor: "#2a005c", accentColor: "#00aaff", music: "level24"},
+    {name: "Level 25", corridorHeight: 70, spikeSpacing: 60, bgColor: "#3d3d00", wallColor: "#5c5c00", accentColor: "#ff0055", music: "level25"}
+];
+let currentLevel = 0;
+
+let walls = [];
+let spikes = [];
+let platforms = [];
+let obstacles = []; // triangular zigzag obstacles inside corridor
+// movings removed to simplify gameplay
+let finishX = 0; // x-coordinate where the level ends
+let bgColor = "#15002b"; // dynamic background color
+let wallColor = "#8a2be2"; // dynamic wall color
+let accentColor = "#ff1493"; // dynamic accent color for spikes/obstacles
+let wallPattern = null;
+let bgPattern = null;
+let selectedLevelForUI = 0; // for UI navigation
+let showHitboxes = false; // debug: toggle with H to visualize colliders
+
+function validateLevels(){
+    const minCorridor = Math.max(70, player.size * 2 + 10);
+    let changed = 0;
+    levelsConfig.forEach((lvl, idx)=>{
+        if(typeof lvl.corridorHeight !== 'number' || lvl.corridorHeight < minCorridor){
+            levelsConfig[idx].corridorHeight = minCorridor;
+            changed++;
+        }
+    });
+    if(changed>0) console.log('validateLevels: adjusted', changed, 'levels to minimum corridor', minCorridor);
+}
+
+// Seeded random number generator for consistent level generation
+let seededRNG = null;
+function initSeededRNG(seed){
+    // Simple seeded PRNG using xorshift32
+    seededRNG = {
+        seed: seed >>> 0,
+        next: function(){
+            this.seed ^= this.seed << 13;
+            this.seed ^= this.seed >> 17;
+            this.seed ^= this.seed << 5;
+            return (this.seed >>> 0) / 4294967296;
+        }
+    };
+}
+function seededRandom(){
+    return seededRNG ? seededRNG.next() : Math.random();
+}
+
+function playSfx(name){
+    if(!audioEnabled) return;
+    if(!sounds || !sounds[name]) return; // safe check
+    const s = sounds[name];
+    if(s){
+        try {
+            s.currentTime = 0;
+            s.play().catch(()=>{});
+        } catch(e) {
+            // silent fail
+        }
+    }
+}
+
+// helper for particle effects
+function spawnParticles(x,y,count,color){
+    for(let i=0;i<count;i++){
+        const angle = Math.random()*Math.PI*2;
+        const speed = Math.random()*4+1;
+        particles.push({
+            x,y,
+            vx: Math.cos(angle)*speed,
+            vy: Math.sin(angle)*speed,
+            life: 60 + Math.random()*30,
+            color
+        });
+    }
+}
+function updateParticles(){
+    for(let i=particles.length-1;i>=0;i--){
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.1; // simple gravity
+        p.life--;
+        if(p.life<=0) particles.splice(i,1);
+    }
+}
+function drawParticles(){
+    particles.forEach(p=>{
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = Math.max(p.life/60,0);
+        ctx.fillRect(p.x,p.y,2,2);
+        ctx.globalAlpha = 1;
+    });
+}
+
+// power-up handling
+function collectPowerup(p){
+    if(p.type === 'speed'){
+        speedBoost = 200; // frames of extra speed
+        spawnParticles(p.x + p.size/2, p.y + p.size/2, 20, '#ffff00');
+    } else if(p.type === 'coin'){
+        coins += 1;
+        localStorage.setItem('sw_coins', coins);
+        spawnParticles(p.x + p.size/2, p.y + p.size/2, 15, '#ffea00');
+    }
+    // bonus score for any powerup
+    score += 200;
+    newHighTimer = 30;
+    playSfx('pickup');
+}
+
+
+function generateLevel(){
+    walls=[];
+    spikes=[];
+    platforms=[];
+    obstacles=[];
+    // movings cleared (not used)
+    powerups=[];
+    
+    // Initialize seeded RNG so this level always generates identically
+    initSeededRNG(currentLevel + 1); // level+1 ensures different seed per level
+    
+    const cfg = levelsConfig[currentLevel];
+    // runtime safety: enforce a minimum corridor height so levels remain passable
+    const minCorridor = Math.max(70, player.size * 2 + 10);
+    if(cfg.corridorHeight < minCorridor){
+        console.warn('Level', currentLevel+1, 'corridorHeight too small; raised to', minCorridor);
+        cfg.corridorHeight = minCorridor;
+    }
+    // pick colors from level config
+    bgColor = cfg.bgColor;
+    wallColor = cfg.wallColor;
+    accentColor = cfg.accentColor;
+    wallPattern = createWallPattern(bgColor);
+    bgPattern = createBGPattern(bgColor);
+    let corridorHeight = cfg.corridorHeight;
+    let corridorCenter = canvas.height/2;
+    let spacing = cfg.spikeSpacing;
+
+    // level runs until finishX; make it configurable per difficulty
+    finishX = 8000 + currentLevel * 2000;
+
+    // create guaranteed safe passages for higher levels so a path always exists
+    const safePassages = [];
+    // ALL levels get safe passages to ensure playability. More frequent for higher levels.
+    const passageCount = (currentLevel >= 20) ? 6 : (currentLevel >= 15 ? 5 : (currentLevel >= 11 ? 4 : 3));
+    const passageSpacing = finishX / (passageCount + 1);
+    for(let i=0;i<passageCount;i++){
+        const start = 800 + i * passageSpacing + seededRandom() * 200;
+        const width = 250 + seededRandom()*100; // wider safe passages for guaranteed clearance
+        safePassages.push({x1:start, x2:start+width});
+    }
+
+    function insideSafePassages(x){
+        for(let i=0;i<safePassages.length;i++){
+            const p = safePassages[i];
+            if(x >= p.x1 && x <= p.x2) return true;
+        }
+        return false;
+    }
+
+    for(let x=600; x<finishX; x+=spacing){
+        // randomly shift the corridor center up/down a bit to force movement
+        if(seededRandom() < 0.3) corridorCenter += (seededRandom()*2-1) * 100;
+        // clamp center
+        corridorCenter = Math.max(corridorHeight+50, Math.min(canvas.height-corridorHeight-50, corridorCenter));
+        const corridorTop = corridorCenter - corridorHeight;
+        const corridorBottom = corridorCenter + corridorHeight;
+
+        walls.push({x:x, y:0, w:40, h:corridorTop});
+        walls.push({x:x, y:corridorBottom, w:40, h:canvas.height-corridorBottom});
+
+        // Keep corridor height stable - challenge comes from obstacles, not narrowing randomly
+        // NOTE: spacing already controls difficulty by making gates closer together
+        if(x % 1500 === 0 && spacing>150) spacing -= 5;
+
+        // add some spikes along top/bottom. DRASTICALLY reduce density across all levels and avoid safe passages
+        let spikesPerSegment = 0;
+        if(currentLevel < 10) spikesPerSegment = seededRandom() < 0.4 ? 1 : 0;
+        else if(currentLevel < 15) spikesPerSegment = seededRandom() < 0.25 ? 1 : 0;
+        else spikesPerSegment = seededRandom() < 0.15 ? 1 : 0; // very rare in late levels
+        for(let i=0;i<spikesPerSegment;i++){
+            const offset = i * 80;
+            const sx = x+150+offset;
+            if(insideSafePassages(sx)) continue; // don't place spikes inside safe passage
+            // occasionally create a round spike with teeth
+            if(seededRandom()<0.08){
+                spikes.push({x:sx, y:corridorTop-30, r:35, type:"circle_teeth"});
+                spikes.push({x:sx, y:corridorBottom+30, r:35, type:"circle_teeth"});
+            } else {
+                spikes.push({x:sx, y:corridorTop-25, size:24, flip:true});
+                spikes.push({x:sx, y:corridorBottom+25, size:24, flip:false});
+            }
+        }
+
+        // triangular zigzag obstacles anchored to top or bottom - DRASTICALLY reduce frequency
+        if(seededRandom() < (currentLevel>=20?0.25:currentLevel>=15?0.35:0.45)){
+            const ox = x+250;
+            if(!insideSafePassages(ox)){
+                const w = 80 + seededRandom()*50;
+                const h = 30 + seededRandom()*50; // smaller obstacles to not block entire corridor
+                obstacles.push({x:ox, w:w, h:h, fromTop: seededRandom()<0.5});
+            }
+        }
+        // moving vertical bars removed to keep focus on walls and spikes
+        // add more obstacles in corners and edges
+        if(seededRandom() < 0.2){
+            const ox2 = x+300;
+            if(!insideSafePassages(ox2)) obstacles.push({x:ox2, w:80, h:60, fromTop: seededRandom()<0.5});
+        }
+        // sometimes place a speed power-up for the player to grab
+        if(seededRandom() < 0.04){
+            const py = corridorCenter + (seededRandom()*(corridorHeight-40)*0.6 - (corridorHeight-40)*0.3);
+            powerups.push({x:x+400, y:py, size:20, type:'speed'});
+        }
+        // occasionally add a coin collectible
+        if(seededRandom() < 0.08){
+            const py2 = corridorCenter + (seededRandom()*(corridorHeight-40)*0.6 - (corridorHeight-40)*0.3);
+            powerups.push({x:x+500, y:py2, size:18, type:'coin'});
+        }
+    }
+}
+
+function startGame(levelIndex){
+    if(typeof levelIndex === "number") currentLevel = levelIndex;
+    selectedLevelForUI = currentLevel;
+    targetDirection = 1; // neutral/down
+    currentDirection = 1;
+    player.angle = 0;
+    state="countdown";
+    overlay.classList.remove("fullscreen");
+
+    // reset milestones for this run
+    milestonesReached = [false,false,false,false];
+
+    // setup competitor if race mode
+    if(raceMode === 'multiplayer'){
+        // multiplayer setup - use multiplayerPlayers array
+        isInMultiplayer = true;
+        exitBtn.style.display = 'block';
+        // reset all player positions
+        multiplayerPlayers.forEach(p => {
+            p.x = 200;
+            p.y = canvas.height/2;
+            p.angle = 0;
+            p.alive = true;
+        });
+    } else if(raceMode !== 'single'){
+        competitor = {
+            x:200,
+            y:canvas.height/2,
+            size:30,
+            angle:0,
+            targetDirection:1,
+            currentDirection:1,
+            color: raceMode === 'ai' ? '#ff9900' : '#00ff00',
+            isAI: raceMode === 'ai'
+        };
+        competitorTrail = [];
+        competitorTrailCounter = 0;
+        exitBtn.style.display = 'block';
+    } else {
+        competitor = null;
+        competitorTrail = [];
+        competitorTrailCounter = 0;
+        exitBtn.style.display = 'none';
+        isInMultiplayer = false;
+    }
+
+    // show tutorial on first playthrough
+    const tutorialDone = localStorage.getItem('sw_tutorialDone');
+    if(!tutorialDone){
+        overlay.innerHTML = `<h2>Use SPACE or UP to move up,<br>release to move down.<br>Avoid obstacles!</h2>`;
+        setTimeout(()=>{
+            localStorage.setItem('sw_tutorialDone','1');
+            startGame(levelIndex); // restart countdown after tutorial
+        },3000);
+        return;
+    }
+
+    // show level name briefly before the countdown
+    overlay.innerHTML = `<h1>${levelsConfig[currentLevel].name}</h1>`;
+    setTimeout(()=>{
+        let count = 3;
+        overlay.innerHTML = `<h1>${count}</h1>`;
+        let interval = setInterval(()=>{
+            count--;
+            if(count>0){
+                overlay.innerHTML = `<h1>${count}</h1>`;
+            } else {
+                clearInterval(interval);
+                // fade overlay out for a nicer transition
+                overlay.style.transition = 'opacity 0.5s';
+                overlay.style.opacity = '0';
+                setTimeout(()=>{
+                    overlay.style.transition = '';
+                    overlay.style.opacity = '1';
+                    overlay.innerHTML = '';
+                    state = 'playing';
+                    playLevelMusic(currentLevel);
+                },500);
+            }
+        },1000);
+    }, 1000);
+    generateLevel();
+}
+
+function die(){
+    if(isInMultiplayer && state === 'playing'){
+        // in multiplayer, player resets position
+        player.x=200;
+        player.y=canvas.height/2;
+        player.angle=0;
+        targetDirection=1;
+        currentDirection=1;
+        score = 0;
+        shakeTime = 30;
+        spawnParticles(player.x+player.size/2, player.y+player.size/2, 30, '#ff0000');
+        playSfx('die');
+        return;
+    }
+    if(raceMode !== 'single' && state === 'playing'){
+        // only reset the player position and score, allow race to continue
+        player.x=200;
+        player.y=canvas.height/2;
+        player.angle=0;
+        targetDirection=1;
+        currentDirection=1;
+        score = 0;
+        shakeTime = 30;
+        spawnParticles(player.x+player.size/2, player.y+player.size/2, 30, '#ff0000');
+        playSfx('die');
+        return;
+    }
+    state="dead";
+    // visual/audio feedback
+    shakeTime = 30;
+    spawnParticles(player.x+player.size/2, player.y+player.size/2, 30, '#ff0000');
+    playSfx('die');
+
+    overlay.classList.remove("fullscreen");
+    overlay.innerHTML="<h1>YOU DIED</h1>" +
+        `<p>Score: ${score}</p>` +
+        "<button onclick='restart()'>Restart</button>" +
+        "<button onclick='showMainMenu()'>Menu</button>";
+}
+
+function restart(){
+    player.x=200;
+    player.y=canvas.height/2;
+    player.angle=0;
+    cameraX=0;
+    score=0;
+    trailPoints = [];
+    competitorTrail = [];
+    targetDirection = 1;
+    currentDirection = 1;
+    speedBoost = 0;
+    particles = [];
+    powerups = [];
+    shakeTime = 0;
+    newHighTimer = 0;
+    overlay.innerHTML="";
+    overlay.classList.remove("fullscreen");
+    startGame();
+}
+
+document.addEventListener("keydown",e=>{
+    // navigation in level select screen
+    if(state === "levels"){
+        if(e.key === "ArrowLeft"){
+            selectedLevelForUI = (selectedLevelForUI - 1 + levelsConfig.length) % levelsConfig.length;
+            showLevels();
+        } else if(e.key === "ArrowRight"){
+            selectedLevelForUI = (selectedLevelForUI + 1) % levelsConfig.length;
+            showLevels();
+        } else if(e.key === "Enter"){
+            startGame(selectedLevelForUI);
+        }
+    }
+    if(e.key === 'f' || e.key === 'F'){
+        toggleFullscreen();
+    }
+
+    // Toggle hitbox debug overlay
+    if(e.key === 'h' || e.key === 'H'){
+        showHitboxes = !showHitboxes;
+    }
+    // Run AI simulation check (T)
+    if(e.key === 't' || e.key === 'T'){
+        simulateAICheck();
+    }
+
+    // gameplay controls (and pause)
+    if(state === "playing"){
+        if(e.code==="Space" || e.key === "ArrowUp"){
+            targetDirection = -1;
+            currentDirection = -1; // immediate response
+        }
+        if(raceMode==='2p' && competitor){
+            if(e.key==='w' || e.key==='W') competitor.targetDirection = -1;
+            if(e.key==='s' || e.key==='S') competitor.targetDirection = 1;
+        }
+        if(e.key === "Escape" || e.key === "p" || e.key === "P") pauseGame();
+    } else if(state === "paused"){
+        // resume from pause
+        if(e.key === "Escape" || e.key === "p" || e.key === "P") resumeGame();
+    }
+
+    // allow opening settings from menu with S
+    if(state === "menu" && (e.key === "s" || e.key === "S")){
+        showSettings();
+    }
+});
+
+document.addEventListener("keyup",e=>{
+    if(state === "playing"){
+        if(e.code==="Space" || e.key === "ArrowUp"){
+            targetDirection = 1;
+            currentDirection = 1; // immediate
+        }
+        if(raceMode==='2p' && competitor){
+            if(e.key==='w' || e.key==='W' || e.key==='s' || e.key==='S') competitor.targetDirection = 1;
+        }
+    }
+});
+
+// mouse left button
+document.addEventListener("mousedown", e=>{
+    if(state === "playing" && e.button === 0) targetDirection = -1;
+});
+
+document.addEventListener("mouseup", e=>{
+    if(state === "playing" && e.button === 0) targetDirection = 1;
+});
+
+function update(){
+    // toggle exit button for race modes
+    exitBtn.style.display = (state==='playing' && raceMode!=='single') ? 'block' : 'none';
+    // particles should always be updated regardless of state so they can fade out
+    updateParticles();
+
+    if(state!=="playing") return;
+    if(paused) return;
+
+    // FPS tracker
+    const now = performance.now();
+    fps = 1000 / (now - lastFrameTime);
+    lastFrameTime = now;
+
+    // handle player movement
+    // Immediate response: don't allow neutral (straight) drift — jump to target instantly
+    currentDirection = targetDirection;
+    // slower base when racing, slower ramp (adjusted for faster pace)
+    speed = (raceMode !== 'single' ? 7 : 8) + Math.floor(score/(raceMode!=='single'?1200:1000)) + (speedBoost>0 ? 4 : 0);
+    if(speedBoost>0) speedBoost--;
+    player.x += speed;
+    player.y += currentDirection * speed;
+
+    // competitor update
+    if(competitor){
+        if(competitor.isAI){
+            // AI physics NOW MATCH PLAYER: same base speed + difficulty modifiers
+            let aiSpeed = (raceMode !== 'single' ? 7 : 8) + Math.floor(score/(raceMode!=='single'?1200:1000)) + (speedBoost>0 ? 4 : 0);
+            
+            let aiReactionSpeed;
+            if(aiDifficulty === 'easy'){
+                // Easy AI: slower, more random, frequent mistakes
+                aiSpeed *= 0.65; // 65% of player speed
+                aiReactionSpeed = 0.06; // very sluggish reaction
+                if(Math.random() < 0.08) aiSpeed *= 0.7;
+            } else if(aiDifficulty === 'normal'){
+                // Normal AI: match player speed
+                aiSpeed *= 0.95; // 95% of player speed (tiny handicap)
+                aiReactionSpeed = 0.12;
+                if(Math.random() < 0.03) aiSpeed *= 0.85;
+            } else { // hard
+                // Hard AI: faster
+                aiSpeed *= 1.1; // 110% of player speed (advantage)
+                aiReactionSpeed = 0.2;
+                if(Math.random() < 0.005) aiSpeed *= 0.95;
+            }
+            
+            competitor.x += aiSpeed;
+            // try to stay near center with difficulty-dependent reaction
+            competitor.currentDirection += ((canvas.height/2 - competitor.y) / 100 - competitor.currentDirection) * aiReactionSpeed;
+            competitor.y += competitor.currentDirection * aiSpeed;
+            
+            // add competitor trail
+            competitorTrailCounter++;
+            if(competitorTrailCounter >= 2){
+                competitorTrail.push({x:competitor.x+competitor.size/2, y:competitor.y+competitor.size/2});
+                if(competitorTrail.length > 40) competitorTrail.shift();
+                competitorTrailCounter = 0;
+            }
+        } else {
+            // human second player
+            competitor.currentDirection += (competitor.targetDirection - competitor.currentDirection) * directionAccel;
+            const p2speed = 8 + Math.floor(score/1000);
+            competitor.x += p2speed;
+            competitor.y += competitor.currentDirection * p2speed;
+            
+            // add P2 trail
+            competitorTrailCounter++;
+            if(competitorTrailCounter >= 2){
+                competitorTrail.push({x:competitor.x+competitor.size/2, y:competitor.y+competitor.size/2});
+                if(competitorTrail.length > 40) competitorTrail.shift();
+                competitorTrailCounter = 0;
+            }
+        }
+        // competitor points according to movement (up/down) — use diagonal visuals
+        competitor.angle = (competitor.currentDirection < 0) ? -Math.PI/4 : Math.PI/4;
+
+        // collisions for competitor
+        if(competitor.y<0 || competitor.y+competitor.size>canvas.height) resetCompetitor();
+        // walls
+        for(let i=0;i<walls.length;i++){
+            const w=walls[i];
+            if(competitor.x<w.x+w.w && competitor.x+competitor.size>w.x &&
+               competitor.y<w.y+w.h && competitor.y+competitor.size>w.y){
+                resetCompetitor();
+                break;
+            }
+        }
+        // obstacles similar to player
+        for(let i=0;i<obstacles.length;i++){
+            const o=obstacles[i];
+            if(competitor.x < o.x + o.w && competitor.x+competitor.size > o.x){
+                if(o.fromTop){
+                    const slope = o.h / (o.w/2);
+                    const limitY = slope * (competitor.x + competitor.size/2 - o.x);
+                    if(competitor.y < limitY){ resetCompetitor(); break; }
+                } else {
+                    const slope = o.h / (o.w/2);
+                    const limitY = canvas.height - (slope * (competitor.x + competitor.size/2 - o.x));
+                    if(competitor.y+competitor.size > limitY){ resetCompetitor(); break; }
+                }
+            }
+        }
+        // spikes
+        for(let i=0;i<spikes.length;i++){
+            const s=spikes[i];
+            if(s.type === 'circle'){
+                const dx=(competitor.x+competitor.size/2)-(s.x+s.r/2);
+                const dy=(competitor.y+competitor.size/2)-(s.y+s.r/2);
+                if(Math.sqrt(dx*dx+dy*dy) < s.r/2 + competitor.size/2){ resetCompetitor(); break; }
+            } else {
+                if(competitor.x<s.x+s.size && competitor.x+competitor.size>s.x &&
+                   competitor.y<s.y+s.size && competitor.y+competitor.size>s.y){ resetCompetitor(); break; }
+            }
+        }
+    }
+
+    // MULTIPLAYER UPDATE
+    if(isInMultiplayer && multiplayerPlayers.length > 0) {
+        multiplayerPlayers.forEach((p, idx) => {
+            if(!p.alive) return;
+            
+            // each player tries to navigate automatically or is player-controlled
+            let pSpeed;
+            if(idx === 0) {
+                // player-controlled
+                pSpeed = (raceMode !== 'single' ? 3 : 4) + Math.floor(score/(raceMode!=='single'?2000:1500)) + (speedBoost>0 ? 2 : 0);
+                p.x += pSpeed;
+                p.y += currentDirection * pSpeed;
+            } else {
+                // AI-controlled other players with simple behavior
+                pSpeed = 3.5 + currentLevel * 0.4 + (Math.random()-0.5)*0.5;
+                p.x += pSpeed;
+                // try to stay near center
+                p.y += ((canvas.height/2 - p.y) / 100) * pSpeed;
+                if(Math.random() < 0.05) p.y += (Math.random()-0.5)*30;
+            }
+            p.angle = -Math.PI/4;
+            
+            // check collisions
+            if(p.y < 0 || p.y + p.size > canvas.height) {
+                p.alive = false;
+                return;
+            }
+            
+            // wall collision
+            for(let i=0; i<walls.length; i++) {
+                const w = walls[i];
+                if(p.x < w.x + w.w && p.x + p.size > w.x &&
+                   p.y < w.y + w.h && p.y + p.size > w.y) {
+                    p.alive = false;
+                    break;
+                }
+            }
+            
+            // obstacle collision
+            for(let i=0; i<obstacles.length; i++) {
+                const o = obstacles[i];
+                if(p.x < o.x + o.w && p.x + p.size > o.x) {
+                    if(o.fromTop) {
+                        const slope = o.h / (o.w/2);
+                        const limitY = slope * (p.x + p.size/2 - o.x);
+                        if(p.y < limitY) { p.alive = false; break; }
+                    } else {
+                        const slope = o.h / (o.w/2);
+                        const limitY = canvas.height - (slope * (p.x + p.size/2 - o.x));
+                        if(p.y + p.size > limitY) { p.alive = false; break; }
+                    }
+                }
+            }
+            
+            // spike collision
+            for(let i=0; i<spikes.length; i++) {
+                const s = spikes[i];
+                if(s.type === "circle") {
+                    const dx = (p.x + p.size/2) - (s.x + s.r/2);
+                    const dy = (p.y + p.size/2) - (s.y + s.r/2);
+                    if(Math.sqrt(dx*dx + dy*dy) < s.r/2 + p.size/2) { p.alive = false; break; }
+                } else {
+                    if(p.x < s.x + s.size && p.x + p.size > s.x &&
+                       p.y < s.y + s.size && p.y + p.size > s.y) {
+                        p.alive = false; break;
+                    }
+                }
+            }
+        });
+        
+        // check multiplayer finish
+        let finishers = multiplayerPlayers.filter(p => p.x > finishX);
+        if(finishers.length > 0) {
+            let winnerName = finishers[0].name || 'Unknown';
+            showRaceWin(winnerName + ' WINS!');
+        }
+    }
+
+    // score update only for player when racing single or multi
+    score++;
+    if(score>highscore){
+        highscore=score;
+        localStorage.setItem("sw_high",highscore);
+        newHighTimer = 60;
+    }
+
+    // award coins at progress milestones (quarter points)
+    if(!isInMultiplayer && finishX>0){
+        const progress = Math.min(1, player.x/finishX);
+        const thresholds = [0.25,0.5,0.75,1];
+        thresholds.forEach((th,idx)=>{
+            if(progress >= th && !milestonesReached[idx]){
+                milestonesReached[idx] = true;
+                // coin reward grows with level and milestone index
+                const base = 5 + currentLevel * 2;
+                const extra = idx * 3; // later milestones give more
+                let amt = base + extra;
+                // apply pet coin boost
+                let coinBoostTotal = 0;
+                pets.forEach(p=>{ coinBoostTotal += p.coinBoost || 0; });
+                amt = Math.floor(amt * (1 + coinBoostTotal));
+                coins += amt;
+                localStorage.setItem('sw_coins', coins);
+                playSfx('coin');
+            }
+        });
+    }
+
+    // check finish (for non-multiplayer races)
+    if(!isInMultiplayer && (player.x > finishX || (competitor && competitor.x > finishX))){
+        let winner;
+        if(player.x > finishX && competitor && competitor.x > finishX){
+            winner = 'Tie';
+        } else if(player.x > finishX){
+            winner = 'Player 1';
+        } else if(competitor && competitor.x > finishX){
+            winner = raceMode === 'ai' ? 'AI' : 'Player 2';
+        }
+        showRaceWin(winner);
+    }
+
+    // player orientation: immediate diagonal (no straight forward pose)
+    player.angle = (currentDirection < 0) ? -Math.PI/4 : Math.PI/4;
+
+    // add current position to trail (every 2 frames for performance)
+    trailCounter++;
+    if(trailCounter >= 2) {
+        trailPoints.push({x:player.x+player.size/2, y:player.y+player.size/2});
+        if(trailPoints.length>40) trailPoints.shift();
+        trailCounter = 0;
+    }
+
+    cameraX = player.x - 200;
+
+    if(player.y<0 || player.y+player.size>canvas.height) die();
+
+    // wall collision with early exit
+    for(let i=0; i<walls.length; i++){
+        const w = walls[i];
+        if(player.x<w.x+w.w && player.x+player.size>w.x &&
+           player.y<w.y+w.h && player.y+player.size>w.y){
+               die();
+               return;
+        }
+    }
+
+    // moving bars not used anymore
+
+    // platform collision (platforms don't kill, they're safe zones or just decoration)
+    platforms.forEach(p=>{
+        if(player.x < p.x + p.w && player.x+player.size > p.x &&
+           player.y < p.y+p.h && player.y+player.size > p.y){
+            // platforms are safe - just visual for now
+        }
+    });
+
+    // obstacle collision (triangular zigzags)
+    for(let i=0; i<obstacles.length; i++){
+        const o = obstacles[i];
+        if(player.x < o.x + o.w && player.x+player.size > o.x){
+            if(o.fromTop){
+                const slope = o.h / (o.w/2);
+                const limitY = slope * (player.x + player.size/2 - o.x);
+                if(player.y < limitY) { die(); return; }
+            } else {
+                const slope = o.h / (o.w/2);
+                const limitY = canvas.height - (slope * (player.x + player.size/2 - o.x));
+                if(player.y+player.size > limitY) { die(); return; }
+            }
+        }
+    }
+
+    // spike collision
+    for(let i=0; i<spikes.length; i++){
+        const s = spikes[i];
+        if(s.type === "circle"){
+            // circle collision
+            const dx = (player.x+player.size/2) - (s.x + s.r/2);
+            const dy = (player.y+player.size/2) - (s.y + s.r/2);
+            if(Math.sqrt(dx*dx+dy*dy) < s.r/2 + player.size/2) { die(); return; }
+        } else {
+            if(player.x<s.x+s.size && player.x+player.size>s.x &&
+               player.y<s.y+s.size && player.y+player.size>s.y){
+                   die();
+                   return;
+            }
+        }
+    }
+
+    // power-up collision (safe bonuses)
+    for(let i=0;i<powerups.length;i++){
+        const p = powerups[i];
+        if(player.x < p.x + p.size && player.x + player.size > p.x &&
+           player.y < p.y + p.size && player.y + player.size > p.y){
+               collectPowerup(p);
+               powerups.splice(i,1);
+               i--;
+        }
+    }
+
+    score++;
+    if(score>highscore){
+        highscore=score;
+        localStorage.setItem("sw_high",highscore);
+        newHighTimer = 60;
+    }
+
+    // check for level end (single-player only)
+    if(raceMode === 'single' && player.x > finishX){
+        win();
+    }
+}
+
+// Play music for the current level (placeholder - integrate with actual audio)
+function playLevelMusic(levelIndex){
+    try {
+        if(currentMusic){
+            currentMusic.pause();
+            currentMusic = null;
+        }
+        const cfg = levelsConfig[levelIndex];
+        if(!audioEnabled) return;
+        const audio = new Audio(`music/${cfg.music}.mp3`);
+        audio.loop = true;
+        audio.volume = musicVolume;
+        audio.play().catch(()=>{});
+        currentMusic = audio;
+    } catch(e){
+        console.log(`Could not play music for level`);
+    }
+}
+
+function drawSpike(x,y,size,flip){
+    // draw a triangle spike with grey/black gradient and white shine
+    ctx.save();
+    ctx.beginPath();
+    if(!flip){
+        ctx.moveTo(x,y+size);
+        ctx.lineTo(x+size/2,y);
+        ctx.lineTo(x+size,y+size);
+    } else {
+        ctx.moveTo(x,y);
+        ctx.lineTo(x+size/2,y+size);
+        ctx.lineTo(x+size,y);
+    }
+    ctx.closePath();
+
+    // grey/black gradient with shine effect
+    const grad = ctx.createLinearGradient(x, y, x+size, y+size);
+    grad.addColorStop(0, "#4a4a4a");
+    grad.addColorStop(0.5, "#2a2a2a");
+    grad.addColorStop(1, "#1a1a1a");
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // white shine outline for definition
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    
+    // add a bright shine spot
+    ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+    ctx.beginPath();
+    if(!flip){
+        ctx.arc(x+size/3, y+size*0.7, size/6, 0, Math.PI*2);
+    } else {
+        ctx.arc(x+size/3, y+size*0.3, size/6, 0, Math.PI*2);
+    }
+    ctx.fill();
+    
+    ctx.restore();
+}
+
+function drawCircleSpike(x,y,r){
+    ctx.save();
+    // grey/black circular spike
+    const grad = ctx.createRadialGradient(x+r/2,y+r/2,0,x+r/2,y+r/2,r);
+    grad.addColorStop(0,"#5a5a5a");
+    grad.addColorStop(0.5,"#3a3a3a");
+    grad.addColorStop(1,"#1a1a1a");
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(x+r/2,y+r/2,r/2,0,Math.PI*2);
+    ctx.fill();
+    ctx.strokeStyle="#ffffff";
+    ctx.lineWidth=1.5;
+    ctx.stroke();
+    
+    // white shine spot
+    ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+    ctx.beginPath();
+    ctx.arc(x+r/2.5, y+r/2.5, r/8, 0, Math.PI*2);
+    ctx.fill();
+    
+    ctx.restore();
+}
+
+function drawCircleSpikeTeeths(x,y,r){
+    ctx.save();
+    // grey/black circular spike with teeth points (like a gear)
+    const grad = ctx.createRadialGradient(x+r/2,y+r/2,0,x+r/2,y+r/2,r);
+    grad.addColorStop(0,"#5a5a5a");
+    grad.addColorStop(0.5,"#3a3a3a");
+    grad.addColorStop(1,"#1a1a1a");
+    ctx.fillStyle = grad;
+    
+    const teeth = 12;
+    ctx.beginPath();
+    for(let i = 0; i < teeth * 2; i++){
+        const angle = (i / (teeth * 2)) * Math.PI * 2;
+        const isTeeth = (i % 2 === 0);
+        const radius = isTeeth ? r/2 : r/3;
+        const px = x+r/2 + Math.cos(angle) * radius;
+        const py = y+r/2 + Math.sin(angle) * radius;
+        if(i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    ctx.fill();
+    
+    ctx.strokeStyle="#ffffff";
+    ctx.lineWidth=1.5;
+    ctx.stroke();
+    
+    // white shine spot
+    ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+    ctx.beginPath();
+    ctx.arc(x+r/2.5, y+r/2.5, r/8, 0, Math.PI*2);
+    ctx.fill();
+    
+    ctx.restore();
+}
+
+// generate a repeating pattern for walls based on the provided base color
+function createWallPattern(color){
+    const p = document.createElement('canvas');
+    p.width = p.height = 40;
+    const pctx = p.getContext('2d');
+    // darker base fill
+    pctx.fillStyle = color;
+    pctx.fillRect(0,0,40,40);
+    // light grid lines
+    pctx.strokeStyle = 'rgba(255,255,255,0.2)';
+    pctx.lineWidth = 1;
+    pctx.beginPath();
+    pctx.moveTo(0,0); pctx.lineTo(40,40);
+    pctx.moveTo(40,0); pctx.lineTo(0,40);
+    pctx.stroke();
+    return ctx.createPattern(p,'repeat');
+}
+
+// generate a subtle background overlay pattern (diagonal stripes)
+function createBGPattern(color){
+    const p = document.createElement('canvas');
+    p.width = p.height = 100;
+    const pctx = p.getContext('2d');
+    pctx.fillStyle = color;
+    pctx.fillRect(0,0,100,100);
+    pctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    pctx.lineWidth = 2;
+    // draw diagonals
+    for(let i=-100;i<200;i+=20){
+        pctx.beginPath();
+        pctx.moveTo(i,0);
+        pctx.lineTo(i+100,100);
+        pctx.stroke();
+    }
+    return ctx.createPattern(p,'repeat');
+}
+
+// draw blocky tiles on walls with triangles and more complex patterns
+function drawBlockyWall(x,y,w,h,baseColor){
+    const blockSize = 20;
+    ctx.fillStyle = baseColor;
+    ctx.fillRect(x,y,w,h);
+    
+    // draw blocks
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx.lineWidth = 2;
+    for(let bx = x; bx < x+w; bx += blockSize){
+        for(let by = y; by < y+h; by += blockSize){
+            ctx.strokeRect(bx, by, blockSize, blockSize);
+            
+            // randomly add triangles inside blocks for visual complexity
+            if(Math.random() < 0.3){
+                ctx.fillStyle = 'rgba(255,255,255,0.2)';
+                ctx.beginPath();
+                ctx.moveTo(bx, by);
+                ctx.lineTo(bx+blockSize, by);
+                ctx.lineTo(bx+blockSize/2, by+blockSize);
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
+    }
+    
+    // highlight edges
+    ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(x,y,w,h);
+    
+    // add diagonal patterns
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = 1;
+    for(let i = -h; i < w; i += 15){
+        ctx.beginPath();
+        ctx.moveTo(x+i, y);
+        ctx.lineTo(x+i+h, y+h);
+        ctx.stroke();
+    }
+}
+
+function draw(){
+    // DEBUG: fill with color to confirm draw() is running
+    ctx.fillStyle = '#333';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // apply a little camera shake when needed
+    let shakeOffsetX = 0, shakeOffsetY = 0;
+    if(shakeTime > 0){
+        shakeTime--;
+        shakeOffsetX = (Math.random()-0.5) * 10;
+        shakeOffsetY = (Math.random()-0.5) * 10;
+    }
+
+    ctx.save();
+    ctx.translate(-cameraX + shakeOffsetX, shakeOffsetY);
+
+    // draw any active particles behind level geometry
+    drawParticles();
+
+    // background fill
+    ctx.fillStyle=bgColor;
+    ctx.fillRect(cameraX,0,canvas.width,canvas.height);
+    // draw stars with parallax slower than camera
+    ctx.fillStyle = '#fff';
+    stars.forEach(s=>{
+        const x = (s.x - cameraX * s.speedFactor) % canvas.width;
+        ctx.fillRect(x, s.y, s.size, s.size);
+    });
+    // additional sinusoidal decorative bubbles
+    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    for(let i=0;i<5;i++){
+        const bx = (cameraX/2 + i*200 + (Date.now()/50)) % canvas.width;
+        const by = canvas.height/4 + Math.sin((cameraX+i*100)/100)*50;
+        ctx.beginPath();
+        ctx.arc(bx, by, 20,0,Math.PI*2);
+        ctx.fill();
+    }
+
+    // race progress bars
+    if(raceMode !== 'single' && finishX>0){
+        const barW = canvas.width * 0.8;
+        const p1 = Math.min(1, player.x/finishX);
+        const p2 = competitor ? Math.min(1, competitor.x/finishX) : 0;
+        ctx.fillStyle='#444';
+        ctx.fillRect(canvas.width*0.1,5,barW,8);
+        ctx.fillStyle='#0f0';
+        ctx.fillRect(canvas.width*0.1,5,barW*p1,8);
+        ctx.fillStyle='#f00';
+        ctx.fillRect(canvas.width*0.1,15,barW*p2,8);
+        ctx.fillStyle='#fff';
+        ctx.font='10px Arial';
+        ctx.fillText('P1', canvas.width*0.1-25, 12);
+        ctx.fillText(raceMode==='ai'?'AI':'P2', canvas.width*0.1-25, 22);
+        ctx.font='20px Arial';
+    }
+
+    // no shadow overlay - removed for brighter appearance
+
+    // walls with blocky tiles
+    walls.forEach(w=>{
+        drawBlockyWall(w.x, w.y, w.w, w.h, wallColor);
+    });
+
+    spikes.forEach(s=>{
+        if(s.type === "circle") drawCircleSpike(s.x,s.y,s.r);
+        else if(s.type === "circle_teeth") drawCircleSpikeTeeths(s.x,s.y,s.r);
+        else drawSpike(s.x,s.y,s.size,s.flip);
+    });
+
+    // platforms removed
+
+    // draw zigzag obstacles and blocking triangles/rectangles everywhere
+    ctx.fillStyle=accentColor;
+    obstacles.forEach(o=>{
+        ctx.beginPath();
+        if(o.fromTop){
+            ctx.moveTo(o.x,0);
+            ctx.lineTo(o.x+o.w/2,o.h);
+            ctx.lineTo(o.x+o.w,0);
+        } else {
+            ctx.moveTo(o.x,canvas.height);
+            ctx.lineTo(o.x+o.w/2,canvas.height-o.h);
+            ctx.lineTo(o.x+o.w,canvas.height);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle="#ffffff";
+        ctx.lineWidth=1.5;
+        ctx.stroke();
+        
+        // add blocking rectangles and triangles around the obstacles to create more danger zones
+        ctx.fillStyle="rgba(200, 50, 50, 0.4)";
+        // add blocks at edges for more blocking
+        for(let bx = o.x; bx < o.x+o.w; bx += 25){
+            if(o.fromTop){
+                ctx.fillRect(bx, 0, 15, 15);
+            } else {
+                ctx.fillRect(bx, canvas.height-15, 15, 15);
+            }
+        }
+    });
+    // moving bars removed
+
+    // draw any power-ups the player can pick up
+    powerups.forEach(p=>{
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        if(p.type === 'speed'){
+            ctx.fillStyle = '#ffff00';
+            ctx.beginPath();
+            ctx.arc(p.size/2, p.size/2, p.size/2, 0, Math.PI*2);
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        } else if(p.type === 'coin'){
+            // simple coin icon
+            ctx.fillStyle='#ffea00';
+            ctx.beginPath();
+            ctx.arc(p.size/2,p.size/2,p.size/2,0,Math.PI*2);
+            ctx.fill();
+            ctx.fillStyle='#aa8800';
+            ctx.fillRect(p.size*0.3,p.size*0.3,p.size*0.4,p.size*0.4);
+        }
+        ctx.restore();
+    });
+
+    ctx.shadowBlur=0;
+
+    // draw trail
+    ctx.strokeStyle = trails[selectedTrail];
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    trailPoints.forEach((p,i)=>{
+        if(i===0) ctx.moveTo(p.x,p.y);
+        else ctx.lineTo(p.x,p.y);
+    });
+    ctx.stroke();
+
+    // draw competitor/AI trail
+    if(competitor && competitorTrail.length > 0){
+        ctx.strokeStyle = competitor.color;
+        ctx.lineWidth = 3;
+        ctx.globalAlpha = 0.7;
+        ctx.beginPath();
+        competitorTrail.forEach((p,i)=>{
+            if(i===0) ctx.moveTo(p.x,p.y);
+            else ctx.lineTo(p.x,p.y);
+        });
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+    }
+
+    // draw player with chosen skin and rotation
+    ctx.save();
+    ctx.translate(player.x+player.size/2, player.y+player.size/2);
+    ctx.rotate(player.angle);
+    ctx.fillStyle = skins[selectedSkin];
+    ctx.beginPath();
+    ctx.moveTo(-player.size/2, 0);
+    ctx.lineTo(player.size/2, -player.size/2);
+    ctx.lineTo(player.size/2, player.size/2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // draw competitor if exists
+    if(competitor){
+        ctx.save();
+        ctx.translate(competitor.x+competitor.size/2, competitor.y+competitor.size/2);
+        ctx.rotate(competitor.angle);
+        ctx.fillStyle = competitor.color;
+        ctx.beginPath();
+        ctx.moveTo(-competitor.size/2,0);
+        ctx.lineTo(competitor.size/2,-competitor.size/2);
+        ctx.lineTo(competitor.size/2,competitor.size/2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+        // label
+        ctx.fillStyle = '#fff';
+        ctx.font = '12px Arial';
+        ctx.fillText(competitor.isAI ? 'AI' : 'P2', competitor.x, competitor.y - 10);
+    }
+
+    // draw multiplayer players if exists
+    if(isInMultiplayer && multiplayerPlayers.length > 0) {
+        multiplayerPlayers.forEach((p, idx) => {
+            if(!p.alive) return;
+            
+            ctx.save();
+            ctx.translate(p.x + p.size/2, p.y + p.size/2);
+            ctx.rotate(p.angle);
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.moveTo(-p.size/2, 0);
+            ctx.lineTo(p.size/2, -p.size/2);
+            ctx.lineTo(p.size/2, p.size/2);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+            
+            // label
+            ctx.fillStyle = '#fff';
+            ctx.font = '12px Arial';
+            ctx.fillText(p.name || ('P' + (idx + 1)), p.x - 15, p.y - 15);
+        });
+    }
+
+    ctx.restore();
+
+    // draw finish portal if level nearing end
+    if(finishX){
+        ctx.save();
+        ctx.translate(-cameraX,0);
+        ctx.fillStyle="#00ff00";
+        ctx.beginPath();
+        ctx.arc(finishX,canvas.height/2,60,0,Math.PI*2);
+        ctx.fill();
+        ctx.strokeStyle="#ffffff";
+        ctx.lineWidth=4;
+        ctx.stroke();
+        ctx.restore();
+    }
+    // simple progress bar along top
+    if(state==='playing' && finishX>0){
+        const barW = canvas.width * 0.8;
+        const pct = Math.min(1, player.x / finishX);
+        ctx.fillStyle = '#444';
+        ctx.fillRect(canvas.width*0.1, 5, barW, 10);
+        ctx.fillStyle = '#0f0';
+        ctx.fillRect(canvas.width*0.1, 5, barW * pct, 10);
+        ctx.strokeStyle = '#fff';
+        ctx.strokeRect(canvas.width*0.1, 5, barW, 10);
+        // percentage text
+        ctx.fillStyle = '#fff';
+        ctx.font = '14px Arial';
+        ctx.fillText(Math.floor(pct*100) + '%', canvas.width*0.9 + 5, 15);
+    }
+
+    ctx.fillStyle="white";
+    ctx.fillText("Score: "+score,20,30);
+    ctx.fillText("High: "+highscore,20,50);
+    // coin icon
+    ctx.fillStyle='#ffea00';
+    ctx.beginPath();
+    ctx.arc(70,70,8,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle='#aa8800';
+    ctx.fillRect(66,66,8,8);
+    ctx.fillStyle='white';
+    ctx.fillText("x " + coins,80,75);
+    ctx.fillText("FPS: "+Math.round(fps),20,90);
+
+    // control hints
+    ctx.font = '14px Arial';
+    ctx.fillStyle = '#ccc';
+    ctx.fillText('Space/Up to fly, P pause, F fullscreen', 20, canvas.height-20);
+    ctx.font = '20px Arial';
+
+    // flash a message when new highscore is just reached
+    if(newHighTimer>0){
+        ctx.fillStyle = '#ff0';
+        ctx.font = '30px Arial';
+        ctx.fillText('NEW HIGH SCORE!', canvas.width/2 - 150, 100);
+        newHighTimer--;
+    }
+
+    // draw a glow around the player when speed boost is active
+    if(speedBoost>0){
+        ctx.save();
+        ctx.translate(-cameraX + shakeOffsetX, shakeOffsetY);
+        ctx.strokeStyle = '#ff0';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(player.x-2, player.y-2, player.size+4, player.size+4);
+        ctx.restore();
+    }
+
+    // Hitbox debug overlay
+    if(showHitboxes){
+        ctx.save();
+        ctx.translate(-cameraX, 0);
+        // walls
+        ctx.strokeStyle = 'rgba(0,255,0,0.9)';
+        ctx.lineWidth = 2;
+        walls.forEach(w=>{
+            ctx.strokeRect(w.x, w.y, w.w, Math.max(1, w.h));
+        });
+        // obstacles (triangles)
+        ctx.strokeStyle = 'rgba(255,0,0,0.9)';
+        obstacles.forEach(o=>{
+            ctx.beginPath();
+            if(o.fromTop){
+                ctx.moveTo(o.x,0);
+                ctx.lineTo(o.x+o.w/2,o.h);
+                ctx.lineTo(o.x+o.w,0);
+            } else {
+                ctx.moveTo(o.x,canvas.height);
+                ctx.lineTo(o.x+o.w/2,canvas.height-o.h);
+                ctx.lineTo(o.x+o.w,canvas.height);
+            }
+            ctx.closePath();
+            ctx.stroke();
+            // bounding box
+            ctx.strokeRect(o.x, 0, o.w, o.fromTop?o.h:o.h);
+        });
+        // spikes
+        ctx.strokeStyle = 'rgba(0,0,255,0.9)';
+        spikes.forEach(s=>{
+            if(s.type === 'circle' || s.type === 'circle_teeth') ctx.beginPath(), ctx.arc(s.x + (s.r?s.r/2:0), s.y + (s.r?s.r/2:0), s.r?s.r/2:10, 0, Math.PI*2), ctx.stroke();
+            else ctx.strokeRect(s.x, s.y, s.size||20, s.size||20);
+        });
+        // powerups
+        ctx.strokeStyle = 'rgba(255,255,0,0.9)';
+        powerups.forEach(p=>{
+            ctx.strokeRect(p.x, p.y, p.size, p.size);
+        });
+
+        // player bounding box
+        ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+        ctx.strokeRect(player.x, player.y, player.size, player.size);
+        if(competitor) ctx.strokeRect(competitor.x, competitor.y, competitor.size, competitor.size);
+        ctx.restore();
+
+        // HUD indicator
+        ctx.fillStyle = 'rgba(255,255,255,0.9)';
+        ctx.font = '14px Arial';
+        ctx.fillText('H: Hitboxes ON', canvas.width - 140, 30);
+    }
+}
+
+function loop(){
+    update();
+    draw();
+    requestAnimationFrame(loop);
+}
+
+// initial menu and start game loop
+try {
+    console.log('Game starting...');
+    initStars();
+    addOfflineCoins(); // credit any coins from pets while offline at startup
+    validateLevels(); // ensure level configs are playable
+    // Run AI simulation silently at startup and persist results for inspection
+    try{
+        const sim = simulateAICheck(true);
+        window.aiSimResults = sim;
+        try{ localStorage.setItem('sw_aiSimResults', JSON.stringify(sim)); }catch(e){}
+        const failed = sim.filter(r=>!r.success).map(r=>r.level);
+        if(failed.length>0) console.warn('simulateAICheck: levels failing medium-AI:', failed);
+        else console.log('simulateAICheck: all tested levels reachable by medium-AI');
+    }catch(e){ console.error('simulateAICheck startup error', e); }
+    showMainMenu();
+    console.log('Starting game loop...');
+    loop();
+    console.log('Game loop started!');
+} catch(e) {
+    console.error('Game initialization error:', e);
+    overlay.innerHTML = '<h1>ERROR: ' + e.message + '</h1>';
+}
+
+function resetCompetitor(){
+    if(!competitor) return;
+    competitor.x = 200;
+    competitor.y = canvas.height/2;
+    competitor.angle = 0;
+    competitor.targetDirection = 1;
+    competitor.currentDirection = 1;
+    competitorTrail = []; // clear trail on reset
+    competitorTrailCounter = 0;
+    // feedback
+    spawnParticles(competitor.x+competitor.size/2, competitor.y+competitor.size/2, 20, '#ff0000');
+    playSfx('die');
+}
+
+function showModeSelect(){
+    state = 'menu';
+    overlay.classList.remove('fullscreen');
+    overlay.innerHTML = `<h1>MODE</h1>
+        <button onclick="chooseMode('single')">Single</button>
+        <button onclick="chooseMode('ai')">Race AI</button>
+        <button onclick="showMultiplayerMenu()">Multiplayer (2-6)</button>
+        <button onclick="showMainMenu()">Back</button>`;
+}
+
+function chooseAIDifficulty(){
+    state = 'menu';
+    overlay.classList.remove('fullscreen');
+    overlay.style.pointerEvents = 'auto';
+    overlay.innerHTML = `<h1>AI DIFFICULTY</h1>
+        <button onclick="setAIDifficulty('easy')">Easy</button>
+        <button onclick="setAIDifficulty('normal')">Normal</button>
+        <button onclick="setAIDifficulty('hard')">Hard</button>
+        <button onclick="showModeSelect()">Back</button>`;
+}
+
+function setAIDifficulty(diff){
+    aiDifficulty = diff;
+    // proceed to level selection so player can pick a level to race the AI
+    showLevels();
+}
+
+function chooseMode(mode){
+    raceMode = mode;
+    if(mode === 'ai'){
+        chooseAIDifficulty();
+    } else {
+        showLevels();
+    }
+}
+
+function showMainMenu(){
+    console.log('showMainMenu called, state:', state);
+    state = "menu";
+    exitBtn.style.display = 'none';
+    overlay.classList.remove("fullscreen");
+    overlay.style.pointerEvents = 'auto';
+    
+    if (!username) {
+        // show username setup screen
+        overlay.innerHTML = `<div style="text-align:center; padding:40px;">
+            <h1 style="font-size:60px; color:#00ffff; text-shadow:0 0 10px #00ffff; margin:30px;">SPACEWAVES PRO</h1>
+            <p style="font-size:24px; margin:20px; color:#fff;">Enter your username:</p>
+            <input type="text" id="usernameInput" placeholder="Your username" style="font-size:18px; padding:12px; width:280px; border:2px solid #00ffff; background:#000; color:#00ffff;">
+            <br><br>
+            <button onclick="setUsernameAndContinue()" style="font-size:20px; padding:12px 30px; background:#00ffff; color:#000; border:3px solid #fff; cursor:pointer;">Continue</button>
+        </div>`;
+        
+        // Use setTimeout to ensure input is in DOM
+        setTimeout(() => {
+            const input = document.getElementById('usernameInput');
+            if (input) {
+                input.focus();
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') setUsernameAndContinue();
+                });
+            }
+        }, 100);
+    } else {
+        // main menu with options
+        overlay.innerHTML = `<h1 style="font-size:70px; color:#00ffff; text-shadow:0 0 10px #00ffff; margin:30px;">SPACEWAVES PRO</h1>
+            <p style="font-size:18px; color:#fff;">Welcome, ${username}!</p>
+            <button onclick='showModeSelect()' style="font-size:24px; padding:15px 30px; background:#00ffff; color:#000; border:3px solid #fff;">Play</button>
+            <button onclick='showFriends()' style="font-size:24px; padding:15px 30px; background:#00ff00; color:#000; border:3px solid #fff;">Friends</button>
+            <button onclick='showPetMenu()' style="font-size:24px; padding:15px 30px; background:#ff9900; color:#000; border:3px solid #fff;">Pets</button>
+            <button onclick='showShop()' style="font-size:24px; padding:15px 30px; background:#ff00ff; color:#000; border:3px solid #fff;">Shop</button>
+            <button onclick='showSettingsMenu()' style="font-size:24px; padding:15px 30px; background:#ffff00; color:#000; border:3px solid #fff;">Settings</button>`;
+    }
+    console.log('Menu HTML set');
+}
+
+function setUsernameAndContinue() {
+    const input = document.getElementById('usernameInput');
+    if (input && input.value.trim().length > 0) {
+        saveUsername(input.value);
+        showMainMenu();
+    }
+}
+
+function win(){
+    // normal single-player victory
+    state="win";
+    const bonus = 10 + currentLevel * 5 + Math.floor(score/1000);
+    coins += bonus;
+    localStorage.setItem('sw_coins', coins);
+
+    overlay.classList.remove("fullscreen");
+    overlay.innerHTML = `<h1>YOU MADE IT!</h1><p>Score: ${score}</p><p>Coins +${bonus}</p>` +
+        `<button onclick='showMainMenu()'>Menu</button>`;
+}
+
+function showRaceWin(winner){
+    state="win";
+    let msg = '';
+    if(winner === 'Tie') msg = 'IT\'S A TIE!';
+    else msg = winner + ' WINS!';
+    let bonus = 0;
+    if(player.x > finishX){
+        bonus = 10 + currentLevel * 5 + Math.floor(score/1000);
+        coins += bonus;
+        localStorage.setItem('sw_coins', coins);
+    }
+
+    overlay.classList.remove("fullscreen");
+    overlay.innerHTML = `<h1>${msg}</h1><p>Score: ${score}</p>` +
+        (bonus?`<p>Coins +${bonus}</p>`:'') +
+        `<button onclick='showMainMenu()'>Menu</button>`;
+}
+
+function showShop(){
+    state = "shop";
+    overlay.classList.add("fullscreen");
+    let html = `
+    <div style="position:absolute; top:20px; right:20px;">
+        <button onclick='closeShop()'>Close</button>
+    </div>
+    <div style="text-align:center; width:100%;">
+        <h1 style="font-size:50px; margin-bottom:20px;">Shop</h1>
+        <p style="font-size:20px;">Coins: ${coins}</p>
+        <div style="margin:40px 0;">
+            <h2 style="font-size:30px; color:#00ffff; margin-bottom:20px;">Skins</h2>
+            <div style="display:flex; justify-content:center; flex-wrap:wrap;">`;
+    skins.forEach((c,i)=>{
+        let border = '2px solid #666666';
+        if(i===selectedSkin) border = '5px solid #ffffff';
+        let label = '';
+        if(!unlockedSkins[i]) label = `<div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; color:#fff; font-size:14px;">${skinCost[i]}</div>`;
+        html += `<div style="position:relative;"><button onclick="selectSkin(${i})" style="width:80px;height:80px;margin:10px;background:${c};border:${border}"></button>${label}</div>`;
+    });
+    html += `</div>
+        </div>
+        <div style="margin:40px 0;">
+            <h2 style="font-size:30px; color:#ff00ff; margin-bottom:20px;">Trails</h2>
+            <div style="display:flex; justify-content:center; flex-wrap:wrap;">`;
+    trails.forEach((c,i)=>{
+        const border = (i===selectedTrail) ? '5px solid #ffffff' : '2px solid #666666';
+        html += `<button onclick="selectTrail(${i})" style="width:80px;height:80px;margin:10px;background:${c};border:${border}"></button>`;
+    });
+    html += `</div>
+        </div>
+        <div style="margin:40px 0;">
+            <h2 style="font-size:30px; color:#ff9900; margin-bottom:20px;">Eggs</h2>
+            <div style="display:flex; justify-content:center; flex-wrap:wrap;">`;
+    eggs.forEach((egg,i)=>{
+        html += `<div style="margin:10px; text-align:center; cursor:pointer;" onclick="viewEgg(${i})">
+            <div style="width:80px;height:80px;background:#666; border:2px solid #fff; display:flex; align-items:center; justify-content:center; color:#fff;">${egg.name}</div>
+            <button onclick="event.stopPropagation(); buyEgg(${i});" style="display:block; margin-top:5px;">${egg.price}c</button>
+        </div>`;
+    });
+    html += `</div>
+        </div>
+    </div>
+    `;
+    overlay.innerHTML = html;
+}
+
+function closeShop(){
+    overlay.classList.remove("fullscreen");
+    showMainMenu();
+}
+
+function selectSkin(i){
+    if(!unlockedSkins[i]){
+        // attempt purchase
+        if(coins >= skinCost[i]){
+            coins -= skinCost[i];
+            localStorage.setItem('sw_coins', coins);
+            unlockedSkins[i] = true;
+            localStorage.setItem('sw_unlockedSkins', JSON.stringify(unlockedSkins));
+        } else {
+            // not enough coins; maybe flash message
+            playSfx('button');
+            return;
+        }
+    }
+    selectedSkin = i;
+    localStorage.setItem("sw_skin",i);
+    if(state === "shop") showShop();
+}
+
+function selectTrail(i){
+    selectedTrail = i;
+    localStorage.setItem("sw_trail",i);
+    if(state === "shop") showShop();
+}
+
+function buyEgg(idx){
+    const egg = eggs[idx];
+    if(coins < egg.price){
+        alert('Not enough coins!');
+        return;
+    }
+    if(pets.length >= 5){
+        alert('Your pet inventory is full (5).');
+        return;
+    }
+    coins -= egg.price;
+    localStorage.setItem('sw_coins', coins);
+    hatchEgg(egg.tier);
+    showShop();
+}
+
+function hatchEgg(tier){
+    // determine rarity by tier probabilities
+    const weightsByTier = {
+        1:[0.7,0.2,0.08,0.02,0],
+        2:[0.5,0.3,0.15,0.04,0.01],
+        3:[0.3,0.4,0.2,0.08,0.02],
+        4:[0.15,0.35,0.3,0.15,0.05],
+        5:[0.05,0.25,0.35,0.25,0.1]
+    };
+    const rarities = ['common','uncommon','rare','epic','legendary'];
+    const w = weightsByTier[tier];
+    let sum = 0;
+    const r = Math.random();
+    let chosen = 'common';
+    for(let i=0;i<w.length;i++){
+        sum += w[i];
+        if(r < sum){ chosen = rarities[i]; break; }
+    }
+    // pick random pet from pool of that rarity
+    const candidates = petPool.filter(p=>p.rarity===chosen);
+    let base = candidates[Math.floor(Math.random()*candidates.length)];
+    // construct pet object with stats
+    const rarityBoost = {common:0.05,uncommon:0.08,rare:0.12,epic:0.20,legendary:0.30};
+    const offlineRates = {common:1,uncommon:2,rare:5,epic:10,legendary:20};
+    const pet = {
+        id: Date.now() + Math.random(),
+        name: base.name,
+        rarity: chosen,
+        color: base.color,
+        coinBoost: rarityBoost[chosen],
+        offlineRate: offlineRates[chosen]
+    };
+    pets.push(pet);
+    savePets();
+    animateEggHatch(pet);
+}
+
+function animateEggHatch(pet){
+    // simple overlay animation
+    overlay.classList.add('fullscreen');
+    overlay.innerHTML = `<div id="eggAnim" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#fff;">
+        <div id="eggShape" style="width:120px;height:160px;background:#666;border:5px solid #fff;border-radius:50% 50% 40% 40%;"></div>
+        <p>Hatching...</p>
+    </div>`;
+    // crack after 1 second
+    setTimeout(()=>{
+        const egg = document.getElementById('eggShape');
+        if(egg) egg.style.background='#444';
+    },1000);
+    setTimeout(()=>{
+        overlay.innerHTML = `<div style="text-align:center;color:#fff;">
+            <h2>Hatched!</h2>
+            <div style="width:120px;height:120px;background:${pet.color};border-radius:50%;margin:auto;">${pet.name}</div>
+            <p>${pet.rarity.toUpperCase()} pet</p>
+            <button onclick="showShop()" style="padding:10px 20px;">OK</button>
+        </div>`;
+    },2000);
+}
+
+function showPetMenu(){
+    state = 'pet';
+    overlay.classList.add('fullscreen');
+    const earned = addOfflineCoins();
+    let html = `<div style="text-align:center;">
+        <h1>Pets</h1>`;
+    if(earned>0) html += `<p style="color:#ff0;">You earned ${earned} coins while offline!</p>`;
+    html += `<p>Coins: ${coins}</p>`;
+    if(pets.length===0) html += '<p>You have no pets. Buy eggs in shop.</p>';
+    html += `<div style="display:flex; flex-direction:column; align-items:center; max-height:60vh; overflow-y:auto;">`;
+    // sort pets by rarity rank
+    const rank = {legendary:5,epic:4,rare:3,uncommon:2,common:1};
+    pets.sort((a,b)=>rank[b.rarity]-rank[a.rarity]);
+    pets.forEach((p,i)=>{
+        html += `<div style="width:90%; background:${p.color}; padding:10px; margin:5px; border:2px solid #fff; border-radius:8px;">
+            <strong>${p.name}</strong> (${p.rarity})<br>
+            +${Math.round(p.coinBoost*100)}% level coins, ${p.offlineRate}c/hr
+        </div>`;
+    });
+    html += `</div>
+        <button onclick="showMainMenu()" style="font-size:18px; padding:10px 30px; background:#00ffff; color:#000; margin-top:20px;">Back to Menu</button>
+    </div>`;
+    overlay.innerHTML = html;
+}
+
+function viewEgg(idx){
+    const egg = eggs[idx];
+    state='shop';
+    overlay.classList.add('fullscreen');
+    // show possible pets by rarity
+    let html = `<div style="text-align:center;"><h1>${egg.name} Contents</h1>`;
+    const weightsByTier = {
+        1:[0.7,0.2,0.08,0.02,0],
+        2:[0.5,0.3,0.15,0.04,0.01],
+        3:[0.3,0.4,0.2,0.08,0.02],
+        4:[0.15,0.35,0.3,0.15,0.05],
+        5:[0.05,0.25,0.35,0.25,0.1]
+    };
+    const rarities = ['common','uncommon','rare','epic','legendary'];
+    const w = weightsByTier[egg.tier];
+    rarities.forEach((r,i)=>{
+        html += `<p style="margin:4px;">${r.toUpperCase()}: ${Math.round(w[i]*100)}%</p>`;
+    });
+    html += `<button onclick="showShop()" style="padding:8px 20px; margin-top:10px;">Back to Shop</button></div>`;
+    overlay.innerHTML = html;
+}
+
+function showLevels(){
+    state = "levels";
+    overlay.classList.add("fullscreen");
+    const levelCfg = levelsConfig[selectedLevelForUI];
+    let modeLabel = '';
+    if(raceMode === 'ai') modeLabel = ' (Race AI - ' + aiDifficulty + ')';
+    else if(raceMode === '2p') modeLabel = ' (2-Player Race)';
+    let html = `
+    <div style="position:absolute; top:20px; right:20px;">
+        <button onclick="showModeSelect()">Back</button>
+        <button onclick="showShop()">Shop</button>
+    </div>
+    <div class="level-content">
+        <div class="level-arrow" onclick="prevLevel()">◄</div>
+        <div class="level-center">
+            <h1 style="font-size:60px; margin:20px 0;">${levelCfg.name}${modeLabel}</h1>
+            <div style="width:80px; height:60px; background-color:${levelCfg.bgColor}; border:3px solid ${levelCfg.wallColor}; margin:20px auto;"></div>
+            <button onclick="startGame(${selectedLevelForUI})" style="font-size:24px; padding:15px 40px; margin-top:40px;">Start Level</button>
+            <button onclick='showMainMenu()' style="font-size:20px; margin-top:20px;">Back</button>
+        </div>
+        <div class="level-arrow" onclick="nextLevel()">►</div>
+    </div>
+    `;
+    overlay.innerHTML = html;
+}
+
+function prevLevel(){
+    selectedLevelForUI = (selectedLevelForUI - 1 + levelsConfig.length) % levelsConfig.length;
+    showLevels();
+}
+
+function nextLevel(){
+    selectedLevelForUI = (selectedLevelForUI + 1) % levelsConfig.length;
+    showLevels();
+}
+
+function simulateAICheck(returnOnly){
+    // Simulate medium AI on levels 11-25 to verify reachability. If `returnOnly` true, don't show alerts.
+    const originalLevel = currentLevel;
+    const results = [];
+    const maxSteps = 50000; // safety
+    for(let lvl = 11; lvl <= 25; lvl++){
+        currentLevel = lvl-1;
+        generateLevel();
+        // create a temp AI competitor
+        let ai = { x:200, y:canvas.height/2, size:30, currentDirection:0, alive:true };
+        let aiDone = false;
+        for(let step=0; step<maxSteps; step++){
+            const aiSpeed = 5 + currentLevel * 0.5;
+            // try to stay near center
+            ai.currentDirection += ((canvas.height/2 - ai.y) / 100 - ai.currentDirection) * 0.12;
+            ai.x += aiSpeed;
+            ai.y += ai.currentDirection * aiSpeed;
+            // collisions: walls
+            let died = false;
+            for(let i=0;i<walls.length;i++){
+                const w = walls[i];
+                if(ai.x < w.x + w.w && ai.x + ai.size > w.x && ai.y < w.y + w.h && ai.y + ai.size > w.y){ died = true; break; }
+            }
+            // obstacles
+            for(let i=0;i<obstacles.length;i++){
+                const o = obstacles[i];
+                if(ai.x < o.x + o.w && ai.x + ai.size > o.x){
+                    if(o.fromTop){ const slope = o.h / (o.w/2); const limitY = slope * (ai.x + ai.size/2 - o.x); if(ai.y < limitY) { died = true; break; } }
+                    else { const slope = o.h / (o.w/2); const limitY = canvas.height - (slope * (ai.x + ai.size/2 - o.x)); if(ai.y + ai.size > limitY) { died = true; break; } }
+                }
+            }
+            // spikes
+            for(let i=0;i<spikes.length;i++){
+                const s = spikes[i];
+                if(s.type==='circle' || s.type==='circle_teeth'){
+                    const dx=(ai.x+ai.size/2)-(s.x+(s.r? s.r/2:0));
+                    const dy=(ai.y+ai.size/2)-(s.y+(s.r? s.r/2:0));
+                    if(Math.sqrt(dx*dx+dy*dy) < (s.r? s.r/2:10) + ai.size/2){ died=true; break; }
+                } else {
+                    if(ai.x < s.x + s.size && ai.x + ai.size > s.x && ai.y < s.y + s.size && ai.y + ai.size > s.y){ died=true; break; }
+                }
+            }
+            if(died) break;
+            if(ai.x > finishX){ aiDone = true; break; }
+        }
+        results.push({level: lvl, success: aiDone});
+    }
+    currentLevel = originalLevel;
+    generateLevel();
+    if(!returnOnly){
+        console.table(results);
+        alert('AI simulation complete. See console for details.');
+    }
+    return results;
+}

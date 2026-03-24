@@ -1,107 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Watch Ad to Play</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background: #0f172a;
-      color: white;
-      font-family: system-ui, Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .box {
-      max-width: 420px;
-    }
-
-    iframe {
-      width: 100%;
-      height: 250px;
-      border: none;
-      border-radius: 10px;
-      margin-bottom: 12px;
-      background: white;
-    }
-
-    button {
-      padding: 14px 22px;
-      font-size: 18px;
-      border: none;
-      border-radius: 8px;
-      background: #22c55e;
-      color: black;
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    button.enabled {
-      opacity: 1;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Capybara Clicker Pro Unblocked</title>
 </head>
 <body>
-
-<div class="box">
-  <h2>Watch this ad to play</h2>
-
-  <!-- ADSTERRA SMART LINK -->
-  <iframe
-    src="https://www.effectivegatecpm.com/p5mjdi67a?key=b3d42b2d4432daca356e839ace1bcc12"
-    sandbox="allow-scripts allow-same-origin allow-popups allow-forms">
-  </iframe>
-
-  <p id="status">Please wait 15 seconds…</p>
-
-  <button id="playBtn" disabled>
-    Play Game
-  </button>
-</div>
-
-<script>
-  const GAME_BASE =
-    "https://capybara-proxy.s8506497.workers.dev/https://bitlifeonline.github.io/capybara-clicker/";
-
-  // MUST MATCH worker.js
-  const SECRET = "CHANGE_THIS_SECRET";
-
-  const btn = document.getElementById("playBtn");
-  const status = document.getElementById("status");
-
-  let timeLeft = 15;
-
-  const timer = setInterval(() => {
-    timeLeft--;
-    status.textContent = `Please wait ${timeLeft} seconds…`;
-
-    if (timeLeft <= 0) {
-      clearInterval(timer);
-      status.textContent = "Ad complete ✔";
-      btn.disabled = false;
-      btn.classList.add("enabled");
-    }
-  }, 1000);
-
-  function makeToken() {
-    const ts = Math.floor(Date.now() / 1000);
-    const sig = btoa(ts + SECRET);
-    return `${ts}.${sig}`;
-  }
-
-  btn.onclick = () => {
-    if (btn.disabled) return;
-    const token = makeToken();
-    window.open(`${GAME_BASE}?token=${token}`, "_blank");
-  };
-</script>
-
+    <main class="main main--post">
+        <article class="post">
+            <header class="hero post__header">
+                <h1 class="post__title">Capybara Clicker Pro</h1>
+            </header>
+            <div class="wrapper main__content post__inner">
+                <div class="post__entry">
+                    <div class="post__iframe">
+                        <!-- Game iframe here -->
+                        <iframe loading="lazy" width="1060" height="650" src="https://unblocked-games.s3.amazonaws.com/games/2023/q2/capybara-clicker-pro/index.html" marginwidth="0" marginheight="0" hspace="0" vspace="0" frameborder="0" scrolling="no" webkitallowfullscreen="webkitallowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="true" allowfullscreen="allowfullscreen"></iframe>
+                    </div>
+                    <p><strong>Capybara Clicker Pro</strong> is an idle clicker game where you tap on the cute Capybara and earn Capybara coins. With the coins you make by clicking on the adorable animal, increase the number of coins every second and every click and reach more significant numbers!</p>
+                    <p>The aim of this game is to tap and earn. You'll also unlock new fantastic Capybara characters as you progress!</p>
+                    <!-- Game description continues... -->
+                </div>
+            </div>
+        </article>
+    </main>
 </body>
 </html>

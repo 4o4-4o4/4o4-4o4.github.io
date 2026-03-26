@@ -1,136 +1,134 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minha Jornada no Rocket League</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Orbitron', sans-serif;
-      background: radial-gradient(circle at top, #0a0f24, #050710 90%);
-      color: #f8fafc;
-      margin: 0;
-      padding: 0;
-    }
-
-    header {
-      text-align: center;
-      padding: 60px 20px;
-      background: linear-gradient(90deg, #0f172a, #1e293b);
-      border-bottom: 3px solid #38bdf8;
-      box-shadow: 0px 4px 15px rgba(0, 247, 255, 0.3);
-    }
-
-    header h1 {
-      font-size: 3rem;
-      color: #38bdf8;
-      text-shadow: 0px 0px 12px #06b6d4;
-      animation: neon 2s infinite alternate;
-    }
-
-    @keyframes neon {
-      0% {
-        text-shadow: 0 0 5px #38bdf8, 0 0 10px #06b6d4, 0 0 20px #06b6d4, 0 0 40px #06b6d4;
-        color: #38bdf8;
-      }
-      100% {
-        text-shadow: 0 0 10px #facc15, 0 0 20px #facc15, 0 0 40px #facc15, 0 0 80px #facc15;
-        color: #facc15;
-      }
-    }
-
-    header p {
-      font-size: 1.3rem;
-      color: #facc15;
-      margin-top: 10px;
-      text-shadow: 0px 0px 8px #facc15;
-    }
-
-    .sobre {
-      max-width: 850px;
-      margin: 50px auto;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .sobre h2 {
-      color: #f472b6;
-      margin-bottom: 15px;
-      font-size: 2rem;
-      text-shadow: 0px 0px 10px #f472b6;
-    }
-
-    .sobre p {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      color: #cbd5e1;
-    }
-
-    .sobre a {
-      color: #38bdf8;
-      text-decoration: none;
-    }
-
-    .galeria {
-      max-width: 1100px;
-      margin: 50px auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 25px;
-      padding: 20px;
-    }
-
-    .galeria img {
-      width: 100%;
-      border-radius: 15px;
-      box-shadow: 0px 0px 20px rgba(56, 189, 248, 0.7);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-    }
-
-    .galeria img:hover {
-      transform: scale(1.07);
-      box-shadow: 0px 0px 30px rgba(250, 204, 21, 0.9);
-    }
-
-    footer {
-      text-align: center;
-      padding: 25px;
-      background: #0f172a;
-      margin-top: 40px;
-      color: #94a3b8;
-      font-size: 0.9rem;
-      border-top: 2px solid #38bdf8;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Mini Rocket League</title>
+<style>
+body {
+    margin: 0;
+    overflow: hidden;
+    background: #0f172a;
+}
+canvas {
+    display: block;
+    margin: auto;
+    background: #020617;
+}
+</style>
 </head>
 <body>
 
-  <header>
-    <h1>Minha Jornada no Rocket League 🏆</h1>
-    <p>Um dos melhores jogadores brasileiros no PS4 na época</p>
-  </header>
+<canvas id="game"></canvas>
 
-  <section class="sobre">
-    <h2>Sobre</h2>
-    <p>
-      Meu nome é Isaías, fui jogador competitivo de <a href="https://pt.wikipedia.org/wiki/Rocket_League" target="_blank">Rocket League</a>, 
-      com destaque no cenário brasileiro de PS4.  
-      Dediquei anos ao jogo, participei de torneios e conquistei posições de respeito, deixando minha marca na comunidade gamer.
-    </p>
-  </section>
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
-  <section class="galeria">
-    <img src="zzz.jpg" alt="Rocket League 1">
-    <img src="123.jpg" alt="Rocket League 2">
-    <img src="foto1.jpg" alt="Rocket League 3">
-    <img src="foto2.jpg" alt="Rocket League 4">
-  </section>
+canvas.width = 900;
+canvas.height = 500;
 
-  <footer>
-    <p>Feito com ❤️ e dedicação ao Rocket League</p>
-  </footer>
+// Player
+let player = {
+    x: 150,
+    y: 250,
+    vx: 0,
+    vy: 0,
+    size: 20
+};
+
+// Ball
+let ball = {
+    x: 450,
+    y: 250,
+    vx: 0,
+    vy: 0,
+    size: 15
+};
+
+let keys = {};
+
+document.addEventListener("keydown", e => keys[e.key] = true);
+document.addEventListener("keyup", e => keys[e.key] = false);
+
+function update() {
+    // Movement
+    if (keys["w"]) player.vy -= 0.3;
+    if (keys["s"]) player.vy += 0.3;
+    if (keys["a"]) player.vx -= 0.3;
+    if (keys["d"]) player.vx += 0.3;
+
+    // Boost
+    if (keys[" "]) {
+        player.vx *= 1.05;
+        player.vy *= 1.05;
+    }
+
+    // Apply velocity
+    player.x += player.vx;
+    player.y += player.vy;
+
+    // Friction
+    player.vx *= 0.98;
+    player.vy *= 0.98;
+
+    // Ball physics
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+    ball.vx *= 0.99;
+    ball.vy *= 0.99;
+
+    // Collision
+    let dx = ball.x - player.x;
+    let dy = ball.y - player.y;
+    let dist = Math.sqrt(dx*dx + dy*dy);
+
+    if (dist < player.size + ball.size) {
+        let angle = Math.atan2(dy, dx);
+        ball.vx += Math.cos(angle) * 3;
+        ball.vy += Math.sin(angle) * 3;
+    }
+
+    // Walls
+    if (player.x < 0) player.x = 0;
+    if (player.x > canvas.width) player.x = canvas.width;
+    if (player.y < 0) player.y = 0;
+    if (player.y > canvas.height) player.y = canvas.height;
+
+    if (ball.x < 0 || ball.x > canvas.width) ball.vx *= -1;
+    if (ball.y < 0 || ball.y > canvas.height) ball.vy *= -1;
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Field line
+    ctx.strokeStyle = "#1e293b";
+    ctx.beginPath();
+    ctx.moveTo(canvas.width/2, 0);
+    ctx.lineTo(canvas.width/2, canvas.height);
+    ctx.stroke();
+
+    // Player
+    ctx.fillStyle = "#00c3ff";
+    ctx.beginPath();
+    ctx.arc(player.x, player.y, player.size, 0, Math.PI*2);
+    ctx.fill();
+
+    // Ball
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.size, 0, Math.PI*2);
+    ctx.fill();
+}
+
+function gameLoop() {
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
+</script>
 
 </body>
 </html>
-

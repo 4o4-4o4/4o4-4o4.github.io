@@ -41,10 +41,28 @@
         [data-look="25"] { --bg: #282c34; --bg2: #282c34; --side: #21252b; --text: #abb2bf; --card: rgba(44, 49, 58, 0.9); --border: #61afef; --accent: #c678dd; }
 
         * { box-sizing: border-box; outline: none; transition: background 0.2s, color 0.2s, border 0.2s; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100vh; background: linear-gradient(135deg, var(--bg), var(--bg2)); overflow: hidden; display: flex; font-family: 'Segoe UI', sans-serif; color: var(--text); }
+        
+        /* Updated Body for Custom Background Image Blending */
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100vh; 
+            background-color: var(--bg);
+            background-image: linear-gradient(135deg, var(--bg), var(--bg2)); 
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay; /* Allows themes to colorize custom images */
+            overflow: hidden; display: flex; font-family: 'Segoe UI', sans-serif; color: var(--text); 
+        }
         
         body.unlocked, body.unlocked * { cursor: none !important; }
         #trail-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+
+        /* --- TEST GLOW ANIMATION --- */
+        @keyframes testPulse {
+            0% { box-shadow: 0 0 5px var(--accent); border-color: var(--border); }
+            50% { box-shadow: 0 0 20px var(--accent), 0 0 30px var(--glow); border-color: var(--accent); }
+            100% { box-shadow: 0 0 5px var(--accent); border-color: var(--border); }
+        }
+        .test-glow { animation: testPulse 2s infinite alternate; }
 
         /* --- GATEKEEPER --- */
         #gatekeeper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; z-index: 10000; }
@@ -74,6 +92,10 @@
         .theme-controls { display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; }
         .color-input-wrap { display: flex; flex-direction: column; gap: 5px; font-size: 12px; }
         input[type="color"] { width: 50px; height: 35px; border: 2px solid var(--border); border-radius: 4px; background: none; cursor: none !important; }
+        
+        /* New Text Input styling for URLs */
+        .text-input-wrap { display: flex; flex-direction: column; gap: 5px; font-size: 12px; flex-grow: 1; min-width: 150px; }
+        .text-input-wrap input { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 8px; border-radius: 4px; cursor: none !important; }
     </style>
 </head>
 <body onload="init()">
@@ -105,13 +127,24 @@
         
         <div id="settings-area">
             <div class="config-box">
-                <h2>Custom Theme Builder</h2>
+                <h2>Custom Theme & Background Builder</h2>
                 <div class="theme-controls">
                     <div class="color-input-wrap"><label>BG 1</label><input type="color" id="color-bg" oninput="updateCustomTheme()"></div>
                     <div class="color-input-wrap"><label>BG 2</label><input type="color" id="color-bg2" oninput="updateCustomTheme()"></div>
                     <div class="color-input-wrap"><label>Sidebar</label><input type="color" id="color-side" oninput="updateCustomTheme()"></div>
                     <div class="color-input-wrap"><label>Accent</label><input type="color" id="color-accent" oninput="updateCustomTheme()"></div>
                     <div class="color-input-wrap"><label>Text</label><input type="color" id="color-text" oninput="updateCustomTheme()"></div>
+                    
+                    <div class="text-input-wrap">
+                        <label>Custom Background Image URL</label>
+                        <input type="text" id="img-bg" placeholder="https://..." oninput="updateCustomTheme()">
+                    </div>
+                    
+                    <div class="text-input-wrap">
+                        <label>Custom Cursor Image URL</label>
+                        <input type="text" id="img-cursor" placeholder="https://..." oninput="updateCustomTheme()">
+                    </div>
+
                     <button class="side-btn" onclick="resetToPreset()">Reset</button>
                 </div>
             </div>
@@ -142,6 +175,10 @@
         const canvas = document.getElementById('trail-canvas'); const ctx = canvas.getContext('2d'); 
         let points = []; let ripple = {x:0, y:0, r:0, a:0};
         
+        // Custom Cursor Variables
+        let cursorImage = new Image();
+        let useCursorImage = false;
+
         const styleNames = ["Matrix", "Bloodlust", "Vaporwave", "Ghost", "Nebula", "Toxic", "Lava", "Ocean", "Crimson", "Noir", "Lemon", "Cobalt", "Barbie", "Cyan", "Lime", "Autumn", "Sky", "Amethyst", "Magenta", "Emerald", "Slate", "Midnight", "Teal", "Solar", "Atom"];
 
         const games = [
@@ -192,20 +229,49 @@
             const side = document.getElementById('color-side').value;
             const acc = document.getElementById('color-accent').value;
             const txt = document.getElementById('color-text').value;
+            const bgUrl = document.getElementById('img-bg').value;
+            const cursorUrl = document.getElementById('img-cursor').value;
+
             document.body.removeAttribute('data-look');
             document.documentElement.style.setProperty('--bg', bg);
             document.documentElement.style.setProperty('--bg2', bg2);
             document.documentElement.style.setProperty('--side', side);
             document.documentElement.style.setProperty('--accent', acc);
             document.documentElement.style.setProperty('--text', txt);
-            localStorage.setItem('p404_custom', JSON.stringify({bg, bg2, side, acc, txt}));
+            
+            // Handle Custom Background Image
+            if(bgUrl.trim() !== "") {
+                document.body.style.backgroundImage = `url('${bgUrl}'), linear-gradient(135deg, var(--bg), var(--bg2))`;
+            } else {
+                document.body.style.backgroundImage = `linear-gradient(135deg, var(--bg), var(--bg2))`;
+            }
+
+            // Handle Custom Cursor
+            if(cursorUrl.trim() !== "") {
+                cursorImage.src = cursorUrl;
+                useCursorImage = true;
+            } else {
+                useCursorImage = false;
+            }
+
+            localStorage.setItem('p404_custom', JSON.stringify({bg, bg2, side, acc, txt, bgUrl, cursorUrl}));
         }
 
-        function resetToPreset() { localStorage.removeItem('p404_custom'); location.reload(); }
+        function resetToPreset() { 
+            localStorage.removeItem('p404_custom'); 
+            document.body.style.backgroundImage = '';
+            location.reload(); 
+        }
         function nukeStorage() { if(confirm("Nuke all data?")) { localStorage.clear(); location.reload(); } }
 
-        function launchGame(url) { document.getElementById('launcher').style.display = 'block'; document.getElementById('game-frame').src = url; }
-        function closeGame() { document.getElementById('launcher').style.display = 'none'; document.getElementById('game-frame').src = ""; }
+        function launchGame(url) { 
+            document.getElementById('launcher').style.display = 'block'; 
+            document.getElementById('game-frame').src = url; 
+        }
+        function closeGame() { 
+            document.getElementById('launcher').style.display = 'none'; 
+            document.getElementById('game-frame').src = ""; 
+        }
         
         function showTab(t) {
             ['content', 'settings', 'records'].forEach(id => document.getElementById(id + '-area').style.display = 'none');
@@ -220,8 +286,17 @@
             grid.innerHTML = '';
             
             games.filter(g => g.n.toLowerCase().includes(term)).forEach(g => {
-                const card = document.createElement('div'); card.className = 'game-card';
-                card.innerText = g.n; card.onclick = () => launchGame(g.p); grid.appendChild(card);
+                const card = document.createElement('div'); 
+                card.className = 'game-card';
+                
+                // Add Glow class if it is a (TEST) game
+                if(g.n.includes('(TEST)')) {
+                    card.classList.add('test-glow');
+                }
+
+                card.innerText = g.n; 
+                card.onclick = () => launchGame(g.p); 
+                grid.appendChild(card);
             });
         }
 
@@ -229,7 +304,14 @@
             const grid = document.getElementById('style-grid');
             styleNames.forEach((name, i) => {
                 const b = document.createElement('button'); b.className = 'side-btn'; b.innerText = name;
-                b.onclick = () => { document.body.setAttribute('data-look', i+1); localStorage.setItem('p404_look', i+1); localStorage.removeItem('p404_custom'); };
+                b.onclick = () => { 
+                    document.body.setAttribute('data-look', i+1); 
+                    localStorage.setItem('p404_look', i+1); 
+                    localStorage.removeItem('p404_custom'); 
+                    document.getElementById('img-bg').value = "";
+                    document.getElementById('img-cursor').value = "";
+                    updateCustomTheme();
+                };
                 grid.appendChild(b);
             });
         }
@@ -244,12 +326,22 @@
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const acc = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+            
             if(points.length > 0) {
-                const h = points[points.length-1]; ctx.fillStyle = acc; ctx.beginPath(); ctx.arc(h.x, h.y, 5, 0, 7); ctx.fill();
+                const h = points[points.length-1]; 
+                
+                // Draw Custom Image OR Default Circle Cursor
+                if(useCursorImage && cursorImage.complete) {
+                    ctx.drawImage(cursorImage, h.x - 16, h.y - 16, 32, 32); // Adjust 32x32 size as needed
+                } else {
+                    ctx.fillStyle = acc; ctx.beginPath(); ctx.arc(h.x, h.y, 5, 0, 7); ctx.fill();
+                }
             }
+            
             ctx.strokeStyle = acc; ctx.lineWidth = 3; ctx.beginPath();
             points.forEach((p, i) => { p.age++; if(i==0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); });
             ctx.stroke(); points = points.filter(p => p.age < 20);
+            
             if(ripple.a > 0) {
                 ctx.strokeStyle = acc; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(ripple.x, ripple.y, ripple.r+=4, 0, 7); ctx.stroke(); ripple.a -= 0.02;
             }
@@ -267,10 +359,11 @@
                 if (e.target.value === "404") {
                     document.getElementById('gatekeeper').style.display = 'none';
                     document.body.classList.add('unlocked');
-                    passInput.value = ""; // Clear for security
+                    passInput.value = ""; 
                 }
             });
 
+            // Load saved settings
             const custom = localStorage.getItem('p404_custom');
             if(custom) {
                 const c = JSON.parse(custom);
@@ -279,6 +372,8 @@
                 document.getElementById('color-side').value = c.side;
                 document.getElementById('color-accent').value = c.acc;
                 document.getElementById('color-text').value = c.txt;
+                document.getElementById('img-bg').value = c.bgUrl || "";
+                document.getElementById('img-cursor').value = c.cursorUrl || "";
                 updateCustomTheme();
             } else {
                 const l = localStorage.getItem('p404_look') || '1';
@@ -288,6 +383,44 @@
             const r = localStorage.getItem('p404_rec');
             if(t) document.title = t; if(i) document.getElementById('tab-icon').href = i;
             if(r) document.getElementById('records-text').value = r;
+
+            // --- AD BLOCKER / GAMEMONETIZE BYPASS ---
+            const gameFrame = document.getElementById('game-frame');
+            gameFrame.onload = function() {
+                try {
+                    const fw = this.contentWindow;
+                    
+                    // Intercept and resolve common ad SDKs instantly
+                    fw.sdk = new Proxy({}, {
+                        get: function(target, prop) {
+                            return function(...args) {
+                                // If the game triggers an ad, instantly call the completion callbacks
+                                if (typeof fw.onAdComplete === 'function') fw.onAdComplete();
+                                if (typeof fw.onReward === 'function') fw.onReward();
+                            };
+                        }
+                    });
+
+                    // Bypass specific Gamemonetize global structures
+                    fw.gdsdk = {
+                        showAd: () => new Promise(resolve => resolve()),
+                        preloadAd: () => {}
+                    };
+
+                    // Intercept post messages looking for ads
+                    const originalPostMessage = fw.postMessage;
+                    fw.postMessage = function(message, targetOrigin, transfer) {
+                        if (typeof message === 'string' && (message.includes('gamemonetize') || message.includes('ad'))) {
+                            // Automatically return an 'ad completed' event
+                            window.postMessage('ad_completed', '*');
+                            return;
+                        }
+                        originalPostMessage.call(fw, message, targetOrigin, transfer);
+                    };
+                } catch(e) {
+                    // Ignore CORS restrictions if a game is hosted on an external domain
+                }
+            };
         }
     </script>
 </body>

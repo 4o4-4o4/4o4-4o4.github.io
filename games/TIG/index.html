@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+		<script src ='https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js'></script>
+
+		
+		<style>
+			div {
+			    position: fixed;
+			    width: 498px;
+			    border: 1px solid black;
+				margin-left: auto;
+				margin-right: auto;
+				right: 0;
+				left: 0;
+				margin-top: -50px;
+			}
+			canvas#myCanvas {
+				background-color: rgb(2.0, 2.0, 2.0);
+				box-shadow: 5px 5px 33px -5px grey;
+				margin: 2% auto auto auto;
+				display: block;
+
+			}
+		</style>
+		<script>
+			$(document).ready(function(){
+				var c = document.getElementById('myCanvas');
+				var ctx = c.getContext('2d');
+				var $c = $('#myCanvas');
+				var myPos = [50,435];
+				var status = 'landed';
+				var jump;
+				var rotate = 0;
+				var block;
+				var pblock;
+				var blocks = {A: {coor: [300,435], width: 15, type:'spikes'}, B: {coor: [450,420], width: 60,type:'blocks'} , C: {coor: [610,435], width: 15, type:'spikes'} , D: {coor: [665,420], width: 60, type:'blocks'} , E: {coor: [755,405], width: 60, type:'blocks'} , F: {coor: [845,390], width: 60, type:'blocks'} , G: {coor: [935,375], width: 60, type:'blocks'} , H: {coor: [1025,375], width: 15, type:'spikes'}, I: {coor: [1075,375], width: 60, type:'blocks'}};
+
+				$(document).keydown(function(key){
+					console.log(key.keyCode);
+					if(key.keyCode===32){
+						
+						if(status === 'landed') {
+							status = 'jumped';
+							rotate = 0;
+							clearInterval(jump);
+							clear(myPos);
+							jump = setInterval(function(){
+								
+								ctx.save();
+								myPos[1] -= 2.6;
+								ctx.translate(myPos[0],myPos[1]);
+								ctx.translate(30,7.5);
+								rotate += (360/110)*(Math.PI/180);
+								if (rotate > Math.PI*3.2/4){
+									rotate = Math.PI*3.2/4;
+								} 
+								ctx.rotate(rotate);
+								ctx.fillStyle = 'red';
+								ctx.fillRect(-30,-7.5,60,15);
+								ctx.restore();
+
+								if (rotate === Math.PI*3.2/4){
+									clearInterval(jump);
+									status = 'jumped';
+								}
+								
+							},1);
+							
+						}
+					}
+				});
+
+				var clear = function(x){
+					ctx.save();
+					ctx.translate(x[0],x[1]);
+					ctx.clearRect(-10,-30,90,90);
+					ctx.restore();
+				}
+
+				var gravity = setInterval(function(){
+								
+
+								if(myPos[1]<435 && myPos[0]+60<block.coor[0]){
+									status = 'landing';
+									ctx.save();
+									clear(myPos);
+									if (rotate > Math.PI){
+										rotate = Math.PI;
+									} else if (rotate >= Math.PI*3.2/4){
+										rotate += (360/110)*(Math.PI/180);
+									}
+									myPos[1] += 1;
+									ctx.translate(myPos[0],myPos[1]);
+									ctx.translate(30,7.5);
+									ctx.rotate(rotate);
+									ctx.fillStyle = 'red';
+									ctx.fillRect(-30,-7.5,60,15);
+									ctx.restore();
+
+
+								} else if(myPos[1]+15 < block.coor[1]){
+									status = 'landing';
+									if (rotate > Math.PI){
+										rotate = Math.PI;
+									} else if (rotate >= Math.PI*3.2/4){
+										rotate += (360/110)*(Math.PI/180);
+									}
+									
+									myPos[1] += 1;
+									
+									ctx.save();
+									clear(myPos);
+									ctx.translate(myPos[0],myPos[1]); 
+									ctx.translate(30,7.5);
+									ctx.rotate(rotate);
+									ctx.fillStyle = 'red';
+									ctx.fillRect(-30,-7.5,60,15);
+									ctx.restore();
+
+								} else if(myPos[0]+60>=block.coor[0] && myPos[1]+14 > block.coor[1] && block.coor[0] + block.width > myPos[0] && myPos[1] < block.coor[1] + 14){
+									
+									clearInterval(gravity);
+									clearInterval(moving);
+									clearInterval(jump);
+									status = 'dead';
+									//ctx.save();
+									clear(myPos);
+									ctx.strokeStyle = 'red';
+									ctx.strokeRect(myPos[0],myPos[1],60,15);
+									//ctx.restore();
+									ctx.fillStyle = 'black';
+									if(block.type === 'spikes') {
+										ctx.fillStyle = 'orange';
+										ctx.fillRect(block.coor[0],block.coor[1],block.width,15);
+									} else if (block.type === 'blocks'){
+										ctx.fillStyle = 'black';
+										ctx.fillRect(block.coor[0],block.coor[1],block.width,15);
+									}
+
+									if(pblock.type === 'spikes') {
+										ctx.fillStyle = 'orange';
+										ctx.fillRect(pblock.coor[0],pblock.coor[1],pblock.width,15);
+									} else if (pblock.type === 'blocks'){
+										ctx.fillStyle = 'black';
+										ctx.fillRect(pblock.coor[0],pblock.coor[1],pblock.width,15);
+									}
+
+									ctx.strokeStyle = 'red';
+									ctx.font = "50px Arial";
+									ctx.strokeText('Awww...you dead..',50,305);
+									
+
+								} else if (status !== 'dead' &&myPos[0]>block.coor[0]+block.width && myPos[1]<435){
+									
+									status = 'landing';
+									
+									if (rotate > Math.PI){
+										rotate = Math.PI;
+									} else if (rotate >= Math.PI*3.2/4){
+										rotate += (360/110)*(Math.PI/180);
+									}
+									ctx.save();
+									clear(myPos);
+									myPos[1] += 1;
+									ctx.translate(myPos[0],myPos[1]);
+									ctx.translate(30,7.5);
+									ctx.rotate(rotate);
+									ctx.fillStyle = 'red';
+									ctx.fillRect(-30,-7.5,60,15);
+									ctx.restore();
+
+								} else if(block.type === 'spikes' && myPos[0]+60 > block.coor[0] && myPos[1]+15> block.coor[1] && myPos[0]<block.coor[0]+block.width) {
+									clearInterval(gravity);
+									clearInterval(moving);
+									clearInterval(jump);
+									status = 'dead';
+									
+									clear(myPos);
+									ctx.strokeStyle = 'red';
+									ctx.strokeRect(myPos[0],myPos[1],60,15);
+									
+									ctx.fillStyle = 'black';
+									if(block.type === 'spikes') {
+										ctx.fillStyle = 'orange';
+										ctx.fillRect(block.coor[0],block.coor[1],block.width,15);
+									} else if (block.type === 'blocks'){
+										ctx.fillStyle = 'black';
+										ctx.fillRect(block.coor[0],block.coor[1],block.width,15);
+									}
+
+									if(pblock.type === 'spikes') {
+										ctx.fillStyle = 'orange';
+										ctx.fillRect(pblock.coor[0],pblock.coor[1],pblock.width,15);
+									} else if (pblock.type === 'blocks'){
+										ctx.fillStyle = 'black';
+										ctx.fillRect(pblock.coor[0],pblock.coor[1],pblock.width,15);
+									}
+
+									ctx.strokeStyle = 'red';
+									ctx.font = "50px Arial";
+									ctx.strokeText('Awww...you dead..',50,305);
+
+								} else {
+									status = 'landed';
+
+									ctx.save();
+									clear(myPos);
+									ctx.translate(myPos[0],myPos[1]);
+									ctx.translate(30,7.5);
+									ctx.fillStyle = 'red';
+									ctx.fillRect(-30,-7.5,60,15);
+									ctx.restore();
+
+								}
+								
+							},1)
+				
+				
+				block = blocks.A;
+				
+				var moving = setInterval(function(){
+					
+					_.each(blocks, function(x,i){
+						if(x.coor[0]-62 < myPos[0]){
+							pblock = block;
+							block = x;
+						}
+
+
+						ctx.fillStyle = 'white';
+						ctx.fillRect(x.coor[0],x.coor[1],x.width,15);
+						
+						x.coor[0] -= 1;
+
+						if(x.coor[0]===-60){
+							delete blocks[i];
+						}
+
+						if(x.type === 'spikes') {
+							ctx.fillStyle = 'orange';
+							ctx.fillRect(x.coor[0],x.coor[1],x.width,15);
+						} else if (x.type === 'blocks'){
+							ctx.fillStyle = 'black';
+							ctx.fillRect(x.coor[0],x.coor[1],x.width,15);
+						}
+
+						if(_.isEmpty(blocks)){
+							clearInterval(gravity);
+							clearInterval(moving);
+							clearInterval(jump);
+							status = 'win';
+							ctx.strokeStyle = 'red';
+							ctx.font = "50px Arial";
+							ctx.strokeText('You Da Man!',150,405);
+						}
+					})
+
+				},1);
+				
+
+			});
+		</script>
+	</head>
+	<body>
+		<canvas id='myCanvas' width='500' height='500'>
+		</canvas>
+		<div></div>
+	</body>
+</html>

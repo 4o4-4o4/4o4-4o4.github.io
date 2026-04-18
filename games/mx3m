@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Moto X3M Game No Ads | Play Extreme Bike Racing Free</title>
+    <meta name="description" content="Race through explosive levels in Moto X3M unblocked. Play the ultimate dirt bike racing game for free with no ads on your school Chromebook.">
+    <meta name="theme-color" content="#0B0E17" id="theme-color-meta">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Variables and Themes from your original setup */
+        html[data-theme="original"] { --background: #0B0E17; --surface: #141824; --surface-light: #1E2332; --primary: #6366F1; --primary-light: #818CF8; --text: #FFFFFF; --text-secondary: #9CA3AF; --border: #2D3348; }
+        html[data-theme="luxury"] { --background: #000000; --surface: #111111; --surface-light: #222222; --primary: #eab308; --primary-light: #fde047; --text: #ffffff; --text-secondary: #a3a3a3; --border: #333333; }
+        
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--background); color: var(--text); }
+        .container-sm { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+
+        /* Game Wrapper Logic */
+        .item-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: var(--surface);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        /* Fullscreen triggers */
+        .item-wrapper:fullscreen {
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            background: #000;
+        }
+
+        .item-wrapper:-webkit-full-screen { width: 100vw; height: 100vh; border-radius: 0; }
+
+        .item-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+        }
+
+        .item-wrapper.is-playing .item-frame { display: block; }
+        .item-wrapper.is-playing .preloader { display: none; }
+
+        .play-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .play-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--primary); }
+
+        .action-row { display: flex; gap: 15px; margin-top: 20px; justify-content: center; }
+
+        .fullscreen-btn {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        #mobile-back-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 1000;
+            background: rgba(0,0,0,0.6);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+        }
+
+        .item-wrapper:fullscreen #mobile-back-button { display: block; }
+    </style>
+</head>
+<body data-theme="luxury">
+
+    <header class="container-sm" style="margin-top: 50px; text-align: center;">
+        <h1>Moto X3M Unblocked</h1>
+        <p style="color: var(--text-secondary);">Extreme Dirt Bike Racing - No Ads</p>
+    </header>
+
+    <main class="container-sm">
+        <div class="item-wrapper" id="gameArea">
+            <button id="mobile-back-button" aria-label="Exit Fullscreen">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            
+            <div class="preloader" id="preloader">
+                <img src="https://slope3unblocked.github.io/images/moto-x3m.png" alt="Moto X3M" width="380" height="214" style="border-radius:15px; margin-bottom: 20px;">
+                <br>
+                <button class="play-btn" id="playBtn" data-url="https://motox3m.ubg235.com">
+                    PLAY MOTO X3M
+                </button>
+            </div>
+
+            <iframe class="item-frame" id="itemFrame" title="Moto X3M" allow="autoplay; fullscreen; gamepad;" allowfullscreen></iframe>
+        </div>
+
+        <div class="action-row">
+            <button class="fullscreen-btn" id="fullscreenBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                FULLSCREEN
+            </button>
+        </div>
+
+        <section style="margin-top: 4rem; padding: 2rem; background: var(--surface); border-radius: 20px;">
+            <h2>⚙️ Master the Mechanics</h2>
+            <ul style="color: var(--text-secondary); line-height: 1.8;">
+                <li><strong>Balance:</strong> Adjust your bike's pitch mid-air to ensure you land on two wheels.</li>
+                <li><strong>Boost:</strong> Perform front and back flips to shave time off your clock.</li>
+                <li><strong>Timing:</strong> Wait for moving obstacles to pass before accelerating.</li>
+            </ul>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const playBtn = document.getElementById('playBtn');
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            const backBtn = document.getElementById('mobile-back-button');
+            const gameArea = document.getElementById('gameArea');
+            const itemFrame = document.getElementById('itemFrame');
+
+            // Handle Play Click
+            playBtn.addEventListener('click', () => {
+                itemFrame.src = playBtn.getAttribute('data-url');
+                gameArea.classList.add('is-playing');
+            });
+
+            // Fullscreen Logic
+            function toggleFullscreen() {
+                if (!document.fullscreenElement) {
+                    if (gameArea.requestFullscreen) {
+                        gameArea.requestFullscreen();
+                    } else if (gameArea.webkitRequestFullscreen) {
+                        gameArea.webkitRequestFullscreen();
+                    } else if (gameArea.msRequestFullscreen) {
+                        gameArea.msRequestFullscreen();
+                    }
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    }
+                }
+            }
+
+            fullscreenBtn.addEventListener('click', toggleFullscreen);
+            backBtn.addEventListener('click', toggleFullscreen);
+        });
+    </script>
+</body>
+</html>

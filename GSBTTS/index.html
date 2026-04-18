@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Big Tower Tiny Square - Gravity Flip</title>
+    <style>
+      * { padding: 0; margin: 0; }
+      body { background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; }
+      canvas { background: #1a1a1a; border: 4px solid #333; }
+    </style>
+  </head>
+
+  <body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <script>
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+
+      // Game variables
+      let gravity = 0.5;
+      let friction = 0.8;
+      let gravityDir = 1; // 1 is down, -1 is up
+
+      let player = {
+        x: 400,
+        y: 300,
+        w: 30,
+        h: 30,
+        velX: 0,
+        velY: 0,
+        speed: 5,
+        jumpForce: 12,
+        onGround: false
+      };
+
+      let keys = {};
+
+      window.addEventListener("keydown", (e) => keys[e.code] = true);
+      window.addEventListener("keyup", (e) => keys[e.code] = false);
+
+      function update() {
+        // Horizontal Movement
+        if (keys["ArrowRight"] || keys["KeyD"]) {
+          if (player.velX < player.speed) player.velX++;
+        }
+        if (keys["ArrowLeft"] || keys["KeyA"]) {
+          if (player.velX > -player.speed) player.velX--;
+        }
+
+        player.velX *= friction;
+        player.x += player.velX;
+
+        // Apply Gravity
+        player.velY += gravity * gravityDir;
+        player.y += player.velY;
+
+        // --- GRAVITY FLIP & COLLISION LOGIC ---
+
+        // Bottom Boundary
+        if (player.y + player.h > canvas.height) {
+          player.y = canvas.height - player.h;
+          if (gravityDir === -1) { 
+            gravityDir = 1; // Flip gravity back down if we hit the floor while gravity was up
+          }
+          player.velY = 0;
+          player.onGround = true;
+        }
+
+        // Top Boundary (Ceiling)
+        if (player.y < 0) {
+          player.y = 0;
+          if (gravityDir === 1) { 
+            gravityDir = -1; // Flip gravity UP if we hit the ceiling
+          }
+          player.velY = 0;
+          player.onGround = true;
+        }
+
+        // Side Walls
+        if (player.x < 0) {
+          player.x = 0;
+          gravityDir *= -1; // Switch gravity on wall hit
+          player.velX = 8;  // Bounce off
+        }
+        if (player.x + player.w > canvas.width) {
+          player.x = canvas.width - player.w;
+          gravityDir *= -1; // Switch gravity on wall hit
+          player.velX = -8; // Bounce off
+        }
+
+        // Jump (Works for both floor and ceiling)
+        if ((keys["Space"] || keys["ArrowUp"]) && player.onGround) {
+          player.velY = -player.jumpForce * gravityDir;
+          player.onGround = false;
+        }
+      }
+
+      function draw() {
+        // Clear canvas
+        ctx.fillStyle = "#1a1a1a";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw Player
+        ctx.fillStyle = "#00ffcc";
+        ctx.fillRect(player.x, player.y, player.w, player.h);
+
+        // Visual indicator of gravity direction
+        ctx.fillStyle = "white";
+        ctx.font = "16px Arial";
+        ctx.fillText("Gravity: " + (gravityDir === 1 ? "DOWN" : "UP"), 20, 30);
+      }
+
+      function loop() {
+        update();
+        draw();
+        requestAnimationFrame(loop);
+      }
+
+      loop();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html>
+<head><base href=""/><meta content="noindex" name="robots"/><link href="" rel="canonical"/>
+<meta charset="utf-8"/>
+<title>Big FLAPPY Tower - Play it now at webh5games.com</title>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<meta content="Construct 3" name="generator"/>
+<meta content="EO Interactive Ltd." name="author"/>
+<meta content="Climb the Big Tower to Rescue Your Pineapple!" name="description"/>
+<link href="appmanifest.json" rel="manifest"/>
+<link href="icons/icon-128.png" rel="apple-touch-icon" sizes="128x128"/>
+<link href="icons/icon-256.png" rel="apple-touch-icon" sizes="256x256"/>
+<link href="icons/icon-256.png" rel="icon" type="image/png"/>
+<link href="style.css" rel="stylesheet"/>
+<style type="text/css">
+            .no-select {
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none; /* Safari */
+            -khtml-user-select: none; /* Konqueror HTML */
+            -moz-user-select: none; /* Old versions of Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+            }
+          </style>
+<script type="text/javascript">
+            setTimeout(function(){
+              if(document.getElementsByTagName("canvas").length) {
+                document.getElementsByTagName("body")[0].classList.add("no-select")
+              }
+            }, 2000);
+          </script>
+<script type="text/javascript">
+</script></head>
+<body>
+<div id="fb-root"></div>
+<script src="box2d.wasm.js"></script>
+<noscript>
+<div id="notSupportedWrap">
+<h2 id="notSupportedTitle">This content requires JavaScript</h2>
+<p class="notSupportedMessage">JavaScript appears to be disabled. Please enable it to view this content.</p>
+</div>
+</noscript>
+<script src="scripts/supportcheck.js"></script>
+<script src="scripts/offlineclient.js" type="module"></script>
+<script src="scripts/main.js" type="module"></script>
+<script src="scripts/register-sw.js" type="module"></script>
+<script>
+	window.addEventListener("keydown", function(e) {
+// space and arrow keys
+if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+e.preventDefault();
+}
+}, false);
+
+
+    if (window.top === window.self) {
+    window.location.href = '../../../';
+}
+
+</script>
+<script>function fnSendMsg(evt){
+          if(typeof window.parent.postMessage == 'function') {
+            window.parent.postMessage('keypress-from-game', '*');
+          } else if(typeof window.top.postMessage == 'function' && window.top != window.self) {
+            window.top.postMessage('keypress-from-game', '*');
+          }
+        }
+        document.body.addEventListener('click', function(event) {
+          fnSendMsg(event);
+        });
+        document.addEventListener('keypress', function(event) {
+        	 fnSendMsg(event);
+        });
+        document.addEventListener('keydown', function (e) {
+        	 fnSendMsg(event);
+        });
+        document.addEventListener('keyup', function (e) {
+        	  fnSendMsg(event);
+        });
+        </script></body>
+</html>

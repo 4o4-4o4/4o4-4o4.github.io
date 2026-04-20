@@ -118,11 +118,11 @@
         <div id="settings-area">
             <div class="config-box">
                 <h2>Game Records</h2>
-                <p style="font-size: 14px; opacity: 0.7;">Glowing games are tests.
+                <p style="font-size: 14px; opacity: 0.7;">(Glowing games are tests, and Big Tower Tiny Square is BTTS, btw. BG 1 & BG 2 is gradient)
                 I have been doing GD, but it failed.
                 Working on Gravity game.
                 I am doing fullscreen if possible.
-                Just added Red Ball and Penalty Shooters 2(I think)
+                Just added Red Ball, Monkey Mart, BTD4, and Penalty Shooters 2 (I think). Got rid of some tests. I played rb4 (I abriviate stuff)! Added Fullscreen!
                 Lots to do!</p>
                 <textarea id="records-text" oninput="saveRecords()" placeholder="Save codes, levels, or scores here..."></textarea>
             </div>
@@ -171,7 +171,7 @@
 
         const games = [
             {n: "Bloons TD 2 (TEST)", p: "./games/bloonstd2/index.html"}, {n: "1v1 LOL (TEST)", p: "./games/cba.html"},
-            {n: "Bloons TD", p: "./games/bloonstd/index.html"}, {n: "Geo Dash", p: "./games/geodash/index.html"}, 
+            {n: "Bloons TD", p: "./games/bloonstd/index.html"}, {n: "Bloons TD 4", p: "./games/btd4/index.html"}, 
             {n: "Duck Life 3", p: "./games/ducklife3/index.html"}, {n: "Slope", p: "./games/slope/index.html"}, 
             {n: "2048", p: "./games/2048/index.html"}, {n: "World's Hardest Game", p: "./games/worlds-hardest-game/index.html"}, 
             {n: "Flappy Bird", p: "./games/flappybird/index.html"}, {n: "Basket Random", p: "./games/basket-random/index.html"}, 
@@ -182,19 +182,19 @@
             {n: "Appel", p: "./games/Appel v1.html"}, {n: "Paper Minecraft", p: "./games/Paper Minecraft v11.html"}, 
             {n: "Square Sling", p: "./games/SS.html"}, {n: "Dunk Shot", p: "./games/DS.html"}, 
             {n: "Sky Ball", p: "./games/SB.html"}, {n: "BITTS", p: "./games/BITTS/BITTS.html"}, 
-            {n: "Tag #2", p: "./games/Tag-main/index.html"}, {n: "BNTTS (TEST)", p: "./games/BNTTS.html"}, 
-            {n: "Tag OG (TEST)", p: "./games/TAG/index.html"}, {n: "Duck Life 1 (TEST)", p: "./games/DuckLife1/index.html"}, 
-            {n: "Cut The Rope (TEST)", p: "./games/CTR.html"}, {n: "BTTS 2 (TEST)", p: "./games/BTTS2.html"}, 
+            {n: "Tag #2", p: "./games/Tag-main/index.html"}, {n: "BNTTS", p: "./games/BNTTS.html"}, 
+            {n: "Tag OG (TEST)", p: "./games/TAG/index.html"}, {n: "Duck Life 1", p: "./games/DuckLife1/index.html"}, 
+            {n: "Cut The Rope", p: "./games/CTR.html"}, {n: "BTTS 2", p: "./games/BTTS2.html"}, 
             {n: "MineCraft (TEST)", p: "./games/EC.html"}, {n: "Mario 64 (TEST)", p: "./games/SM64.html"}, 
-            {n: "Retro Bowl (TEST)", p: "./games/RB.html"}, {n: "Drift Boss (TEST)", p: "./games/DB/DB.html"},
+            {n: "Retro Bowl", p: "./games/RB.html"}, {n: "Drift Boss (TEST)", p: "./games/DB/DB.html"},
             {n: "Cookie Clicker", p: "./CC/index.html"}, {n: "Death run 3d", p: "./games/DR3D/index.html"},
-            {n: "FNAF (TEST)", p: "./games/FNAF.html"}, {n: "Target Rider (TEST)", p: "./games/LR.html"},
-            {n: "Better GD (TEST)", p: "./games/geodash/gdl-main/index.html"}, {n: "Scratch GD (TEST)", p: "./games/geodash/index.html"}, 
-            {n: "Password Game (TEST)", p: "./games/PG/index.html"}, {n: "Duck Life 2 (TEST)", p: "./games/ducklife2/index.html"},
-            {n: "Level Devil (TEST)", p: "./games/LD/index.html"}, {n: "Penalty Shooters (TEST)", p: "./games/ps1/index.html"},
+            {n: "FNAF", p: "./games/FNAF.html"}, {n: "Penalty Shooters 2", p: "./games/ps2/index.html"},
+            {n: "Better GD (TEST)", p: "./games/geodash/gdl-main/index.html"}, {n: "Scratch GD", p: "./games/geodash/index.html"}, 
+            {n: "Password Game", p: "./games/PG/index.html"},
+            {n: "Level Devil", p: "./games/LD/index.html"}, {n: "Penalty Shooters", p: "./games/ps1/index.html"},
             {n: "Motox 3M (TEST)", p: "./games/mx3m.html"}, {n: "BFTTS (TEST)", p: "./games/bftts/index.html"}, 
             {n: "BTTS Gravity TEST TEST (TEST)", p: "./GSBTTS/index.html"}, {n: "FNAF 2 (TEST)", p: "./games/FNAF2/index.html"},
-            {n: "SLOPE 2 (TEST)", p: "./games/Slope2/Slope-2-main/index.html"}
+            {n: "SLOPE 2 (TEST)", p: "./games/Slope2/Slope-2-main/index.html"}, {n: "Monkey Mart (TEST)", p: "./games/MM.html"}
         ];
 
         function shuffle(array) {

@@ -1,0 +1,25 @@
+{
+	"interstitial": {
+		"eventIds": [
+		],
+		"blocklist": [
+			"break:*"
+		],
+		"allowlist": [
+			"*"
+		]
+	},
+	"rewarded": {
+		"eventIds": [
+			"button:level:gems",
+			"button:level:continue"
+		],
+		"blocklist": [
+			
+		],
+		"allowlist": [
+			"*"
+		]
+	},
+	"isLevelBased": true
+}

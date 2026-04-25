@@ -13,7 +13,7 @@
             --cursor-color: #3498db; --glow: rgba(52, 152, 219, 0.4);
         }
 
-        /* --- THE 25 NAMED STYLES --- */
+        /* Preset Themes */
         [data-look="1"] { --bg: #000800; --bg2: #000800; --side: #000500; --text: #00ff00; --card: rgba(0, 15, 0, 0.9); --border: #004400; --accent: #00ff00; --cursor-color: #00ff00; }
         [data-look="2"] { --bg: #0a0000; --bg2: #0a0000; --side: #150000; --text: #ff4d4d; --card: rgba(35, 0, 0, 0.9); --border: #550000; --accent: #ff0000; --cursor-color: #ff0000; }
         [data-look="3"] { --bg: #000b1a; --bg2: #000b1a; --side: #00122e; --text: #00fff2; --card: rgba(0, 20, 50, 0.9); --border: #00fff2; --accent: #f0f; --cursor-color: #00fff2; }
@@ -68,7 +68,6 @@
         #top-nav { height: 60px; background: var(--side); display: flex; align-items: center; padding: 0 20px; gap: 15px; border-bottom: 1px solid var(--border); }
         #search { flex-grow: 1; background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px; color: var(--text); cursor: none !important; }
         
-        /* Filter Button Styling */
         #filter-select { background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 6px; color: var(--text); cursor: none !important; font-size: 14px; }
 
         #content-area, #settings-area { flex-grow: 1; overflow-y: auto; padding: 30px; display: none; }
@@ -112,7 +111,7 @@
                 <option value="abc">abc</option>
                 <option value="cba">cba</option>
                 <option value="tests">tests</option>
-                <option value="working">working games(non test)</option>
+                <option value="working">working games</option>
             </select>
 
             <button class="side-btn" style="background:#cc0000; color:white; opacity:1;" onclick="panic()">PANIC</button>
@@ -123,10 +122,6 @@
         <div id="settings-area">
             <div class="config-box">
                 <h2>Game Records</h2>
-                <p style="font-size: 14px; opacity: 0.7;">I have a google docs that tells you everything. if you dont understand the website or how it works, go the the docs. if it gets blocked, go the the doc. I haven't made it yet, but when i have, i will say.
-                I am doing fullscreen if possible.
-                Just added 2 papa games and burrito bison, House of Hazards, color fill 3d, paper io 2 and Tube Jumpers. Got rid of some tests. I did not test Any games.
-                </p>
                 <textarea id="records-text" oninput="saveRecords()" placeholder="Save codes, levels, or scores here..."></textarea>
             </div>
 
@@ -146,11 +141,9 @@
             <div class="config-box">
                 <h2>Cloak Presets</h2>
                 <div class="grid-layout">
-                    <button class="side-btn" onclick="setPreset('My Apps(old)', 'https://filescdn.classlink.com/resources/customlinks/1601307234673-fbb20dacacaf8359984dc1276e57ddc6.png')">My Apps</button>
+                    <button class="side-btn" onclick="setPreset('My Apps', 'https://filescdn.classlink.com/resources/customlinks/1601307234673-fbb20dacacaf8359984dc1276e57ddc6.png')">My Apps</button>
                     <button class="side-btn" onclick="setPreset('Classroom', 'https://ssl.gstatic.com/classroom/favicon.png')">Classroom</button>
                     <button class="side-btn" onclick="setPreset('IXL', 'https://www.ixl.com/favicon.ico')">IXL</button>
-                    <button class="side-btn" onclick="setPreset('Slides', 'SLIDES.png')">Slides</button>
-                    <button class="side-btn" onclick="setPreset('Docs', 'google-docs.png')">Docs</button>
                 </div>
             </div>
             
@@ -160,8 +153,8 @@
             </div>
             
             <div class="config-box" style="border-color: #ff4444;">
-                <h2 style="color: #ff4444;">Scary Button</h2>
-                <button class="side-btn" style="background:#ff4444; color:white; opacity:1;" onclick="nukeStorage()">Hi, Click Me! I Reset Everything</button>
+                <h2 style="color: #ff4444;">Storage</h2>
+                <button class="side-btn" style="background:#ff4444; color:white; opacity:1;" onclick="nukeStorage()">Nuke Everything</button>
             </div>
         </div>
     </div>
@@ -197,15 +190,10 @@
             {n: "Password Game", p: "./games/PG/index.html"}, {n: "Block Blast", p: "./games/BbBb/index.html"},
             {n: "Level Devil", p: "./games/LD/index.html"}, {n: "Penalty Shooters", p: "./games/ps1/index.html"},
             {n: "Motox 3M (TEST)", p: "./games/mx3m.html"}, {n: "BFTTS (TEST)", p: "./games/bftts/index.html"}, 
-            {n: "BTTS Gravity TEST TEST (TEST)", p: "./GSBTTS/index.html"}, {n: "FNAF 2 (TEST)", p: "./games/FNAF2/index.html"},
+            {n: "BTTS Gravity TEST", p: "./GSBTTS/index.html"}, {n: "FNAF 2 (TEST)", p: "./games/FNAF2/index.html"},
             {n: "SLOPE 2", p: "./games/Slope2/Slope-2-main/index.html"}, {n: "Monkey Mart (TEST)", p: "./games/MM.html"},
-            {n: "Paper IO 2 (TEST)", p: "./games/paperio2/index.html"}, {n: "Tube Jumpers (TEST)", p: "HTTPS://4o4-4o4.github.io/dlth/index.html"},
+            {n: "Paper IO 2 (TEST)", p: "./games/paperio2/index.html"}, {n: "Tube Jumpers (TEST)", p: "https://4o4-4o4.github.io/dlth/index.html"},
             {n: "House of Hazards (TEST)", p: "./games/hoh/index.html"}
-
-            /* --- ADD MORE GAMES --- */
-            {n: "", p: ""}, {n: "", p: ""},
-            {n: "", p: ""}, {n: "", p: ""},
-            {n: "", p: ""}, {n: "", p: ""}
         ];
 
         function shuffle(array) {
@@ -231,7 +219,6 @@
                 txt: document.getElementById('color-text').value,
                 cur: document.getElementById('color-cursor').value
             };
-
             document.body.removeAttribute('data-look');
             const root = document.documentElement;
             root.style.setProperty('--bg', colors.bg);
@@ -240,7 +227,6 @@
             root.style.setProperty('--accent', colors.acc);
             root.style.setProperty('--text', colors.txt);
             root.style.setProperty('--cursor-color', colors.cur);
-            
             localStorage.setItem('p404_custom', JSON.stringify(colors));
         }
 
@@ -248,10 +234,8 @@
             const root = document.documentElement;
             const props = ['--bg', '--bg2', '--side', '--accent', '--text', '--cursor-color'];
             props.forEach(p => root.style.removeProperty(p));
-
             document.body.setAttribute('data-look', id);
             localStorage.setItem('p404_look', id);
-
             const style = getComputedStyle(document.body);
             document.getElementById('color-bg').value = rgbToHex(style.getPropertyValue('--bg').trim());
             document.getElementById('color-bg2').value = rgbToHex(style.getPropertyValue('--bg2').trim());
@@ -259,8 +243,6 @@
             document.getElementById('color-accent').value = rgbToHex(style.getPropertyValue('--accent').trim());
             document.getElementById('color-text').value = rgbToHex(style.getPropertyValue('--text').trim());
             document.getElementById('color-cursor').value = rgbToHex(style.getPropertyValue('--cursor-color').trim());
-
-            updateCustomTheme();
         }
 
         function resetToPreset() { localStorage.removeItem('p404_custom'); location.reload(); }
@@ -285,26 +267,20 @@
             const filter = document.getElementById('filter-select').value;
             grid.innerHTML = '';
             
-            let filteredGames = [...games];
+            // Fix: Filter out empty game slots before processing
+            let filteredGames = games.filter(g => g.n && g.p);
 
-            // Apply filter categories
             if (filter === "tests") {
                 filteredGames = filteredGames.filter(g => g.n.includes('(TEST)'));
             } else if (filter === "working") {
                 filteredGames = filteredGames.filter(g => !g.n.includes('(TEST)'));
             }
 
-            // Apply search term
             filteredGames = filteredGames.filter(g => g.n.toLowerCase().includes(term));
 
-            // Apply sorting
-            if (filter === "abc") {
-                filteredGames.sort((a, b) => a.n.localeCompare(b.n));
-            } else if (filter === "cba") {
-                filteredGames.sort((a, b) => b.n.localeCompare(a.n));
-            } else if (term === "" && filter === "default") {
-                shuffle(filteredGames);
-            }
+            if (filter === "abc") filteredGames.sort((a, b) => a.n.localeCompare(b.n));
+            else if (filter === "cba") filteredGames.sort((a, b) => b.n.localeCompare(a.n));
+            else if (term === "" && filter === "default") shuffle(filteredGames);
 
             filteredGames.forEach(g => {
                 const card = document.createElement('div'); 
@@ -329,6 +305,9 @@
 
         window.onmousemove = e => { if(document.body.classList.contains('unlocked')) points.push({ x: e.clientX, y: e.clientY, age: 0 }); };
         window.onclick = e => { if(document.body.classList.contains('unlocked')) ripple = {x: e.clientX, y: e.clientY, r: 0, a: 1}; };
+        
+        // Fix: Added resize listener to keep cursor trail accurate
+        window.onresize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -356,10 +335,7 @@
                 document.getElementById('color-side').value = c.side; document.getElementById('color-accent').value = c.acc;
                 document.getElementById('color-text').value = c.txt; document.getElementById('color-cursor').value = c.cur;
                 updateCustomTheme();
-            } else { 
-                const lastPreset = localStorage.getItem('p404_look') || '1';
-                applyPreset(lastPreset); 
-            }
+            } else { applyPreset(localStorage.getItem('p404_look') || '1'); }
 
             const t = localStorage.getItem('p404_t'); const i = localStorage.getItem('p404_i'); const r = localStorage.getItem('p404_rec');
             if(t) document.title = t; if(i) document.getElementById('tab-icon').href = i;
@@ -369,7 +345,7 @@
                 try {
                     const fw = this.contentWindow;
                     fw.sdk = new Proxy({}, { get: () => (...args) => { if(fw.onAdComplete) fw.onAdComplete(); } });
-                } catch(e) {}
+                } catch(e) { console.log("Ad-strip restricted by cross-origin policy."); }
             };
         }
     </script>
